@@ -10,7 +10,7 @@ import time
 import sqlite3
 
 
-Sign_in_up_ui,_ = loadUiType(path.join(path.dirname(__file__), "index.ui"))
+Sign_in_up_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/index.ui"))
 
 class Sign_in_up(QWidget, Sign_in_up_ui):
     def __init__(self, parent = None):
@@ -21,17 +21,45 @@ class Sign_in_up(QWidget, Sign_in_up_ui):
         self.height_ = 431
 
         self.home_frame.resize(self.width_, self.height_)
-        self.add_person_btn.clicked.connect(self.addP)
-        self.home_icon.mousePressEvent = self.showH
+        self.add_person_btn.clicked.connect(self.addPersonFrame)
+        self.home_icon.mousePressEvent = self.showHomeFrame
 
-    def showH(self, event):
+        self.RDV_btn.clicked.connect(self.showRDVFrame)
+        self.today_RDV_btn.clicked.connect(self.showTodayRDVFrame)
+        self.time_out_RDV_btn.clicked.connect(self.showTimeOutRDVFrame)
+        self.new_RDV_btn.clicked.connect(self.showNewRDVFrame)
+
+
+
+    def showHomeFrame(self, event):
         self.home_frame.resize(self.width_, self.height_)
         self.add_person_frame.resize(1, 1)
+        self.RDV_frame.resize(1, 1)
 
-    def addP(self):
-
+    def addPersonFrame(self):
         self.home_frame.resize(1, 1)
         self.add_person_frame.resize(self.width_, self.height_)
+        self.RDV_frame.resize(1, 1)
+
+    def showRDVFrame(self):
+        self.home_frame.resize(1, 1)
+        self.add_person_frame.resize(1, 1)
+        self.RDV_frame.resize(self.width_, self.height_)
+
+    def showTodayRDVFrame(self):
+        self.today_RDV_frame.resize(821, 311)
+        self.time_out_RDV_frame.resize(1, 1)
+        self.new_RDV_frame.resize(1, 1)
+
+    def showTimeOutRDVFrame(self):
+        self.today_RDV_frame.resize(1, 1)
+        self.time_out_RDV_frame.resize(821, 311)
+        self.new_RDV_frame.resize(1, 1)
+
+    def showNewRDVFrame(self):
+        self.today_RDV_frame.resize(1, 1)
+        self.time_out_RDV_frame.resize(1, 1)
+        self.new_RDV_frame.resize(821, 311)
 
 
 
