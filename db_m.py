@@ -1,10 +1,9 @@
 import mysql.connector
 
 class DB_m:
-    def __init__(self, host, port, user, psw, db):
+    def __init__(self, host, port, user, psw):
         self.conn = mysql.connector.connect(
             host=host,
-            port = port,
             user=user,
             passwd=psw
         )
@@ -23,4 +22,6 @@ class DB_m:
 
     def close_db(self):
         self.conn.close()
+
+db = DB_m('192.168.0.158', 3306, 'vmacc', 'root')
 

@@ -56,16 +56,17 @@ class LogIn(QWidget, logIn_ui):
             print('##########################')
             print(self.admin_pass)
             print(str(hashlib.md5(self.passwrd.text().encode()).hexdigest()))
-
+            #todo go to suder admin settings
             self.main = Main()
             self.main.show()
             self.close()
         else:
-            print(self.admin_user)
-            print(str(hashlib.md5(self.username.text().encode()).hexdigest()))
-            print('##########################')
-            print(self.admin_pass)
-            print(str(hashlib.md5(self.passwrd.text().encode()).hexdigest()))
+            # print(self.admin_user)
+            # print(str(hashlib.md5(self.username.text().encode()).hexdigest()))
+            # print('##########################')
+            # print(self.admin_pass)
+            # print(str(hashlib.md5(self.passwrd.text().encode()).hexdigest()))
+
             self.passwrd.setText('')
             self.username.setText('')
 
