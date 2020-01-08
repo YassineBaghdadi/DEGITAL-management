@@ -1,19 +1,19 @@
-import mysql.connector
+import pymysql
+
+
 
 class DB_m:
-    def __init__(self, host, port, user, psw):
-        self.conn = mysql.connector.connect(
+    def __init__(self, host, user, psw, db, port  = 3306):
+        self.conn = pymysql.connect(
             host=host,
             user=user,
-            passwd=psw
+            passwd=psw,
+            db = db,
+            port = port
+
         )
 
         self.curs = self.conn.cursor()
-        self.curs.execute('CREATE DATABASE IF NOT EXISTS {};'.format(db))
-        self.conn.commit()
-        self.curs.execute('use {};'.format(db))
-
-
 
 
     def query_(self, sql_):
@@ -23,5 +23,16 @@ class DB_m:
     def close_db(self):
         self.conn.close()
 
-db = DB_m('192.168.0.158', 3306, 'vmacc', 'root')
+    def logIn(self, u, p):
+        try:
+            try:
+                self.curs.execute('select role from users where username = "{}" and passwrd = "{}"'.format(u, p))
+                return self.curs.fetchone()[0]
+
+            except:
+                return 'wrong'
+        except:
+            return 'error'
+
+
 

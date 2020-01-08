@@ -10,16 +10,24 @@ import time
 import sqlite3
 
 
-main_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/index.ui"))
+main_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
 class Main(QWidget, main_ui):
-    def __init__(self, parent = None):
+    def __init__(self, account_type, parent = None):
         super(Main, self).__init__(parent)
         QWidget.__init__(self)
+
+        self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.setupUi(self)
         self.width_ = 871
         self.height_ = 431
 
+        if account_type == 'admin':
+            pass
+        else:
+            self.new_RDV_btn.setEnabled(False)
+            self.sessions_btn.setEnabled(False)
+            self.Statistiques_btn.setEnabled(False)
 
         self.home_frame.resize(self.width_, self.height_)
         self.home_icon.mousePressEvent = self.showHomeFrame

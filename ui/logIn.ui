@@ -68,13 +68,13 @@
     </rect>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="username">
+  <widget class="QLineEdit" name="username_in">
    <property name="geometry">
     <rect>
      <x>120</x>
@@ -87,7 +87,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="passwrd">
+  <widget class="QLineEdit" name="passwrd_in">
    <property name="geometry">
     <rect>
      <x>120</x>
