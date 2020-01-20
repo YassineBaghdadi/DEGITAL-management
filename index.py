@@ -9,11 +9,11 @@ import os
 from os import path
 import sys
 import sqlite3
-
-import noInternetAlert
+import  noInternetAlert
+from noInternetAlert import *
 from logIn import *
 from db_m import *
-
+from admin_settings import *
 
 splash_win_dir,_ = loadUiType(path.join(path.dirname(__file__), "ui/splash.ui"))
 
@@ -23,35 +23,54 @@ class Splash(QWidget, splash_win_dir):
         super(Splash, self).__init__(parent)
         QWidget.__init__(self)
         self.setupUi(self)
+
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.setWindowTitle('welcome back')
         self.timer = QBasicTimer()
         self.step = 0
         self.prog()
-        self.localdb = sqlite3.connect('src/setting.db')
-        self.curs = self.localdb.cursor()
-        self.curs.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="admin_setting";')
-        if self.curs.fetchone():
-            print('the is exists ')
-            # self.curs.execute('select host from admin_setting')
-            # self.server = self.curs.fetchone()
-        else:
-            print('the table not found ')
-            self.curs.execute('create table admin_setting (id INTEGER PRIMARY KEY AUTOINCREMENT , host text, db_user text, db_pass text, port int, db_name text)')
-            self.localdb.commit()
-            self.curs.execute('insert into admin_setting (host, db_user, db_pass, port, db_name) values ("localhost", "root", "root", 3306, "MOY")')
-            self.localdb.commit()
-            print('the table created successfully')
+        self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
+
+
 
     def is_connected(self):
-        try:
-            self.curs.execute('select host, db_user, db_pass from admin_setting')
-            data = self.curs.fetchone()
-            self.mydb = DB_m(data[0], data[1], data[2],'')
-            return True
-        except:
-            print(OSError)  # todo create errors on log file with time/date
-            return False
+        try:#todo
+            con = sqlite3.connect('src/setting.db')
+            cur = con.cursor()
+            self.dt = cur.execute('select host, db_user, db_pass, db_name, port from admin_setting').fetchone()
+
+            if DB_m(self.dt[0], self.dt[1], self.dt[2], self.dt[3], int(self.dt[4])):
+                print('connected')
+                self.logi = LogIn()
+                self.logi.show()
+                self.close()
+            else:
+                print('cant conn')
+                self.err = noInternetAlert.NoInternetAlert()
+                self.err.show()
+                self.close()
+
+            # TODO delay
+            # if cur.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="delay";').fetchone() and cur.execute('SELECT * FROM delay;').fetchall():
+            #     try:
+            #
+            #         last_open = cur.execute('select logins_date where id = max(id)').fetchone()
+            #         if int(last_open) + cur.execute('select days from delay where id = 1').fetchone() >= datetime.toda
+            #
+            #     except:
+            #         pass
+
+
+            con.close()
+        except Exception as e:
+            print(e)
+            err_log = open('src/logs.txt', 'a')
+            err_log.write('\n' + self.today + ' ' + str(e))
+
+            self.err = noInternetAlert.NoInternetAlert()
+            self.err.show()
+            self.close()
 
 
 
@@ -64,17 +83,11 @@ class Splash(QWidget, splash_win_dir):
     def timerEvent(self, event):
         if self.step >= 100 :
             self.timer.stop()
-            if self.is_connected():
-                self.mydb.close_db()
-                self.inde = LogIn()
-                self.inde.show()
-                self.close()
-
-
-            else:
-                self.noI = noInternetAlert.NoInternetAlert()
-                self.close()
-                self.noI.show()
+            self.is_connected()
+            # except:
+            #     err = noInternetAlert.NoInternetAlert()
+            #     err.show()
+            #     self.close()
             return
         self.step += 4
         self.progressBar.setValue(self.step)

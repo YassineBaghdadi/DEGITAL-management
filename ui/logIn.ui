@@ -80,11 +80,23 @@
      <x>120</x>
      <y>160</y>
      <width>220</width>
-     <height>40</height>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="placeholderText">
+    <string/>
+   </property>
+   <property name="cursorMoveStyle">
+    <enum>Qt::LogicalMoveStyle</enum>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLineEdit" name="passwrd_in">
@@ -93,7 +105,7 @@
      <x>120</x>
      <y>210</y>
      <width>220</width>
-     <height>40</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="echoMode">
@@ -101,6 +113,9 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

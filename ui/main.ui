@@ -14,7 +14,11 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QLineEdit{
+	
+	background-color: rgb(255, 255, 255);
+	border : 0px solid #ffffff;
+}</string>
   </property>
   <widget class="Line" name="line">
    <property name="geometry">
@@ -36,157 +40,6 @@ border-color: rgb(128, 128, 128);</string>
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>18</x>
-     <y>120</y>
-     <width>141</width>
-     <height>431</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="add_person_btn">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="RDV_btn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="search_btn">
-      <property name="minimumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="Ditails_btn">
-      <property name="minimumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="sessions_btn">
-      <property name="minimumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="Statistiques_btn">
-      <property name="minimumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>138</width>
-        <height>48</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">margin-top:20px;
-margin-bottom:20px;</string>
-      </property>
-      <property name="text">
-       <string> </string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QLabel" name="home_icon">
    <property name="geometry">
     <rect>
@@ -197,7 +50,7 @@ margin-bottom:20px;</string>
     </rect>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="setting_btn">
@@ -210,7 +63,7 @@ margin-bottom:20px;</string>
     </rect>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
   </widget>
   <widget class="QFrame" name="home_frame">
@@ -283,7 +136,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="text">
-     <string>Nom</string>
+     <string>Prenom</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -309,7 +162,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="text">
-     <string>Prenom</string>
+     <string>nom</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -323,32 +176,6 @@ margin-bottom:20px;</string>
       <width>220</width>
       <height>33</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="cne">
-    <property name="geometry">
-     <rect>
-      <x>141</x>
-      <y>160</y>
-      <width>220</width>
-      <height>33</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>168</y>
-      <width>54</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>C.I.N</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -392,12 +219,15 @@ margin-bottom:20px;</string>
     <property name="text">
      <string>Homme</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>250</y>
+      <x>50</x>
+      <y>170</y>
       <width>70</width>
       <height>17</height>
      </rect>
@@ -412,9 +242,9 @@ margin-bottom:20px;</string>
    <widget class="QDateEdit" name="birth_date">
     <property name="geometry">
      <rect>
-      <x>145</x>
-      <y>240</y>
-      <width>170</width>
+      <x>141</x>
+      <y>160</y>
+      <width>189</width>
       <height>27</height>
      </rect>
     </property>
@@ -428,7 +258,7 @@ margin-bottom:20px;</string>
      <bool>false</bool>
     </property>
     <property name="displayFormat">
-     <string>dd-MM-yyyy</string>
+     <string>yyyy-MM-dd</string>
     </property>
     <property name="calendarPopup">
      <bool>true</bool>
@@ -437,9 +267,9 @@ margin-bottom:20px;</string>
    <widget class="QLabel" name="age_counter">
     <property name="geometry">
      <rect>
-      <x>325</x>
-      <y>242</y>
-      <width>31</width>
+      <x>329</x>
+      <y>162</y>
+      <width>32</width>
       <height>23</height>
      </rect>
     </property>
@@ -448,83 +278,6 @@ margin-bottom:20px;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
-      <width>110</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Situation Familial</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="familly_state">
-    <property name="geometry">
-     <rect>
-      <x>142</x>
-      <y>285</y>
-      <width>220</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Celibataire</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Marie</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Divorce</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Separe</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>veuf</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>16</x>
-      <y>341</y>
-      <width>110</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Nomber d'enfant</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="children_num">
-    <property name="geometry">
-     <rect>
-      <x>146</x>
-      <y>330</y>
-      <width>210</width>
-      <height>33</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_10">
@@ -646,7 +399,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="add_person_annuler_btn">
@@ -659,8 +412,214 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
+   </widget>
+   <widget class="QLabel" name="codeP">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>16</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QFrame" name="for_adult">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>381</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>110</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Nomber d'enfant</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>54</x>
+       <y>19</y>
+       <width>54</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>C.I.N</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="children_num">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>99</y>
+       <width>210</width>
+       <height>33</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="familly_state">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>54</y>
+       <width>220</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Celibataire</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Marie</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Divorce</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Separe</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>veuf</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>14</x>
+       <y>59</y>
+       <width>110</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Situation Familial</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="cne">
+     <property name="geometry">
+      <rect>
+       <x>145</x>
+       <y>11</y>
+       <width>220</width>
+       <height>33</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="for_baby381x161">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>1</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLineEdit" name="L_name_2">
+     <property name="geometry">
+      <rect>
+       <x>134</x>
+       <y>70</y>
+       <width>220</width>
+       <height>33</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="F_name_2">
+     <property name="geometry">
+      <rect>
+       <x>134</x>
+       <y>23</y>
+       <width>220</width>
+       <height>33</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_35">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>78</y>
+       <width>129</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>C.I.N de responsable</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_36">
+     <property name="geometry">
+      <rect>
+       <x>-3</x>
+       <y>31</y>
+       <width>140</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Nom de responsable</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QFrame" name="RDV_frame">
@@ -718,7 +677,7 @@ margin-bottom:20px;</string>
         </size>
        </property>
        <property name="text">
-        <string> </string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -737,7 +696,7 @@ margin-bottom:20px;</string>
         </size>
        </property>
        <property name="text">
-        <string> </string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -756,7 +715,7 @@ margin-bottom:20px;</string>
         </size>
        </property>
        <property name="text">
-        <string> </string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -767,9 +726,15 @@ margin-bottom:20px;</string>
      <rect>
       <x>30</x>
       <y>110</y>
-      <width>821</width>
+      <width>831</width>
       <height>311</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -779,10 +744,115 @@ margin-bottom:20px;</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="todayRDVTable">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="autoScroll">
+        <bool>true</bool>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="defaultDropAction">
+        <enum>Qt::IgnoreAction</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideMiddle</enum>
+       </property>
+       <property name="showGrid">
+        <bool>true</bool>
+       </property>
+       <property name="gridStyle">
+        <enum>Qt::DashLine</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="cornerButtonEnabled">
+        <bool>true</bool>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderHighlightSections">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>New Row</string>
+        </property>
+       </row>
        <column>
         <property name="text">
-         <string>Nom</string>
+         <string>ID</string>
         </property>
        </column>
        <column>
@@ -792,17 +862,32 @@ margin-bottom:20px;</string>
        </column>
        <column>
         <property name="text">
+         <string>Nom</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
          <string>C.N.I</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Dernière visite</string>
+         <string>Date de RDV</string>
         </property>
        </column>
        <column>
         <property name="text">
          <string>Note</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>  </string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>  </string>
         </property>
        </column>
       </widget>
@@ -854,7 +939,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="text">
-     <string>00</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -877,7 +962,39 @@ margin-bottom:20px;</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QTableWidget" name="tableWidget_3">
+      <widget class="QTableWidget" name="old_RDVTabble">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="textElideMode">
+        <enum>Qt::ElideMiddle</enum>
+       </property>
+       <property name="gridStyle">
+        <enum>Qt::DashLine</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>ID</string>
+        </property>
+       </column>
        <column>
         <property name="text">
          <string>Nom</string>
@@ -891,11 +1008,6 @@ margin-bottom:20px;</string>
        <column>
         <property name="text">
          <string>C.N.I</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Dernière visite</string>
         </property>
        </column>
        <column>
@@ -930,37 +1042,27 @@ margin-bottom:20px;</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLineEdit" name="lineEdit">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>280</width>
-       <height>29</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QWidget" name="verticalLayoutWidget_3">
      <property name="geometry">
       <rect>
        <x>33</x>
        <y>64</y>
        <width>107</width>
-       <height>211</height>
+       <height>215</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
        <widget class="QLabel" name="label_21">
         <property name="text">
-         <string>Nom :</string>
+         <string>Prenom :</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_23">
         <property name="text">
-         <string>Prenom :</string>
+         <string>Nom :</string>
         </property>
        </widget>
       </item>
@@ -998,14 +1100,14 @@ margin-bottom:20px;</string>
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>65</y>
+       <y>55</y>
        <width>280</width>
-       <height>213</height>
+       <height>230</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>
-       <widget class="QLineEdit" name="lineEdit_4">
+       <widget class="QLineEdit" name="newRDVF_name">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1021,7 +1123,7 @@ margin-bottom:20px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_7">
+       <widget class="QLineEdit" name="newRDVL_name">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1037,7 +1139,7 @@ margin-bottom:20px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_6">
+       <widget class="QLineEdit" name="newRDVtel">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1053,7 +1155,7 @@ margin-bottom:20px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="newRDVAddress">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1069,7 +1171,7 @@ margin-bottom:20px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_5">
+       <widget class="QLineEdit" name="newRDVAssir">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1085,7 +1187,7 @@ margin-bottom:20px;</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_3">
+       <widget class="QLineEdit" name="newRDVLast_visit">
         <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
@@ -1115,17 +1217,7 @@ margin-bottom:20px;</string>
       <string>La Date De Rendez-vous</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>100</y>
-       <width>278</width>
-       <height>29</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QDateEdit" name="dateEdit">
+    <widget class="QDateEdit" name="newRDVDateEdit">
      <property name="geometry">
       <rect>
        <x>510</x>
@@ -1144,13 +1236,13 @@ margin-bottom:20px;</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTextEdit" name="newRDVNote">
      <property name="geometry">
       <rect>
        <x>510</x>
-       <y>140</y>
+       <y>95</y>
        <width>280</width>
-       <height>75</height>
+       <height>113</height>
       </rect>
      </property>
     </widget>
@@ -1177,7 +1269,26 @@ margin-bottom:20px;</string>
       </rect>
      </property>
      <property name="text">
-      <string> </string>
+      <string/>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="clientListcombo">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>20</y>
+       <width>320</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <property name="duplicatesEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -1200,23 +1311,13 @@ margin-bottom:20px;</string>
    <property name="frameShadow">
     <enum>QFrame::Sunken</enum>
    </property>
-   <widget class="QLineEdit" name="lineEdit_9">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>20</y>
-      <width>380</width>
-      <height>29</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>80</y>
+      <y>60</y>
       <width>121</width>
-      <height>270</height>
+      <height>290</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1230,14 +1331,14 @@ margin-bottom:20px;</string>
      <item>
       <widget class="QLabel" name="label_18">
        <property name="text">
-        <string>Nom</string>
+        <string>Prenom</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_26">
        <property name="text">
-        <string>Prenom</string>
+        <string>Nom</string>
        </property>
       </widget>
      </item>
@@ -1269,38 +1370,110 @@ margin-bottom:20px;</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="label_32">
+       <property name="text">
+        <string>Assirance</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
       <x>166</x>
-      <y>80</y>
+      <y>60</y>
       <width>230</width>
-      <height>281</height>
+      <height>300</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_8">
      <item>
-      <widget class="QLineEdit" name="lineEdit_11"/>
+      <widget class="QLineEdit" name="lineEdit_11">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_14"/>
+      <widget class="QLineEdit" name="lineEdit_14">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_15"/>
+      <widget class="QLineEdit" name="lineEdit_15">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_17"/>
+      <widget class="QLineEdit" name="lineEdit_17">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_16"/>
+      <widget class="QLineEdit" name="lineEdit_16">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_13"/>
+      <widget class="QLineEdit" name="lineEdit_13">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_12"/>
+      <widget class="QLineEdit" name="lineEdit_12">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_23">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -1308,9 +1481,9 @@ margin-bottom:20px;</string>
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>80</y>
+      <y>58</y>
       <width>121</width>
-      <height>270</height>
+      <height>272</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1345,14 +1518,7 @@ margin-bottom:20px;</string>
      <item>
       <widget class="QLabel" name="label_31">
        <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_32">
-       <property name="text">
-        <string>TextLabel</string>
+        <string>derniere visite</string>
        </property>
       </widget>
      </item>
@@ -1369,29 +1535,73 @@ margin-bottom:20px;</string>
     <property name="geometry">
      <rect>
       <x>574</x>
-      <y>70</y>
+      <y>50</y>
       <width>230</width>
       <height>251</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_10">
      <item>
-      <widget class="QLineEdit" name="lineEdit_18"/>
+      <widget class="QLineEdit" name="lineEdit_18">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_19"/>
+      <widget class="QLineEdit" name="lineEdit_19">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_20"/>
+      <widget class="QLineEdit" name="lineEdit_20">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_21"/>
+      <widget class="QLineEdit" name="lineEdit_21">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_22"/>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_23"/>
+      <widget class="QLineEdit" name="lineEdit_22">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -1399,9 +1609,9 @@ margin-bottom:20px;</string>
     <property name="geometry">
      <rect>
       <x>573</x>
-      <y>320</y>
+      <y>292</y>
       <width>230</width>
-      <height>77</height>
+      <height>91</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1410,17 +1620,27 @@ margin-bottom:20px;</string>
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="save_searsh_changes">
+   <widget class="QComboBox" name="comboBox">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>390</y>
-      <width>72</width>
-      <height>19</height>
+      <x>250</x>
+      <y>10</y>
+      <width>324</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save_searsh_changes">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>380</y>
+      <width>94</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string>Enregestrer</string>
     </property>
    </widget>
   </widget>
@@ -1445,10 +1665,10 @@ margin-bottom:20px;</string>
    <widget class="QLineEdit" name="lineEdit_51">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>260</x>
       <y>30</y>
-      <width>230</width>
-      <height>20</height>
+      <width>299</width>
+      <height>29</height>
      </rect>
     </property>
     <property name="font">
@@ -1456,6 +1676,9 @@ margin-bottom:20px;</string>
       <family>Lucida Sans</family>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="inputMask">
      <string/>
@@ -1465,6 +1688,9 @@ margin-bottom:20px;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_62">
@@ -1492,14 +1718,107 @@ margin-bottom:20px;</string>
      <string>Détails des séances pour chaque personne :</string>
     </property>
    </widget>
-   <widget class="QTableView" name="DitailsTabel">
+   <widget class="QTreeWidget" name="treeWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>110</y>
-      <width>831</width>
-      <height>271</height>
+      <x>15</x>
+      <y>101</y>
+      <width>1</width>
+      <height>1</height>
      </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+     <property name="text">
+      <string>asdasd</string>
+     </property>
+     <property name="text">
+      <string>asdasd</string>
+     </property>
+     <property name="text">
+      <string>asdasd</string>
+     </property>
+     <property name="text">
+      <string>asdasd</string>
+     </property>
+     <property name="text">
+      <string>asdasd</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>daskjkjdkjksdjkjksdj,m ljlkj    jjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjjjjjj jjjjj</string>
+      </property>
+      <property name="text">
+       <string>cvxcvxc</string>
+      </property>
+      <property name="text">
+       <string>sdcsdc</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>New Subitem</string>
+       </property>
+       <property name="text">
+        <string>gfhgh</string>
+       </property>
+       <property name="text">
+        <string>fghgfh</string>
+       </property>
+       <property name="text">
+        <string>fghgfhfgh</string>
+       </property>
+      </item>
+     </item>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>110</y>
+      <width>420</width>
+      <height>183</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -1865,6 +2184,194 @@ margin-bottom:20px;</string>
      <string>ok</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="exit">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>600</y>
+     <width>87</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>quit</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="search_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>272</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="add_person_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>134</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="RDV_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>203</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="sessions_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>410</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Ditails_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>341</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Statistiques_btn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>480</y>
+     <width>138</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>138</width>
+     <height>48</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">margin-top:20px;
+margin-bottom:20px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>
