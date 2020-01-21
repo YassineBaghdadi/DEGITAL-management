@@ -48,7 +48,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>17</x>
      <y>20</y>
      <width>71</width>
      <height>16</height>
@@ -58,26 +58,13 @@
     <string>paramètres</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>21</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>logo</string>
-   </property>
-  </widget>
   <widget class="QFrame" name="addUser">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>70</y>
-     <width>441</width>
-     <height>321</height>
+     <width>1</width>
+     <height>1</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -145,13 +132,30 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
+       <widget class="QLineEdit" name="username"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_3"/>
+       <widget class="QLineEdit" name="passwrd">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="passwrd_2">
+        <property name="inputMethodHints">
+         <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
+        </property>
+        <property name="inputMask">
+         <string/>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -166,7 +170,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="admin">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
@@ -176,15 +180,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="ass">
         <property name="text">
          <string>  User</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="save">
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -194,10 +201,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>save</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="delete_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -207,22 +217,51 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>delete</string>
      </property>
     </widget>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTreeWidget" name="users">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>211</y>
-      <width>421</width>
-      <height>100</height>
+      <x>14</x>
+      <y>204</y>
+      <width>414</width>
+      <height>108</height>
      </rect>
     </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="allColumnsShowFocus">
+     <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+    <property name="headerHidden">
+     <bool>false</bool>
+    </property>
+    <attribute name="headerCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="headerHighlightSections">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="headerShowSortIndicator" stdset="0">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="headerStretchLastSection">
+     <bool>false</bool>
+    </attribute>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
    </widget>
   </widget>
-  <widget class="QLabel" name="label_11">
+  <widget class="QLabel" name="right">
    <property name="geometry">
     <rect>
      <x>430</x>
@@ -235,39 +274,13 @@
     <string>logo</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_12">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>20</y>
-     <width>21</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>logo</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>30</y>
-     <width>91</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>W : 441 - H 321</string>
-   </property>
-  </widget>
-  <widget class="QFrame" name="addM1">
+  <widget class="QFrame" name="addMG">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>70</y>
-     <width>1</width>
-     <height>1</height>
+     <width>441</width>
+     <height>321</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -310,21 +323,6 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="verticalLayoutWidget_6">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>10</y>
-       <width>161</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_6">
-      <item>
-       <widget class="QLineEdit" name="lineEdit_8"/>
-      </item>
-     </layout>
-    </widget>
     <widget class="QPushButton" name="pushButton_5">
      <property name="geometry">
       <rect>
@@ -335,10 +333,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Save</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_6">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>200</x>
@@ -348,7 +349,17 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Delete</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_8">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>20</y>
+       <width>164</width>
+       <height>28</height>
+      </rect>
      </property>
     </widget>
    </widget>
@@ -365,8 +376,23 @@
      <string>Ajouter maladie génétique</string>
     </property>
    </widget>
+   <widget class="QTreeWidget" name="treeWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>175</y>
+      <width>423</width>
+      <height>137</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
+   </widget>
   </widget>
-  <widget class="QFrame" name="addM2">
+  <widget class="QFrame" name="addMCh">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -415,21 +441,6 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="verticalLayoutWidget_8">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>10</y>
-       <width>161</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_8">
-      <item>
-       <widget class="QLineEdit" name="lineEdit_9"/>
-      </item>
-     </layout>
-    </widget>
     <widget class="QPushButton" name="pushButton_7">
      <property name="geometry">
       <rect>
@@ -440,10 +451,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>save</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_8">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>200</x>
@@ -453,7 +467,17 @@
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>delete</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_9">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>20</y>
+       <width>164</width>
+       <height>28</height>
+      </rect>
      </property>
     </widget>
    </widget>
@@ -470,15 +494,35 @@
      <string>Ajouter maladie chronique</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget_2">
+   <widget class="QTreeWidget" name="treeWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>176</y>
+      <width>1</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTreeWidget" name="treeWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>180</y>
-      <width>421</width>
-      <height>100</height>
+      <width>420</width>
+      <height>133</height>
      </rect>
     </property>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
    </widget>
   </widget>
  </widget>

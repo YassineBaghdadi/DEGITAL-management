@@ -78,7 +78,7 @@ class LogIn(QWidget, logIn_ui):
 
         else:
             acc_type = self.db_.logIn( self.username_in.text(), self.passwrd_in.text())
-            open('src/login_logs.txt', 'a').write('\n{},  {}, username used : {}'.format(self.today, acc_type, self.username_in.text()))
+            open('src/login_logs.txt', 'a').write('\n{},  user : {}, as : {}'.format(self.today, self.username_in.text(), acc_type))
             if acc_type == 'admin':
                 #the admin
                 print('profile : ', self.db_.logIn(self.username_in.text(), self.passwrd_in.text()))

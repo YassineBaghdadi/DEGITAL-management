@@ -79,6 +79,9 @@
    </property>
   </widget>
   <widget class="QLineEdit" name="delay">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>428</x>
@@ -148,6 +151,9 @@
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>350</x>
@@ -225,29 +231,6 @@
     <string>Port</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="serial_key">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>180</y>
-     <width>201</width>
-     <height>19</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>222</x>
-     <y>173</y>
-     <width>81</width>
-     <height>33</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>untel</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="tst_con">
    <property name="geometry">
     <rect>
@@ -259,6 +242,29 @@
    </property>
    <property name="text">
     <string>Test Con</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="quiryline">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>170</y>
+     <width>458</width>
+     <height>36</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exic">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>173</y>
+     <width>87</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>exicute</string>
    </property>
   </widget>
  </widget>

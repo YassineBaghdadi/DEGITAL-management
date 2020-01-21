@@ -14,7 +14,7 @@ import time
 import sqlite3
 
 from time import gmtime, strftime
-
+from setting import *
 
 import noInternetAlert
 from db_m import DB_m
@@ -46,6 +46,7 @@ class Main(QWidget, main_ui):
             )
         self.mysqlCurs = self.mysqlConn.cursor()
 
+        self.setWindowTitle('Home')
         # self.db_ = DB_m(self.host_db, self.user_db, self.passwrd_db, self.DBname, self.port_db)
 
         if self.acc_type == 'admin':
@@ -63,6 +64,7 @@ class Main(QWidget, main_ui):
         self.setting_btn.setPixmap(QtGui.QPixmap('img/btns/settings.png'))
         self.home_icon.setScaledContents(True)
         self.setting_btn.setScaledContents(True)
+        self.setting_btn.mousePressEvent = self.goSetting
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(QImage("img/pack.png")))
         self.setPalette(palette)
@@ -90,6 +92,7 @@ class Main(QWidget, main_ui):
 
 
         #RDV part:
+        self.newRDVDateEdit.setDate(QtCore.QDate.currentDate())
         self.RDV_btn.setStyleSheet('background-image: url(img/btns/off/RDV_btn.png);')
 
         # self.RDV_btn.setPixmap(QtGui.QPixmap('img/btns/off/RDV_btn.png'))
@@ -142,10 +145,62 @@ class Main(QWidget, main_ui):
         self.lineEdit_51.textChanged.connect(self.searshDetaisTree)
 
         #statistiques part
+        self.dateEdit_2.setDate(QtCore.QDate.currentDate())
+        self.dateEdit_3.setDate(QtCore.QDate.currentDate())
         self.Statistiques_btn.setStyleSheet('background-image: url(img/btns/off/statistiques_btn.png);')
         # self.Statistiques_btn.setPixmap(QtGui.QPixmap('img/btns/off/statistiques_btn.png'))
         # self.Statistiques_btn.setScaledContents(True)
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
+        self.pushButton.clicked.connect(self.statictic)
+
+    def goSetting(self, event):
+        self.sett = Setting()
+        self.sett.show()
+
+
+    def statictic(self):
+        # self.visits = 0
+        # self.cls_incription = 0
+        # self.rdvs = 0
+        # self.money = 0
+        if str(self.dateEdit_2.date().toPyDate()) >= str(self.dateEdit_3.date().toPyDate()):
+            err = QMessageBox.warning(self, 'ERROR', 'invalid dates ', QMessageBox.Ok)
+        else:
+            if self.comboBox_2.currentText() == 'For All ...':
+                self.mysqlCurs.execute("""
+                    select count(client_code) from sessions where S_date >= '{}' and S_date <= '{}'
+                """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.visits = self.mysqlCurs.fetchone()[0]
+                self.mysqlCurs.execute("""
+                    select count(codeP) from person where inscri_date >= '{}' and inscri_date <= '{}'
+                """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.cls_incription = self.mysqlCurs.fetchone()[0]
+                self.mysqlCurs.execute("""
+                    select count(id) from RDV where rdv_date >= '{}' and rdv_date <= '{}' 
+                """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.rdvs = self.mysqlCurs.fetchone()[0]
+                self.mysqlCurs.execute("""
+                    select sum(price) from sessions where S_date >= '{}' and S_date <= '{}'
+                """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.money = self.mysqlCurs.fetchone()[0]
+            else:
+                self.mysqlCurs.execute("""
+                        select count(client_code) from sessions where client_code = '{}' and S_date >= '{}' and S_date <= '{}'
+                """.format(self.comboBox_2.currentText().split(' ')[0], str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.visits = self.mysqlCurs.fetchone()[0]
+                self.cls_incription = 1
+                self.mysqlCurs.execute('select count(id) from RDV where client_code = "{}" and rdv_date >= "{}" and rdv_date <= "{}"'.format(
+                    self.comboBox_2.currentText().split(' ')[0], str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.rdvs = self.mysqlCurs.fetchone()[0]
+                self.mysqlCurs.execute('select sum(price) from sessions where client_code ="{}"and S_date >= "{}" and S_date <= "{}"'.format(
+                    self.comboBox_2.currentText().split(' ')[0], str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+                self.money = self.mysqlCurs.fetchone()[0]
+
+            self.label_71.setText(str(self.visits))
+            self.label_72.setText(str(self.cls_incription))
+            self.label_73.setText(str(self.rdvs))
+            self.label_74.setText(str(self.money))
+
 
     def newRdvFill(self):
         client_info = []
@@ -304,9 +359,12 @@ class Main(QWidget, main_ui):
     def generatecode(self):
         self.id_P = ''
 
-        chars = ['A', 'a', 0, 'B', 'b', 1, 'C', 'c', 2, 'D', 'd', 3, 'E', 'e', 4, 'F', 'f', 5, 'G', 'g', 6, 'H', 'h',
-                 'I', 'i', 'J', 'j', 7, 'L', 'l', 'M', 'm', 'N', 8, 'n', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's',
-                 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', 9]
+        chars = ['A', 'a', 0, 'B', 'b', 1, 'C', 'c', 2, 'D',
+                 'd', 3, 'E', 'e', 4, 'F', 'f', 5, 'G', 'g',
+                 6, 'H', 'h', 'I', 'i', 'J', 'j', 7, 'L', 'l',
+                 'M', 'm', 'N', 8, 'n', 'o', 'P', 'p', 'Q', 'q',
+                 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v',
+                 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', 9]
 
         for i in range(2):
             self.id_P += str(random.choice(chars))
@@ -317,6 +375,7 @@ class Main(QWidget, main_ui):
                 break
 
         return self.id_P
+
 
     def refresh(self):
         self.codesP = []
@@ -483,8 +542,8 @@ class Main(QWidget, main_ui):
                                                          ': "{}" - ont été inscrits à : "{}"'.format(self.pdt[1], self.pdt[13]), QMessageBox.Ok)
 
         else:
-            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, note, inscri_date )values (
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}' , '{}') ;"""
+            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, note, inscri_date, inscri_time )values (
+                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}' , '{}', '{}') ;"""
             try:
                 self.mysqlCurs.execute(addPq.format(self.codeP.text(), self.F_name.text(), self.L_name.text(), str(self.birth_date.date().toPyDate()), self.sexe, self.cne.text(), str(self.familly_state.currentText()),
                         self.children_num.text(),
@@ -493,7 +552,8 @@ class Main(QWidget, main_ui):
                         str(
                             self.assurance_type.currentText()),
                         self.note.toPlainText(),
-                        self.today
+                        self.today.split(' ')[0],
+                                                    self.today.split(' ')[1]
                         ))
                 err = QMessageBox.information(self, '', 'the adding operation successfully', QMessageBox.Ok)
                 # try:
@@ -551,6 +611,7 @@ class Main(QWidget, main_ui):
                 self.err = noInternetAlert.NoInternetAlert()
                 self.close()
                 self.err.show()
+            self.birth_date.setDate(QtCore.QDate.currentDate())
 
     def getAge(self):
         if self.birth_date.date().toPyDate() <= datetime.date.today() :
@@ -560,6 +621,7 @@ class Main(QWidget, main_ui):
             # self.birth_date.setDate(QtCore.QDate.currentDate())
             self.age_counter.setText('00')
             don = QMessageBox.information(self, 'ERROR DATE', 'la date invalide', QMessageBox.Ok)
+            self.birth_date.setDate(QtCore.QDate.currentDate())
 
     def showSessionsForm(self, event):
         try:
@@ -768,6 +830,7 @@ class Main(QWidget, main_ui):
                 '''.format(str(self.clientListcombo.currentText().split(' ')[0]), self.today.split(' ')[0], str(self.newRDVDateEdit.date().toPyDate()), self.newRDVNote.toPlainText()))
                 self.mysqlConn.commit()
                 self.refresh()
+                self.newRDVDateEdit.setDate(QtCore.QDate.currentDate())
             # try:
             #     self.mysqlCurs.execute('''
             #     insert into RDV (client_code, from_time, rdv_date, note) values(
@@ -915,6 +978,7 @@ class Main(QWidget, main_ui):
             print(e)
             err_log = open('src/logs.txt', 'a')
             err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+
         # self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
         self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))
         self.add_person_btn.setScaledContents(True)
@@ -938,6 +1002,22 @@ class Main(QWidget, main_ui):
         # self.Statistiques_btn.setStyleSheet('background-image: url(img/btns/on/statistiques_btn.png);')
         self.Statistiques_btn.setPixmap(QtGui.QPixmap('img/btns/on/statistiques_btn.png'))
         self.Statistiques_btn.setScaledContents(True)
+
+        try:
+            clients = ['For All ...']
+            self.mysqlCurs.execute('select codeP, F_name, L_name, cne from person order by F_name asc')
+            # print(self.mysqlCurs.fetchall())
+            for a in self.mysqlCurs.fetchall():
+                if str(a[3]) == '':
+                    clients.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + '------'))
+                else:
+                    clients.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + str(a[3])))
+
+            self.comboBox_2.clear()
+            self.comboBox_2.addItems(clients)
+        except Exception as e:
+            err_log = open('src/logs.txt', 'a')
+            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
 
         self.home_frame.resize(1, 1)
         self.add_person_frame.resize(1, 1)

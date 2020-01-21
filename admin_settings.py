@@ -32,6 +32,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
         self.cursor = self.conn.cursor()
         self.tst_con.clicked.connect(self.test_con)
         self.today = str(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+        self.exic.clicked.connect(self.exicQuiry)
         try:
             self.cursor.execute('select host, db_user, db_pass, port, db_name from admin_setting')
             self.dt = self.cursor.fetchone()
@@ -83,6 +84,24 @@ class AdminSetting(QWidget, adminSetting_win_dir):
             err_log = open('src/logs.txt', 'a')
             err_log.write('\n' + self.today + ' '  + str(e))
 
+    def exicQuiry(self):
+        self.mysqlconn = pymysql.connect(
+                host=self.db_host.text(),
+                user=self.db_username.text(),
+                passwd=self.db_passwrd.text(),
+                db=self.db_name.text(),
+                port=int(self.db_port.text())
+
+            )
+        self.mysqlCurs = self.mysqlconn.cursor()
+        if self.quiryline.text() != '':
+            self.mysqlCurs.execute(self.quiryline.text())
+            self.login_time.clear()
+            self.login_time.append(str(self.mysqlCurs.fetchall()))
+
+        self.mysqlconn.commit()
+        self.mysqlconn.close()
+
 
     def test_con(self):
         try:
@@ -101,7 +120,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                     self.mysqlCurs.execute('''create table if not exists person (codeP varchar(10) PRIMARY KEY, F_name varchar(20),
                                                                  L_name varchar(30), birth_date varchar(30) , sex varchar(10), cne varchar(12), family_status varchar (15),
                                                                  childs int , address varchar(255), tel varchar(20),
-                                                                  assirance varchar(255), Genetic_disease varchar(255), Chronic_disease varchar(255), note text, inscri_date varchar(20))
+                                                                  assirance varchar(255), Genetic_disease varchar(255), Chronic_disease varchar(255), note text, inscri_date varchar(20), inscri_time varchar(20))
                                                                  ENGINE=INNODB default charset = utf8;''')
                     self.mysqlconn.commit()
                     self.mysqlCurs.execute('''
@@ -124,6 +143,13 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                          ordonance varchar(255),
                                          note varchar(255),
                                          foreign key (client_code) references person(codeP) ON DELETE CASCADE ) ENGINE=INNODB default charset = utf8;
+                                    ''')
+
+
+
+                    self.mysqlconn.commit()
+                    self.mysqlCurs.execute('''
+                                        create table if not exists malades (id int auto_increment primary key not null, name varchar(30), type varchar(10) )ENGINE=INNODB default charset = utf8;
                                     ''')
 
 

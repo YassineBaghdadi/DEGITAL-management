@@ -81,32 +81,6 @@ border-color: rgb(128, 128, 128);</string>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QPushButton" name="pushButton_7">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>150</y>
-      <width>87</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_8">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>150</y>
-      <width>87</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="add_person_frame">
    <property name="geometry">
@@ -325,7 +299,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QLineEdit" name="tel">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>611</x>
       <y>101</y>
       <width>210</width>
       <height>33</height>
@@ -351,7 +325,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QComboBox" name="assurance_type">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>611</x>
       <y>150</y>
       <width>213</width>
       <height>27</height>
@@ -366,7 +340,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QTextEdit" name="note">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>611</x>
       <y>210</y>
       <width>240</width>
       <height>111</height>
@@ -430,128 +404,6 @@ border-color: rgb(128, 128, 128);</string>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
-   </widget>
-   <widget class="QFrame" name="for_adult">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>381</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QLabel" name="label_9">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>110</y>
-       <width>110</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Nomber d'enfant</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>54</x>
-       <y>19</y>
-       <width>54</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>C.I.N</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="children_num">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>99</y>
-       <width>210</width>
-       <height>33</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>0</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="familly_state">
-     <property name="geometry">
-      <rect>
-       <x>146</x>
-       <y>54</y>
-       <width>220</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text">
-       <string>Celibataire</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Marie</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Divorce</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Separe</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>veuf</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QLabel" name="label_8">
-     <property name="geometry">
-      <rect>
-       <x>14</x>
-       <y>59</y>
-       <width>110</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Situation Familial</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="cne">
-     <property name="geometry">
-      <rect>
-       <x>145</x>
-       <y>11</y>
-       <width>220</width>
-       <height>33</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
    <widget class="QFrame" name="for_baby381x161">
     <property name="geometry">
@@ -620,6 +472,112 @@ border-color: rgb(128, 128, 128);</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>299</y>
+      <width>110</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Situation Familial</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>54</x>
+      <y>259</y>
+      <width>54</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>C.I.N</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="familly_state">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>294</y>
+      <width>220</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Celibataire</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Marie</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Divorce</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Separe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>veuf</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLineEdit" name="children_num">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>339</y>
+      <width>210</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="cne">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>251</y>
+      <width>220</width>
+      <height>33</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>110</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nomber d'enfant</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QFrame" name="RDV_frame">
@@ -1727,6 +1685,12 @@ border-color: rgb(128, 128, 128);</string>
       <height>1</height>
      </rect>
     </property>
+    <property name="uniformRowHeights">
+     <bool>false</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>false</bool>
+    </property>
     <column>
      <property name="text">
       <string>New Column</string>
@@ -1859,7 +1823,7 @@ border-color: rgb(128, 128, 128);</string>
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>Visites</string>
        </property>
       </widget>
      </item>
@@ -1872,7 +1836,7 @@ border-color: rgb(128, 128, 128);</string>
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>Clients inscription :</string>
        </property>
       </widget>
      </item>
@@ -1885,7 +1849,7 @@ border-color: rgb(128, 128, 128);</string>
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>RDVs :</string>
        </property>
       </widget>
      </item>
@@ -1898,59 +1862,7 @@ border-color: rgb(128, 128, 128);</string>
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_69">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_63">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_66">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_70">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
+        <string>money :</string>
        </property>
       </widget>
      </item>
@@ -1959,9 +1871,9 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QWidget" name="verticalLayoutWidget_20">
     <property name="geometry">
      <rect>
-      <x>193</x>
+      <x>200</x>
       <y>100</y>
-      <width>120</width>
+      <width>111</width>
       <height>251</height>
      </rect>
     </property>
@@ -1969,21 +1881,21 @@ border-color: rgb(128, 128, 128);</string>
      <item>
       <widget class="QLabel" name="label_71">
        <property name="text">
-        <string>TextLabel</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_72">
        <property name="text">
-        <string>TextLabel</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_73">
        <property name="text">
-        <string>TextLabel</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -1994,109 +1906,13 @@ border-color: rgb(128, 128, 128);</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="label_75">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_76">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_77">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_78">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_21">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>100</y>
-      <width>71</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_icos">
-     <item>
-      <widget class="QLabel" name="label_80">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_82">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_83">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_84">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_81">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_86">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_85">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_79">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>100</y>
+      <x>410</x>
+      <y>106</y>
       <width>441</width>
       <height>241</height>
      </rect>
@@ -2105,13 +1921,13 @@ border-color: rgb(128, 128, 128);</string>
      <enum>QFrame::StyledPanel</enum>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+     <enum>QFrame::Plain</enum>
     </property>
    </widget>
    <widget class="QDateEdit" name="dateEdit_2">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>90</x>
       <y>30</y>
       <width>150</width>
       <height>22</height>
@@ -2121,7 +1937,7 @@ border-color: rgb(128, 128, 128);</string>
      <set>Qt::AlignCenter</set>
     </property>
     <property name="displayFormat">
-     <string>dd-MMMM-yyyy</string>
+     <string>yyyy-MM-dd</string>
     </property>
     <property name="calendarPopup">
      <bool>true</bool>
@@ -2133,7 +1949,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QDateEdit" name="dateEdit_3">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>260</x>
       <y>30</y>
       <width>150</width>
       <height>22</height>
@@ -2143,7 +1959,7 @@ border-color: rgb(128, 128, 128);</string>
      <set>Qt::AlignCenter</set>
     </property>
     <property name="displayFormat">
-     <string>dd-MMMM-yyyy</string>
+     <string>yyyy-MM-dd</string>
     </property>
     <property name="calendarPopup">
      <bool>true</bool>
@@ -2155,7 +1971,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QLabel" name="label_87">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>30</x>
       <y>33</y>
       <width>47</width>
       <height>20</height>
@@ -2174,7 +1990,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>730</x>
       <y>30</y>
       <width>75</width>
       <height>23</height>
@@ -2182,6 +1998,16 @@ border-color: rgb(128, 128, 128);</string>
     </property>
     <property name="text">
      <string>ok</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_2">
+    <property name="geometry">
+     <rect>
+      <x>423</x>
+      <y>28</y>
+      <width>295</width>
+      <height>25</height>
+     </rect>
     </property>
    </widget>
   </widget>

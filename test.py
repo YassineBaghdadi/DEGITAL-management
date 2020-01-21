@@ -52,14 +52,13 @@ class Main(QWidget, main_ui):
 #         self.mysqlCurs.execute('select codeP, F_name, L_name, cne, birth_date, family_status, address, tel, inscri_date from person order by F_name asc')
 #         for i in self.mysqlCurs.fetchall():
 #             print(i)
-        self.mysqlCurs.execute(
-            'select S_date, price from sessions order by S_date desc')
-        sessions = self.mysqlCurs.fetchone()
-        print(sessions[0])
-        print('##########')
-        if sessions:
-            print('yes')
-
+#         self.mysqlCurs.execute(
+#             'select inscri_date from person')
+#         print(self.mysqlCurs.fetchall())
+#         for i in self.mysqlCurs.fetchall():
+#             self.mysqlCurs.execute('update person set inscri_date = "{}"'.format(i[0].split(' ')[0]))
+#             self.mysqlCurs.execute('update person set inscri_time = "{}"'.format(i[0].split(' ')[1]))
+#             self.db.commit()
         # self.mysqlCurs.execute(
         #     '''select F_name, L_name, tel, address, assirance from person where codeP = "a3pj90V" ''')
         #
