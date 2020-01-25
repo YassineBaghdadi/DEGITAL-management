@@ -14,11 +14,13 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLineEdit{
+   <string notr="true">
+QLineEdit{
 	
 	background-color: rgb(255, 255, 255);
 	border : 0px solid #ffffff;
-}</string>
+}
+</string>
   </property>
   <widget class="Line" name="line">
    <property name="geometry">
@@ -81,6 +83,144 @@ border-color: rgb(128, 128, 128);</string>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
+   <widget class="QComboBox" name="nums_combo">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>30</y>
+      <width>310</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addNum">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>28</y>
+      <width>87</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="num_addNew">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>28</y>
+      <width>87</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add New</string>
+    </property>
+   </widget>
+   <widget class="QTreeWidget" name="numbersTree">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>841</width>
+      <height>340</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="autoScroll">
+     <bool>true</bool>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
+    <property name="defaultDropAction">
+     <enum>Qt::IgnoreAction</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="textElideMode">
+     <enum>Qt::ElideMiddle</enum>
+    </property>
+    <column>
+     <property name="text">
+      <string>Number</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Nom</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>C.N.I</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Date d'incription</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Note</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>79</y>
+      <width>840</width>
+      <height>3</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="num_clear">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>28</y>
+      <width>87</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>clear</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QFrame" name="add_person_frame">
    <property name="geometry">
@@ -840,12 +980,12 @@ border-color: rgb(128, 128, 128);</string>
        </column>
        <column>
         <property name="text">
-         <string>  </string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>  </string>
+         <string/>
         </property>
        </column>
       </widget>
@@ -1005,7 +1145,7 @@ border-color: rgb(128, 128, 128);</string>
       <rect>
        <x>33</x>
        <y>64</y>
-       <width>107</width>
+       <width>113</width>
        <height>215</height>
       </rect>
      </property>
@@ -1681,7 +1821,7 @@ border-color: rgb(128, 128, 128);</string>
      <rect>
       <x>15</x>
       <y>101</y>
-      <width>1</width>
+      <width>140</width>
       <height>1</height>
      </rect>
     </property>
@@ -1908,22 +2048,6 @@ border-color: rgb(128, 128, 128);</string>
      </item>
     </layout>
    </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>106</y>
-      <width>441</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-   </widget>
    <widget class="QDateEdit" name="dateEdit_2">
     <property name="geometry">
      <rect>
@@ -1993,7 +2117,7 @@ border-color: rgb(128, 128, 128);</string>
       <x>730</x>
       <y>30</y>
       <width>75</width>
-      <height>23</height>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
@@ -2007,6 +2131,16 @@ border-color: rgb(128, 128, 128);</string>
       <y>28</y>
       <width>295</width>
       <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="Graph" name="gr">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>100</y>
+      <width>410</width>
+      <height>310</height>
      </rect>
     </property>
    </widget>
@@ -2200,6 +2334,13 @@ margin-bottom:20px;</string>
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Graph</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

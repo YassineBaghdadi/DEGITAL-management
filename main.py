@@ -13,6 +13,12 @@ import sys
 import time
 import sqlite3
 
+
+
+import pyqtgraph as pg
+
+
+
 from time import gmtime, strftime
 from setting import *
 
@@ -70,6 +76,13 @@ class Main(QWidget, main_ui):
         self.setPalette(palette)
 
         self.exit.clicked.connect(self.quit_)
+
+        self.nums_combo.currentTextChanged.connect(self.enableSaveBtn)
+        self.addNum.clicked.connect(self.saveNewNum)
+        self.numsRefresh()
+        self.num_clear.clicked.connect(self.deleteNums)
+        self.num_addNew.clicked.connect(self.addPersonFrame)
+
         ##########################  add person part :  ##########################################################
         self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
         # self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))
@@ -88,7 +101,6 @@ class Main(QWidget, main_ui):
         self.add_person_save_btn.mousePressEvent = self.addPerson
         # self.children_num.textChanged(self.virifNum(self.children_num))
         self.children_num.setValidator(QIntValidator())
-        self.refresh()
 
 
         #RDV part:
@@ -152,6 +164,84 @@ class Main(QWidget, main_ui):
         # self.Statistiques_btn.setScaledContents(True)
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
         self.pushButton.clicked.connect(self.statictic)
+
+
+    def deleteNums(self):
+        self.mysqlCurs.execute('SET SQL_SAFE_UPDATES = 0;')
+        self.mysqlCurs.execute('delete from nums')
+        self.mysqlConn.commit()
+        self.numsRefresh()
+
+
+    def numsRefresh(self):
+        print(00)
+        self.mysqlCurs.execute('select count(id) from nums')
+        if self.mysqlCurs.fetchone()[0]:
+            self.num_clear.setEnabled(True)
+        else:
+            self.num_clear.setEnabled(False)
+
+
+        self.numbersTree.clear()
+        self.mysqlCurs.execute('''select num, codeP, F_name, L_name, cne, inscri_date 
+        from person inner join nums on person.codeP = nums.client_code order by num asc''')
+        data = self.mysqlCurs.fetchall()
+        if data:
+            self.numbersTree.setHeaderLabels(['Number', 'ID', 'Name', 'C.N.I', 'Date d\'inscription'])
+            self.numbersTree.clear()
+            for i in data:
+                item = QTreeWidgetItem([str(i[0]), str(i[1]), str(i[2]) + ' ' + str(i[3]), str(i[4]), str(i[5])])
+                self.numbersTree.addTopLevelItem(item)
+
+
+        clients__ = ['choisir un client']
+        try:
+            self.mysqlCurs.execute('select codeP, F_name, L_name, cne from person order by F_name asc')
+            # print(self.mysqlCurs.fetchall())
+            for a in self.mysqlCurs.fetchall():
+                if str(a[3]) == '':
+                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + '------'))
+                else:
+                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + str(a[3])))
+
+            self.nums_combo.clear()
+            self.nums_combo.addItems(clients__)
+
+        except Exception as e:
+            print(e)
+            err_log = open('src/logs.txt', 'a')
+            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+            self.nums_combo.clear()
+            self.nums_combo.addItems(clients__)
+
+
+
+    def saveNewNum(self):
+        self.mysqlCurs.execute("""
+                select count(id) from nums where client_code = "{}"
+        """.format(self.nums_combo.currentText().split(' ')[0]))
+        if self.mysqlCurs.fetchone()[0]:
+            err = QMessageBox.warning(self, 'ERROR', 'this client already took an number', QMessageBox.Ok)
+        else:
+            self.mysqlCurs.execute('select max(num) from nums')
+            last = self.mysqlCurs.fetchone()[0]
+            if last:
+                self.mysqlCurs.execute('insert into nums (num, client_code, token_date) values ({}, "{}", "{}")'.format(last + 1, self.nums_combo.currentText().split(' ')[0], self.today.split(' ')[0]))
+
+            else:
+                self.mysqlCurs.execute('insert into nums (num, client_code, token_date) values ({}, "{}", "{}")'.format(1, self.nums_combo.currentText().split(' ')[0], self.today.split(' ')[0]))
+
+            self.mysqlConn.commit()
+            self.numsRefresh()
+
+    def enableSaveBtn(self):
+        if self.nums_combo.currentText() == 'choisir un client':
+            self.addNum.setEnabled(False)
+        else:
+            self.addNum.setEnabled(True)
+
+        self.refresh()
+
 
     def goSetting(self, event):
         self.sett = Setting()
@@ -295,7 +385,9 @@ class Main(QWidget, main_ui):
                        self.lineEdit_13.text(), self.lineEdit_12.text(), self.lineEdit_19.text(),
                        self.textEdit_2.toPlainText(), str(self.comboBox.currentText().split(' ')[0])))
             self.mysqlConn.commit()
-            err = QMessageBox.information(self, 'DONE', 'the date updated successfully', QMessageBox.Ok)
+            err = QMessageBox.information(self, 'DONE', 'the updated successfully', QMessageBox.Ok)
+            self.refresh()
+
 
     def search_fill(self):
         if self.comboBox.currentText() == 'choisir un client':
@@ -340,8 +432,6 @@ class Main(QWidget, main_ui):
                     print(e)
                     err_log = open('src/logs.txt', 'a')
                     err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type ))
-
-
 
     def addPersonCancel(self, event):
         self.codeP.setText('')
@@ -479,6 +569,8 @@ class Main(QWidget, main_ui):
                 err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
                 self.clientListcombo.clear()
                 self.clientListcombo.addItems(clients)
+
+        # self.mysqlConn.commit()
         clients_ = ['choisir un client']
         try:
             self.mysqlCurs.execute('select codeP, F_name, L_name, cne from person order by F_name asc')
@@ -498,6 +590,19 @@ class Main(QWidget, main_ui):
                 err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
                 self.comboBox.clear()
                 self.comboBox.addItems(clients_)
+
+
+        self.mysqlConn.commit()
+
+
+
+        # try:
+        #
+        #
+        # except Exception as e:
+        #     print(e)
+
+
 
 
     def addPerson(self, event):

@@ -65,7 +65,22 @@ class Main(QWidget, main_ui):
         # client_info = self.mysqlCurs.fetchone()
         #
         # print(client_info)
+        #
+        # self.mysqlCurs.execute(
+        #     'select num, codeP, F_name, L_name, cne, inscri_date from person inner join nums on person.codeP = nums.client_code order by num asc')
+        # data = self.mysqlCurs.fetchall()
+        # if data:
+        #     self.treeWidget.clear()
+        #     for i in data:
+        #         item = QTreeWidgetItem([str(i[0]), str(i[1]), str(i[2]) + str(i[3]), str(i[4]), str(i[5])])
+        #         self.treeWidget.addTopLevelItem(item)
+        # self.db.close()
 
+
+
+        # self.mysqlCurs.execute('select max(num) from nums')
+        # last = self.mysqlCurs.fetchone()[0]
+        # print(last)
         # self.mysqlCurs.execute('''
         # select codeP, F_name, L_name, cne, max(S_date), note
         # from person inner join sessions on person.codeP = sessions.client_code
@@ -229,17 +244,14 @@ print(today.split(' ')[0])
 
 
 
-
-
-
-
-
-
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    main_wn = Main()
-    main_wn.show()
-    sys.exit(app.exec_())
-if __name__ == '__main__' :
-    main()
+#
+#
+#
+# def main():
+#     app = QtWidgets.QApplication(sys.argv)
+#     main_wn = Main()
+#     main_wn.show()
+#     sys.exit(app.exec_())
+# if __name__ == '__main__' :
+#     main()
 

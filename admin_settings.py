@@ -155,6 +155,23 @@ class AdminSetting(QWidget, adminSetting_win_dir):
 
 
                     self.mysqlconn.commit()
+                    self.mysqlCurs.execute('''
+                                        create table if not exists nums (id int auto_increment primary key not null, 
+                                        num int, 
+                                        client_code varchar(12),
+                                         token_date varchar(20) ,
+                                         foreign key (client_code) references person(codeP) ON DELETE CASCADE)ENGINE=INNODB default charset = utf8;
+                                    ''')
+
+                    self.mysqlconn.commit()
+
+                    self.mysqlCurs.execute('''
+                                        create table if not exists tools (id int auto_increment primary key not null, t1 varchar(20), t2 varchar(20),
+                                          t3 varchar(20),  t4 varchar(20),  t5 varchar(20))ENGINE=INNODB default charset = utf8;
+                                    ''')
+
+                    self.mysqlconn.commit()
+
                 except Exception as e:
                     print(e)
             else:
