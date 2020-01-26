@@ -112,7 +112,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QPushButton" name="num_addNew">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>480</x>
       <y>28</y>
       <width>87</width>
       <height>29</height>
@@ -205,20 +205,20 @@ border-color: rgb(128, 128, 128);</string>
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="num_clear">
+   <widget class="QPushButton" name="num_close">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>770</x>
       <y>28</y>
-      <width>87</width>
-      <height>29</height>
+      <width>1</width>
+      <height>1</height>
      </rect>
     </property>
     <property name="text">
-     <string>clear</string>
+     <string>close</string>
     </property>
    </widget>
   </widget>
@@ -1390,6 +1390,22 @@ border-color: rgb(128, 128, 128);</string>
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="rdv_counter">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>70</y>
+      <width>54</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>00</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QFrame" name="search_frame">
    <property name="geometry">
@@ -2134,7 +2150,7 @@ border-color: rgb(128, 128, 128);</string>
      </rect>
     </property>
    </widget>
-   <widget class="Graph" name="gr">
+   <widget class="QGraphicsView" name="gr">
     <property name="geometry">
      <rect>
       <x>450</x>
@@ -2334,13 +2350,6 @@ margin-bottom:20px;</string>
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Graph</class>
-   <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

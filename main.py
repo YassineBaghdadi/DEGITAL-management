@@ -39,6 +39,7 @@ class Main(QWidget, main_ui):
         self.height_ = 431
         self.acc_type = account_type
         self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+        # self.today = '2020-01-27 3456'
         self.sqliteConn = sqlite3.connect('src/setting.db')
         self.sqliteCurs = self.sqliteConn.cursor()
         self.host_db, self.user_db, self.passwrd_db, self.DBname, self.port_db = self.sqliteCurs.execute('select host, db_user, db_pass, db_name, port from admin_setting').fetchone()
@@ -77,10 +78,11 @@ class Main(QWidget, main_ui):
 
         self.exit.clicked.connect(self.quit_)
 
+
         self.nums_combo.currentTextChanged.connect(self.enableSaveBtn)
         self.addNum.clicked.connect(self.saveNewNum)
-        self.numsRefresh()
-        self.num_clear.clicked.connect(self.deleteNums)
+        self.home_refresh()
+        self.num_close.clicked.connect(self.deleteNums)
         self.num_addNew.clicked.connect(self.addPersonFrame)
 
         ##########################  add person part :  ##########################################################
@@ -101,6 +103,8 @@ class Main(QWidget, main_ui):
         self.add_person_save_btn.mousePressEvent = self.addPerson
         # self.children_num.textChanged(self.virifNum(self.children_num))
         self.children_num.setValidator(QIntValidator())
+
+        self.person_refresh()
 
 
         #RDV part:
@@ -133,6 +137,7 @@ class Main(QWidget, main_ui):
         self.new_RDV_btn.mousePressEvent = self.showNewRDVFrame
         self.save_new_rdv.mousePressEvent = self.saveNewRDV
         self.clientListcombo.currentTextChanged.connect(self.newRdvFill)
+        self.rdv_refresh()
 
         #search part :
         self.search_btn.setStyleSheet('background-image: url(img/btns/off/search_btn.png);')
@@ -167,72 +172,41 @@ class Main(QWidget, main_ui):
 
 
     def deleteNums(self):
-        self.mysqlCurs.execute('SET SQL_SAFE_UPDATES = 0;')
-        self.mysqlCurs.execute('delete from nums')
-        self.mysqlConn.commit()
-        self.numsRefresh()
 
-
-    def numsRefresh(self):
-        print(00)
-        self.mysqlCurs.execute('select count(id) from nums')
-        if self.mysqlCurs.fetchone()[0]:
-            self.num_clear.setEnabled(True)
-        else:
-            self.num_clear.setEnabled(False)
-
-
-        self.numbersTree.clear()
-        self.mysqlCurs.execute('''select num, codeP, F_name, L_name, cne, inscri_date 
-        from person inner join nums on person.codeP = nums.client_code order by num asc''')
-        data = self.mysqlCurs.fetchall()
-        if data:
-            self.numbersTree.setHeaderLabels(['Number', 'ID', 'Name', 'C.N.I', 'Date d\'inscription'])
-            self.numbersTree.clear()
-            for i in data:
-                item = QTreeWidgetItem([str(i[0]), str(i[1]), str(i[2]) + ' ' + str(i[3]), str(i[4]), str(i[5])])
-                self.numbersTree.addTopLevelItem(item)
-
-
-        clients__ = ['choisir un client']
+        # self.mysqlCurs.execute('SET SQL_SAFE_UPDATES = 0;')
         try:
-            self.mysqlCurs.execute('select codeP, F_name, L_name, cne from person order by F_name asc')
-            # print(self.mysqlCurs.fetchall())
-            for a in self.mysqlCurs.fetchall():
-                if str(a[3]) == '':
-                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + '------'))
-                else:
-                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + str(a[3])))
+            self.mysqlCurs.execute('select st from tools where id = 1')
+            st = self.mysqlCurs.fetchone()[0]
+            if st == 'c':
+                self.mysqlCurs.execute('update tools set st = "o" where id = 1')
 
-            self.nums_combo.clear()
-            self.nums_combo.addItems(clients__)
+            else:
+                self.mysqlCurs.execute('update tools set st = "c" where id = 1')
 
+            self.mysqlConn.commit()
         except Exception as e:
             print(e)
-            err_log = open('src/logs.txt', 'a')
-            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
-            self.nums_combo.clear()
-            self.nums_combo.addItems(clients__)
+
+        self.home_refresh()
 
 
 
     def saveNewNum(self):
         self.mysqlCurs.execute("""
-                select count(id) from nums where client_code = "{}"
-        """.format(self.nums_combo.currentText().split(' ')[0]))
+                select count(id) from nums where client_code = "{}" and token_date like '{}'
+        """.format(self.nums_combo.currentText().split(' ')[0], self.today.split(' ')[0]))
         if self.mysqlCurs.fetchone()[0]:
             err = QMessageBox.warning(self, 'ERROR', 'this client already took an number', QMessageBox.Ok)
         else:
-            self.mysqlCurs.execute('select max(num) from nums')
+            self.mysqlCurs.execute('select max(num) from nums where token_date like "{}"'.format(self.today.split(' ')[0]))
             last = self.mysqlCurs.fetchone()[0]
             if last:
                 self.mysqlCurs.execute('insert into nums (num, client_code, token_date) values ({}, "{}", "{}")'.format(last + 1, self.nums_combo.currentText().split(' ')[0], self.today.split(' ')[0]))
-
             else:
                 self.mysqlCurs.execute('insert into nums (num, client_code, token_date) values ({}, "{}", "{}")'.format(1, self.nums_combo.currentText().split(' ')[0], self.today.split(' ')[0]))
 
             self.mysqlConn.commit()
-            self.numsRefresh()
+            self.home_refresh()
 
     def enableSaveBtn(self):
         if self.nums_combo.currentText() == 'choisir un client':
@@ -240,7 +214,6 @@ class Main(QWidget, main_ui):
         else:
             self.addNum.setEnabled(True)
 
-        self.refresh()
 
 
     def goSetting(self, event):
@@ -386,7 +359,8 @@ class Main(QWidget, main_ui):
                        self.textEdit_2.toPlainText(), str(self.comboBox.currentText().split(' ')[0])))
             self.mysqlConn.commit()
             err = QMessageBox.information(self, 'DONE', 'the updated successfully', QMessageBox.Ok)
-            self.refresh()
+
+            self.searsh_refresh()
 
 
     def search_fill(self):
@@ -467,7 +441,88 @@ class Main(QWidget, main_ui):
         return self.id_P
 
 
-    def refresh(self):
+    def home_refresh(self):
+        self.searsh_refresh()
+        try:
+            self.mysqlCurs.execute("""select token_date from nums order by token_date desc""")
+            dt = self.mysqlCurs.fetchall()
+            self.dates = []
+            for i in dt:
+                if i[0] not in self.dates:
+                    self.dates.append(i[0])
+        except Exception as e:
+            print(e)
+            self.dates = []
+
+        if self.acc_type == 'admin':
+            self.num_close.resize(87, 29)
+            self.num_close.setEnabled(True)
+            self.mysqlCurs.execute('select st from tools where id = 1')
+            st = self.mysqlCurs.fetchone()[0]
+            if st == 'c':
+                self.num_close.setText('Open')
+            else:
+                self.num_close.setText('Close')
+        else:
+            self.mysqlCurs.execute('select st from tools where id = 1')
+            st = self.mysqlCurs.fetchone()[0]
+            if st == 'c':
+                self.nums_combo.setEnabled(False)
+            else:
+                self.nums_combo.setEnabled(True)
+
+
+
+        self.numbersTree.clear()
+        self.mysqlCurs.execute('''select num, codeP, F_name, L_name, cne, inscri_date 
+        from person inner join nums on person.codeP = nums.client_code order by token_date asc''')
+        data = self.mysqlCurs.fetchall()
+        self.numbersTree.clear()
+        # if data:
+        #     self.numbersTree.setHeaderLabels(['Number', 'ID', 'Name', 'C.N.I', 'Date d\'inscription'])
+        #     for row in data:
+        #         item = QTreeWidgetItem([str(row[0]), str(row[1]), str(row[2]) + ' ' + str(row[3]), str(row[4]), str(row[5])])
+        #         self.numbersTree.addTopLevelItem(item)
+
+        if data :
+            self.numbersTree.setHeaderLabels(['Number', 'ID', 'Name', 'C.N.I', 'Date d\'inscription'])
+            for date_ in self.dates:
+                ittem = QTreeWidgetItem([date_])
+                self.mysqlCurs.execute("""
+                    select num, codeP, F_name, L_name, cne, inscri_date 
+                                        from person inner join nums on person.codeP = nums.client_code where nums.token_date like '{}' order by num asc""".format(date_))
+                for row in self.mysqlCurs.fetchall():
+                    child = QTreeWidgetItem([str(row[0]), str(row[1]), str(row[2]) + ' ' + str(row[3]), str(row[4]), str(row[5])])
+                    ittem.addChild(child)
+
+                    self.numbersTree.addTopLevelItem(ittem)
+
+
+
+
+
+        clients__ = ['choisir un client']
+        try:
+            self.mysqlCurs.execute('select codeP, F_name, L_name, cne from person order by F_name asc')
+            # print(self.mysqlCurs.fetchall())
+            for a in self.mysqlCurs.fetchall():
+                if str(a[3]) == '':
+                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + '------'))
+                else:
+                    clients__.append(str(a[0]) + ' | ' + str(a[1]) + ' ' + str(a[2] + ' ' + str(a[3])))
+
+            self.nums_combo.clear()
+            self.nums_combo.addItems(clients__)
+
+        except Exception as e:
+            print(e)
+            err_log = open('src/logs.txt', 'a')
+            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+            self.nums_combo.clear()
+            self.nums_combo.addItems(clients__)
+
+
+    def person_refresh(self):
         self.codesP = []
         try:
             self.mysqlCurs.execute('''select codeP from person''')
@@ -475,10 +530,9 @@ class Main(QWidget, main_ui):
                 self.codesP.append(i[0])
 
             while True:
-                if self.generatecode() in self.codesP:
-                    print('the code already exists')
-
-                    self.generatecode()
+                self.new_code = self.generatecode()
+                if self.new_code in self.codesP:
+                    pass
                 else:
                     self.codeP.setText(self.generatecode())
                     break
@@ -490,12 +544,15 @@ class Main(QWidget, main_ui):
             # self.codeP.setText(self.generatecode())
 
 
+    def rdv_refresh(self):
 
-        try: # todo
+        try:
             self.mysqlCurs.execute("select count(id) from RDV where rdv_date = '{}' ".format(str(self.today.split(' ')[0])))
             self.today_RDV_counter.setText(str(self.mysqlCurs.fetchone()[0]))
             self.mysqlCurs.execute("""select count(id) from RDV where rdv_date < '{}' """.format(str(self.today.split(' ')[0])))
             self.time_out_counter.setText(str(self.mysqlCurs.fetchone()[0]))
+            self.mysqlCurs.execute("""select count(id) from RDV where rdv_date > '{}' """.format(str(self.today.split(' ')[0])))
+            self.rdv_counter.setText(str(self.mysqlCurs.fetchone()[0]))
 
             while self.todayRDVTable.rowCount() > 0:
                 self.todayRDVTable.removeRow(0)
@@ -570,6 +627,10 @@ class Main(QWidget, main_ui):
                 self.clientListcombo.clear()
                 self.clientListcombo.addItems(clients)
 
+
+
+    def searsh_refresh(self):
+
         # self.mysqlConn.commit()
         clients_ = ['choisir un client']
         try:
@@ -596,18 +657,10 @@ class Main(QWidget, main_ui):
 
 
 
-        # try:
-        #
-        #
-        # except Exception as e:
-        #     print(e)
-
-
-
 
     def addPerson(self, event):
         try:
-            self.refresh()
+            self.person_refresh()
         except Exception as e:
                 print(e)
                 err_log = open('src/logs.txt', 'a')
@@ -737,12 +790,7 @@ class Main(QWidget, main_ui):
                 err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
 
     def showHomeFrame(self, event):
-        try:
-            self.refresh()
-        except Exception as e:
-            print(e)
-            err_log = open('src/logs.txt', 'a')
-            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+
         # self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
         self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))
         self.add_person_btn.setScaledContents(True)
@@ -774,10 +822,11 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.home_refresh()
 
     def addPersonFrame(self, event):
         try:
-            self.refresh()
+            self.person_refresh()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')
@@ -817,7 +866,7 @@ class Main(QWidget, main_ui):
 
     def showRDVFrame(self, event):
         try:
-            self.refresh()
+            self.rdv_refresh()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')
@@ -918,7 +967,7 @@ class Main(QWidget, main_ui):
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
 
-    def saveNewRDV(self, event):#todo
+    def saveNewRDV(self, event):
 
         self.mysqlCurs.execute('select * from RDV where client_code = "{}" and rdv_date ="{}"'.format(str(self.clientListcombo.currentText().split(' ')[0]), str(self.newRDVDateEdit.date().toPyDate())))
         if self.clientListcombo.currentText() == 'choisir un client':
@@ -934,7 +983,7 @@ class Main(QWidget, main_ui):
                 )
                 '''.format(str(self.clientListcombo.currentText().split(' ')[0]), self.today.split(' ')[0], str(self.newRDVDateEdit.date().toPyDate()), self.newRDVNote.toPlainText()))
                 self.mysqlConn.commit()
-                self.refresh()
+                self.rdv_refresh()
                 self.newRDVDateEdit.setDate(QtCore.QDate.currentDate())
             # try:
             #     self.mysqlCurs.execute('''
@@ -964,7 +1013,7 @@ class Main(QWidget, main_ui):
 
     def showSearchForm(self, event):
         try:
-            self.refresh()
+            self.searsh_refresh()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')
@@ -1004,7 +1053,7 @@ class Main(QWidget, main_ui):
 
     def showDetailsForm(self, event):
         try:
-            self.refresh()
+            # self.refresh()
             # self.searshDetaisTree()
             self.fillDetaisTree()
         except Exception as e:
@@ -1078,7 +1127,7 @@ class Main(QWidget, main_ui):
 
     def showStatistiquesForm(self, event):
         try:
-            self.refresh()
+            self.searshDetaisTree()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')

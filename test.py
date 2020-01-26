@@ -35,6 +35,64 @@ class Main(QWidget, main_ui):
 
         # prepare a cursor object using cursor() method
         self.mysqlCurs = self.db.cursor()
+        self.codesP = []
+        try:
+            self.mysqlCurs.execute('''select codeP from person''')
+            for i in self.mysqlCurs.fetchall():
+                self.codesP.append(i[0])
+
+        except Exception as e:
+            print(e)
+
+        # self.years = ['2022', '2021', '2020', '2019', '2018', '2017']
+        # self.months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        # self.days = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30']
+
+        # for i in range(1, 160):
+        #     self.mysqlCurs.execute('delete from nums where id = {}'.format(i))
+        #     self.db.commit()
+        #     print(i)
+
+        dates = ['2020-01-20', '2020-01-21', '2020-01-22', '2020-01-23', '2020-01-24', '2020-01-25', '2020-01-26', '2020-01-27', '2020-01-28', '2020-01-29']
+        self.mysqlCurs.execute('select id from nums')
+
+        for i in dates:
+
+            for r in range(30):
+                self.mysqlCurs.execute(
+                        'select max(num) from nums where token_date like "{}"'.format(i))
+                last = self.mysqlCurs.fetchone()[0]
+                if last:
+                    self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
+                    # print(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
+                else:
+                    self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
+                    # print(1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
+                self.db.commit()
+                print(str(i), ' : Done')
+
+        # self.mysqlCurs.execute("""select token_date from nums order by token_date asc""")
+        # dt = self.mysqlCurs.fetchall()
+        # # self.temp = dt[0][0]
+        # self.dates = []
+        # for i in dt:
+        #     if i[0] not in self.dates:
+        #         self.dates.append(i[0])
+
+
+        # print(self.dates)
+        # self.mysqlCurs.execute("""select inscri_date from person order by inscri_date asc""")
+        # dt = self.mysqlCurs.fetchall()
+        # self.temp = dt[0][0]
+        # self.dates = [self.temp]
+        # for i in dt:
+        #     if i[0] != self.temp:
+        #         self.dates.append(i[0])
+        #
+        # print(dt)
+        # print(self.dates)
+
+
         # self.mysqlCurs.execute('''select person.codeP, person.F_name, person.L_name, person.cne, RDV.rdv_date, RDV.note
         #             from person inner join RDV on person.codeP = RDV.client_code where RDV.rdv_date >= "{}" order by rdv_date asc'''.format(
         #     str(today.split(' ')[0])))
@@ -240,18 +298,17 @@ print(today.split(' ')[0])
 
 
 
-
-
-
-
+import re, uuid
+print("The MAC address in formatted and less complex way is : ", end="")
+print(':'.join(re.findall('..', '%012x' % uuid.getnode())))
 #
 #
-#
-# def main():
-#     app = QtWidgets.QApplication(sys.argv)
-#     main_wn = Main()
-#     main_wn.show()
-#     sys.exit(app.exec_())
-# if __name__ == '__main__' :
-#     main()
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    main_wn = Main()
+    main_wn.show()
+    sys.exit(app.exec_())
+if __name__ == '__main__' :
+    main()
 

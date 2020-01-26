@@ -166,9 +166,15 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                     self.mysqlconn.commit()
 
                     self.mysqlCurs.execute('''
-                                        create table if not exists tools (id int auto_increment primary key not null, t1 varchar(20), t2 varchar(20),
-                                          t3 varchar(20),  t4 varchar(20),  t5 varchar(20))ENGINE=INNODB default charset = utf8;
+                                        create table if not exists tools (id int auto_increment primary key not null, st varchar(20))ENGINE=INNODB default charset = utf8;
                                     ''')
+
+                    self.mysqlconn.commit()
+                    self.mysqlCurs.execute('select count(id) from tools')
+                    if not self.mysqlCurs.fetchone()[0]:
+                        self.mysqlCurs.execute('''
+                                            insert into tools (st) value("o")
+                                        ''')
 
                     self.mysqlconn.commit()
 
