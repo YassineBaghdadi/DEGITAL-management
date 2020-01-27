@@ -893,3 +893,6 @@
 2020-01-26 00:36:29 'NoneType' object is not subscriptable ( admin )
 2020-01-26 00:36:29 'NoneType' object is not subscriptable ( admin )
 2020-01-26 00:36:29 'NoneType' object is not subscriptable ( admin )
+2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )
+2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )
+2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )

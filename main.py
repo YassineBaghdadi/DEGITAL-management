@@ -547,6 +547,13 @@ class Main(QWidget, main_ui):
     def rdv_refresh(self):
 
         try:
+            while self.todayRDVTable.rowCount() > 0:
+                self.todayRDVTable.removeRow(0)
+
+            self.today_RDV_counter.setText('')
+            self.time_out_counter.setText('')
+            self.rdv_counter.setText('')
+
             self.mysqlCurs.execute("select count(id) from RDV where rdv_date = '{}' ".format(str(self.today.split(' ')[0])))
             self.today_RDV_counter.setText(str(self.mysqlCurs.fetchone()[0]))
             self.mysqlCurs.execute("""select count(id) from RDV where rdv_date < '{}' """.format(str(self.today.split(' ')[0])))
@@ -554,8 +561,6 @@ class Main(QWidget, main_ui):
             self.mysqlCurs.execute("""select count(id) from RDV where rdv_date > '{}' """.format(str(self.today.split(' ')[0])))
             self.rdv_counter.setText(str(self.mysqlCurs.fetchone()[0]))
 
-            while self.todayRDVTable.rowCount() > 0:
-                self.todayRDVTable.removeRow(0)
 
             self.mysqlCurs.execute('''select person.codeP, person.F_name, person.L_name, person.cne, RDV.rdv_date, RDV.note
             from person inner join RDV on person.codeP = RDV.client_code where RDV.rdv_date >= "{}" order by rdv_date asc'''.format(str(self.today.split(' ')[0])))
@@ -781,13 +786,13 @@ class Main(QWidget, main_ui):
             don = QMessageBox.information(self, 'ERROR DATE', 'la date invalide', QMessageBox.Ok)
             self.birth_date.setDate(QtCore.QDate.currentDate())
 
-    def showSessionsForm(self, event):
-        try:
-            self.refresh()
-        except Exception as e:
-                print(e)
-                err_log = open('src/logs.txt', 'a')
-                err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+    # def showSessionsForm(self, event):
+    #     try:
+    #         self.refresh()
+    #     except Exception as e:
+    #             print(e)
+    #             err_log = open('src/logs.txt', 'a')
+    #             err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
 
     def showHomeFrame(self, event):
 
