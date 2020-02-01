@@ -77,7 +77,7 @@ class Main(QWidget, main_ui):
         self.setPalette(palette)
 
         self.exit.clicked.connect(self.quit_)
-
+        self.numbersTree.itemDoubleClicked.connect(self.handler)
 
         self.nums_combo.currentTextChanged.connect(self.enableSaveBtn)
         self.addNum.clicked.connect(self.saveNewNum)
@@ -153,6 +153,12 @@ class Main(QWidget, main_ui):
         # self.sessions_btn.setPixmap(QtGui.QPixmap('img/btns/off/seionse_btn.png'))
         # self.sessions_btn.setScaledContents(True)
         self.sessions_btn.mousePressEvent = self.showSessionsForm
+        completer = QCompleter()
+
+        self.session_codeP_lineEdit.setCompleter(completer)
+        model = QStringListModel()
+        completer.setModel(model)
+        self.getData(model)
 
         #ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
@@ -170,6 +176,23 @@ class Main(QWidget, main_ui):
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
         self.pushButton.clicked.connect(self.statictic)
 
+    def handler(self):
+        if self.numbersTree.selectedItems()[0].text(1):
+            print(self.numbersTree.selectedItems()[0].text(1))
+            self.mysqlCurs.execute('select F_name, L_name, cne, codeP from person where codeP = "{}"'.format(self.numbersTree.selectedItems()[0].text(1)))
+            F_name, L_name, cne, codeP = self.mysqlCurs.fetchone()
+            self.goSes(F_name + ' ' + L_name + '--' + cne + '--' + codeP)
+
+    def goSes(self, codeP):
+        self.showSessionsForm(None)
+        self.session_codeP_lineEdit.setText(str(codeP))
+
+    def getData(self, m):
+        self.mysqlCurs.execute('select F_name, L_name, cne, codeP from person')
+        dt =[]
+        for i in self.mysqlCurs.fetchall():
+            dt.append(str(i[0]) + ' ' + str(i[1]) + '--' + str(i[2]) + '--' + str(i[3]))
+        m.setStringList(dt)
 
     def deleteNums(self):
 
@@ -558,7 +581,7 @@ class Main(QWidget, main_ui):
             self.today_RDV_counter.setText(str(self.mysqlCurs.fetchone()[0]))
             self.mysqlCurs.execute("""select count(id) from RDV where rdv_date < '{}' """.format(str(self.today.split(' ')[0])))
             self.time_out_counter.setText(str(self.mysqlCurs.fetchone()[0]))
-            self.mysqlCurs.execute("""select count(id) from RDV where rdv_date > '{}' """.format(str(self.today.split(' ')[0])))
+            self.mysqlCurs.execute("""select count(id) from RDV where rdv_date >= '{}' """.format(str(self.today.split(' ')[0])))
             self.rdv_counter.setText(str(self.mysqlCurs.fetchone()[0]))
 
 
@@ -705,18 +728,18 @@ class Main(QWidget, main_ui):
                                                          ': "{}" - ont été inscrits à : "{}"'.format(self.pdt[1], self.pdt[13]), QMessageBox.Ok)
 
         else:
-            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, note, inscri_date, inscri_time )values (
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}' , '{}', '{}') ;"""
+            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, work, note, inscri_date, inscri_time )values (
+                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}', '{}' , '{}', '{}') ;"""
             try:
                 self.mysqlCurs.execute(addPq.format(self.codeP.text(), self.F_name.text(), self.L_name.text(), str(self.birth_date.date().toPyDate()), self.sexe, self.cne.text(), str(self.familly_state.currentText()),
                         self.children_num.text(),
                         self.address.text(),
                         self.tel.text(),
-                        str(
-                            self.assurance_type.currentText()),
+                        str(self.assurance_type.currentText()),
+                         str(self.prof_combo.currentText()),
                         self.note.toPlainText(),
                         self.today.split(' ')[0],
-                                                    self.today.split(' ')[1]
+                        self.today.split(' ')[1]
                         ))
                 err = QMessageBox.information(self, '', 'the adding operation successfully', QMessageBox.Ok)
                 # try:
@@ -786,13 +809,39 @@ class Main(QWidget, main_ui):
             don = QMessageBox.information(self, 'ERROR DATE', 'la date invalide', QMessageBox.Ok)
             self.birth_date.setDate(QtCore.QDate.currentDate())
 
-    # def showSessionsForm(self, event):
-    #     try:
-    #         self.refresh()
-    #     except Exception as e:
-    #             print(e)
-    #             err_log = open('src/logs.txt', 'a')
-    #             err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+    def showSessionsForm(self, event):
+
+        # self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
+        self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))
+        self.add_person_btn.setScaledContents(True)
+
+        # self.RDV_btn.setStyleSheet('background-image: url(img/btns/off/RDV_btn.png);')
+        self.RDV_btn.setPixmap(QtGui.QPixmap('img/btns/off/RDV_btn.png'))
+        self.RDV_btn.setScaledContents(True)
+
+        # self.search_btn.setStyleSheet('background-image: url(img/btns/off/search_btn.png);')
+        self.search_btn.setPixmap(QtGui.QPixmap('img/btns/off/search_btn.png'))
+        self.search_btn.setScaledContents(True)
+
+        # self.sessions_btn.setStyleSheet('background-image: url(img/btns/off/seionse_btn.png);')
+        self.sessions_btn.setPixmap(QtGui.QPixmap('img/btns/on/seionse_btn.png'))
+        self.sessions_btn.setScaledContents(True)
+
+        # self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
+        self.Ditails_btn.setPixmap(QtGui.QPixmap('img/btns/off/detais.png'))
+        self.Ditails_btn.setScaledContents(True)
+
+        # self.Statistiques_btn.setStyleSheet('background-image: url(img/btns/off/statistiques_btn.png);')
+        self.Statistiques_btn.setPixmap(QtGui.QPixmap('img/btns/off/statistiques_btn.png'))
+        self.Statistiques_btn.setScaledContents(True)
+
+        self.home_frame.resize(1, 1)
+        self.add_person_frame.resize(1, 1)
+        self.RDV_frame.resize(1, 1)
+        self.search_frame.resize(1, 1)
+        self.Ditails_frame.resize(1, 1)
+        self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(self.width_, self.height_)
 
     def showHomeFrame(self, event):
 
@@ -827,6 +876,7 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
         self.home_refresh()
 
     def addPersonFrame(self, event):
@@ -868,6 +918,7 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
 
     def showRDVFrame(self, event):
         try:
@@ -908,6 +959,7 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
 
     def showTodayRDVFrame(self, event):
         # self.today_RDV_btn.setStyleSheet('background-image: url(img/btns/on/today_rdv_btn.png);')
@@ -1054,13 +1106,14 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
 
 
     def showDetailsForm(self, event):
         try:
             # self.refresh()
             # self.searshDetaisTree()
-            self.fillDetaisTree()
+            self.detais_refresh()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')
@@ -1097,6 +1150,7 @@ class Main(QWidget, main_ui):
         self.Ditails_frame.resize(self.width_, self.height_)
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
 
         #
         # try:
@@ -1183,12 +1237,14 @@ class Main(QWidget, main_ui):
         self.RDV_frame.resize(1, 1)
         self.search_frame.resize(1, 1)
         self.Ditails_frame.resize(1, 1)
+        self.sessions_frame.resize(1, 1)
         ##### Séance
         self.Statistiques_frame.resize(self.width_, self.height_)
 
-    def fillDetaisTree(self):
+    def detais_refresh(self):
         try:
             self.treeWidget.clear()
+
             self.treeWidget.setColumnCount(9)
             self.treeWidget.setHeaderLabels(
                 ["code", "prenom", "nom", "C.N.I", "naissance", "S Familier", "adresse", "TEL", "Inscri a"])
@@ -1208,7 +1264,7 @@ class Main(QWidget, main_ui):
 
                     rdvs = self.mysqlCurs.fetchall()
                     if rdvs:
-                        ch1 = QTreeWidgetItem([' Tout les RDVs : '])
+                        ch1 = QTreeWidgetItem([' Tout les RDVs : {}'.format(len(rdvs))])
                         for rdv in rdvs:
                             rr = QTreeWidgetItem([rdv[0], rdv[1]])
                             ch1.addChild(rr)
@@ -1219,7 +1275,7 @@ class Main(QWidget, main_ui):
                             i[0]))
                     sessions = self.mysqlCurs.fetchall()
                     if sessions:
-                        ch2 = QTreeWidgetItem(['Sessions History'])
+                        ch2 = QTreeWidgetItem(['Sessions History : {}'.format(len(sessions))])
                         for session in sessions:
                             ss = QTreeWidgetItem([session[0], session[1]])
                             ch2.addChild(ss)
@@ -1228,7 +1284,7 @@ class Main(QWidget, main_ui):
                     self.mysqlCurs.execute('select sum(price) from sessions where client_code like "{}"'.format(i[0]))
                     tt_money = self.mysqlCurs.fetchone()
                     if tt_money[0]:
-                        ch3 = QTreeWidgetItem(['Total money spended : ', tt_money[0]])
+                        ch3 = QTreeWidgetItem(['Total money spended : ', '{} DH'.format(tt_money[0])])
                         item.addChild(ch3)
 
                     self.mysqlCurs.execute(
@@ -1236,7 +1292,7 @@ class Main(QWidget, main_ui):
                             i[2], i[0]))
                     familly = self.mysqlCurs.fetchall()
                     if familly:
-                        ch4 = QTreeWidgetItem(['Familly : '])
+                        ch4 = QTreeWidgetItem(['Familly : {}'.format(len(familly))])
                         for family in familly:
                             ff = QTreeWidgetItem([family[0], family[1], family[2], family[3]])
                             ch4.addChild(ff)
@@ -1277,7 +1333,7 @@ class Main(QWidget, main_ui):
 
                     rdvs = self.mysqlCurs.fetchall()
                     if rdvs:
-                        ch1 = QTreeWidgetItem([' Tout les RDVs : '])
+                        ch1 = QTreeWidgetItem([' Tout les RDVs : {}'.format(len(rdvs))])
                         for rdv in rdvs:
                             rr = QTreeWidgetItem([rdv[0], rdv[1]])
                             ch1.addChild(rr)
@@ -1288,7 +1344,7 @@ class Main(QWidget, main_ui):
                         'select S_date, price from sessions where client_code like "{}" order by S_date desc'.format(i[0]))
                     sessions = self.mysqlCurs.fetchall()
                     if sessions:
-                        ch2 = QTreeWidgetItem(['Sessions History'])
+                        ch2 = QTreeWidgetItem(['Sessions History : {}'.format(len(sessions))])
                         for session in sessions:
                             ss = QTreeWidgetItem([session[0], session[1]])
                             ch2.addChild(ss)
@@ -1298,17 +1354,17 @@ class Main(QWidget, main_ui):
 
                     self.mysqlCurs.execute('select sum(price) from sessions where client_code like "{}"'.format(i[0]))
                     tt_money = self.mysqlCurs.fetchone()
-                    if tt_money:
-                        ch3 = QTreeWidgetItem(['Total money spended : ', tt_money[0]])
+                    if tt_money[0]:
+                        ch3 = QTreeWidgetItem(['Total money spended : ', f'{str(tt_money[0])} DH'])
                         item.addChild(ch3)
 
 
 
-                    ch4 = QTreeWidgetItem(['Familly : '])
                     self.mysqlCurs.execute(
                         'select codeP, F_name, L_name, cne, Address from person where L_name like "{}" and codeP != "{}"'.format(i[2], i[0]))
                     familly = self.mysqlCurs.fetchall()
                     if familly:
+                        ch4 = QTreeWidgetItem(['Familly : {}'.format(len(familly))])
                         for family in familly:
                             ff = QTreeWidgetItem([family[0], family[1], family[2], family[3]])
                             ch4.addChild(ff)
@@ -1323,7 +1379,7 @@ class Main(QWidget, main_ui):
                 self.label_2.setScaledContents(True)
 
         else:
-            self.fillDetaisTree()
+            self.detais_refresh()
 
 
 

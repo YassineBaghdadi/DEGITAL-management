@@ -9,7 +9,7 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.pagesizes import A5, letter
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus.para import Paragraph
-
+from emoji import emojize
 
 class Ppdf:
     def __init__(self, ordonance):
@@ -28,14 +28,15 @@ class Ppdf:
         self.client_info = ['codeP', 'yassine', 'baghdadi', 22 ]
         self.adress = 'hay hamria Guercif'
         self.tele = '06.30.50.46.06'
+        self.codeP = 'thsg753'
 
 
-        self.DR_studies = ''
-        for o in range(50):
-            self.DR_studies += str(o) + ','
-            if o % 5 == 0:
-                self.DR_studies += ' '
-        print(len(self.DR_studies))
+        self.DR_studies = 'Laureat de la faculte de medecine et de pharmacie - Fes, Diplome en gynecologie suivie de grossesse et infertilite de la faculte de bordeau - France, echographie - Elechogardigramme agrement de delivre les certificats d\'aptitude pour permis de conduite.'
+        # for o in range(50):
+        #     self.DR_studies += str(o) + ','
+        #     if o % 5 == 0:
+        #         self.DR_studies += ' '
+        # print(len(self.DR_studies))
         #
         #
 
@@ -57,21 +58,22 @@ class Ppdf:
         #
         # self.pdf_.showPage()
         # for font in self.pdf_.getAvailableFonts():
-        #     self.pdf_.setFont(font, 11)
+        #     print(font)
+            # self.pdf_.setFont(font, 11)
         #     self.pdf_.drawString(140, self.yy, 'this is the "{}" font '.format(font))
         #     self.yy -= 15
-        self.yy = 415
-        self.pdf_.setFont('Helvetica', 11)
-        for i in ordonance.split('\n'):
-            if i == '':
-                print('')
-            else:
-                self.pdf_.drawString(40, self.yy,'-> ' +  str(i))
-                if self.yy <= 50:
-                    self.yy = 415
-                    self.pdf_.showPage()
-                else:
-                    self.yy -= 25
+        # self.yy = 415
+        # self.pdf_.setFont('Helvetica', 11)
+        # for i in ordonance.split('\n'):
+        #     if i == '':
+        #         print('')
+        #     else:
+        #         self.pdf_.drawString(40, self.yy,'-> ' +  str(i))
+        #         if self.yy <= 50:
+        #             self.yy = 415
+        #             self.pdf_.showPage()
+        #         else:
+        #             self.yy -= 25
 
 
         self.pdf_.save()
@@ -103,16 +105,18 @@ class Ppdf:
 
         message.drawOn(self.pdf_, 155, 530 - h)
 
-        self.pdf_.line(182, 470, 267, 470)
+        self.pdf_.line(182, 450, 267, 450)
 
         self.pdf_.setFont('Courier-BoldOblique', 7)
         self.pdf_.drawString(12, 580, self.city + ', le : ' + self.today.split(' ')[0])
-        self.pdf_.drawString(120, 450, 'Nom et Prénom : ' + str(self.client_info[1])+ ' ' + str(self.client_info[2]) + ', Age : ' + str(self.client_info[3]) + ' ans')
+        self.pdf_.drawString(120, 438, 'Nom et Prénom : ' + str(self.client_info[1])+ ' ' + str(self.client_info[2]) + ', `#{' + self.codeP + '} ' +  ', Age : ' + str(self.client_info[3]) + ' ans. ')
 
-        self.pdf_.line(30, 440, 380, 440)
+        self.pdf_.line(30, 430, 380, 430)
 
 
-        self.pdf_.line(10, 35, 410, 35)
+        self.pdf_.line(30, 35, 380, 35)
+
+        self.pdf_.drawString(50, 18,  str(self.adress)+ ' - ' + str(self.city) + ' | Tel : ' + str(self.tele))
 
         # self.pdf_.drawString(420, 580, 'x420')
         # self.pdf_.drawString(400, 580, 'x400')

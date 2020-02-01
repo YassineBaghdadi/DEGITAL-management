@@ -120,7 +120,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                     self.mysqlCurs.execute('''create table if not exists person (codeP varchar(10) PRIMARY KEY, F_name varchar(20),
                                                                  L_name varchar(30), birth_date varchar(30) , sex varchar(10), cne varchar(12), family_status varchar (15),
                                                                  childs int , address varchar(255), tel varchar(20),
-                                                                  assirance varchar(255), Genetic_disease varchar(255), Chronic_disease varchar(255), note text, inscri_date varchar(20), inscri_time varchar(20))
+                                                                  assirance varchar(255), work varchar(40), Genetic_disease varchar(255), Chronic_disease varchar(255), note text, inscri_date varchar(20), inscri_time varchar(20))
                                                                  ENGINE=INNODB default charset = utf8;''')
                     self.mysqlconn.commit()
                     self.mysqlCurs.execute('''

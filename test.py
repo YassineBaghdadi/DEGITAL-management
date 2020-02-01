@@ -53,23 +53,41 @@ class Main(QWidget, main_ui):
         #     self.db.commit()
         #     print(i)
 
-        dates = ['2020-01-20', '2020-01-21', '2020-01-22', '2020-01-23', '2020-01-24', '2020-01-25', '2020-01-26', '2020-01-27', '2020-01-28', '2020-01-29']
-        self.mysqlCurs.execute('select id from nums')
+        # dates = ['2020-01-20', '2020-01-21', '2020-01-22', '2020-01-23', '2020-01-24', '2020-01-25', '2020-01-26', '2020-01-27', '2020-01-28', '2020-01-29']
+        # self.mysqlCurs.execute('select id from nums')
 
-        for i in dates:
+        # for i in dates:
+        #
+        #     for r in range(30):
+        #         self.mysqlCurs.execute(
+        #                 'select max(num) from nums where token_date like "{}"'.format(i))
+        #         last = self.mysqlCurs.fetchone()[0]
+        #         if last:
+        #             self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
+        #             # print(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
+        #         else:
+        #             self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
+        #             # print(1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
+        #         self.db.commit()
+        #         print(str(i), ' : Done')
+        # self.mysqlCurs.execute(
+        #     'select rdv_date, note from RDV where client_code like "26hG0ao" order by rdv_date desc')
+        #
+        # rdvs = self.mysqlCurs.fetchall()
+        # print(rdvs)
+        # print(len(rdvs))
 
-            for r in range(30):
-                self.mysqlCurs.execute(
-                        'select max(num) from nums where token_date like "{}"'.format(i))
-                last = self.mysqlCurs.fetchone()[0]
-                if last:
-                    self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
-                    # print(last + 1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
-                else:
-                    self.mysqlCurs.execute('insert into nums (num,  client_code,  token_date) values ({}, "{}", "{}")'.format(1, self.codesP[random.randint(0, len(self.codesP) - 1)], i))
-                    # print(1, self.codesP[random.randint(0, len(self.codesP) - 1)], randdate)
-                self.db.commit()
-                print(str(i), ' : Done')
+
+        # repeted = []
+        # normal = []
+        # for i in self.codesP:
+        #     if i in normal:
+        #         print(i)
+        #         repeted.append(i)
+        #     else:
+        #         normal.append(i)
+        #
+        # print(f'repeted ire : {repeted}')
 
         # self.mysqlCurs.execute("""select token_date from nums order by token_date asc""")
         # dt = self.mysqlCurs.fetchall()
@@ -175,7 +193,9 @@ class Main(QWidget, main_ui):
         # client_info = self.mysqlCurs.fetchone()
         #
         # print(client_info)
-
+        self.pushButton.clicked.connect(self.mv)
+    def mv(self):
+        self.comboBox.move(120, 80)
     #
 # # Fetch a single row using fetchone() method.r
 #

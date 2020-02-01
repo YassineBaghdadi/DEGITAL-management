@@ -83,8 +83,6 @@ class Setting(QWidget, _ui):
                 self.lineEdit_9.setText('')
                 self.refresh()
 
-
-
     def addGM(self):
         try:
             self.mysqlCurs.execute('select * from malades where name = "{}"'.format(self.lineEdit_8.text()))
@@ -104,8 +102,6 @@ class Setting(QWidget, _ui):
                 self.mysqlConn.commit()
                 self.lineEdit_8.setText('')
                 self.refresh()
-
-
 
     def deleteUser(self):
         try:
@@ -129,7 +125,6 @@ class Setting(QWidget, _ui):
             print(e)
             open('src/login_logs.txt', 'a').write(
                 '\n{},  err  : {}'.format(self.today, e))
-
 
     def deleteGM(self):
 
