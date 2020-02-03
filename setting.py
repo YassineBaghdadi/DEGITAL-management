@@ -63,7 +63,6 @@ class Setting(QWidget, _ui):
         self.pushButton_7.clicked.connect(self.addChM)
         self.pushButton_5.clicked.connect(self.addGM)
 
-
     def addChM(self):
         try:
             self.mysqlCurs.execute('select * from malades where name = "{}"'.format(self.lineEdit_9.text()))

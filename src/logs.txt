@@ -896,3 +896,8 @@
 2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )
 2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )
 2020-01-27 20:03:03 'Main' object has no attribute 'refresh' ( admin )
+2020-02-02 11:09:31 (1054, "Unknown column 'work' in 'field list'") ( admin )
+2020-02-02 11:22:56 (1049, "Unknown database 'MOY'")
+2020-02-02 11:23:09 (1049, "Unknown database 'MOY'")
+2020-02-02 11:24:10 (1049, "Unknown database 'MOY'")
+2020-02-02 11:25:51 (1049, "Unknown database 'MOY'")

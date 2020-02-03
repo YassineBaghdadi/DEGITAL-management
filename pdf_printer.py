@@ -34,3 +34,5 @@ class PDF_Printer(QtWidgets.QWidget):
 
 	def openPdf(self):
 		self.brower.get('file://' + str(self.path))
+
+p = PDF_Printer()

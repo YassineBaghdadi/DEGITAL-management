@@ -148,6 +148,7 @@ class Main(QWidget, main_ui):
         self.comboBox.currentTextChanged.connect(self.search_fill)
         self.lineEdit_19.setValidator(QIntValidator())
 
+
         #sessions part :
         self.sessions_btn.setStyleSheet('background-image: url(img/btns/off/seionse_btn.png);')
         # self.sessions_btn.setPixmap(QtGui.QPixmap('img/btns/off/seionse_btn.png'))
@@ -159,6 +160,50 @@ class Main(QWidget, main_ui):
         model = QStringListModel()
         completer.setModel(model)
         self.getData(model)
+        self.tabWidget.currentChanged.connect(self.session_refresh)
+        self.session_codeP_lineEdit.textChanged.connect(self.session_refresh)
+        self.ordononce_EditLine.textChanged.connect(self.enable_ordononce_add)
+        self.session_price.setValidator(QIntValidator())
+        self.ordononce_add_pushButton.clicked.connect(self.add_dwa_to_treeView)
+        self.current_dwayat = []
+        self.dwa_count = 0
+        self.ordononce_treeWidget.itemSelectionChanged.connect(self.enable_ordononce_rmv)
+        self.ordononce_rmv_pushButton.clicked.connect(self.rmv_dwa_from_treeView)
+
+        self.ordononce_EditLine.setCompleter(completer)
+        self.model1 = QStringListModel()
+        completer.setModel(self.model1)
+        self.ordonoce_refresh(self.model1)
+        self.session_json_data = {
+            'Medicaux':[{
+                    'Diabele':'n',
+                    'hta':'n',
+                    'Thyroide':'n',
+                    'Cholesterolemie':'n',
+                    'Anemie':'n',
+                    'Autre':'n'
+                }], 'chirurgicaux':[{
+                    'Thyoide':'n',
+                    'vb':'n',
+                    'Amygdales':'n',
+                    'Pelvienne':'n',
+                    'Autre':'n'
+                }], 'Gyneco':[{
+                    'first_regle_age':'n',
+                    'Cycle_menstruel':'n',
+                    'first_rapport_age':'n',
+                    'G':'n',
+                    'P':'n',
+                    'fcs':'n',
+                    'mfiu':'n',
+                    'mort_ne':'n'
+                }], 'Accauchement':[{
+                    'vb':'n',
+                    'Cesarienne':'n',
+                    'Grossesse_Actuale':'n'
+                }],
+        }
+        self.session_save_btn.clicked.connect(self.save_session)
 
         #ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
@@ -176,6 +221,72 @@ class Main(QWidget, main_ui):
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
         self.pushButton.clicked.connect(self.statictic)
 
+    def save_session(self):#TODO here we are
+        # self.session_json_data[]
+        try:
+            ordonance = ''
+            for ix in range(self.ordononce_treeWidget.topLevelItemCount()):
+                ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0))
+
+            self.mysqlCurs.execute(f"""
+                insert into sessions (client_code, S_date, checking, price, ordonance, reason) 
+                values ("{self.session_codeP_lineEdit.text().split("--")[-1]}" ,"{self.today.split(' ')[0]}", "{self.session_json_data}", "{self.session_price.text()}",
+                "{ordonance}", "{self.session_reason_textEdit.toPlainText()}")
+            """)
+        except Exception as e:
+            print(e)
+
+
+    def enable_ordononce_rmv(self):
+        try:
+            if self.ordononce_treeWidget.selectedItems()[0].text(0):
+                self.ordononce_rmv_pushButton.setEnabled(True)
+            else:
+                self.ordononce_rmv_pushButton.setEnabled(False)
+        except Exception as e:
+            print(e)
+
+
+    def rmv_dwa_from_treeView(self):
+        # self.ordononce_treeWidget.takeTopLevelItem(self.ordononce_treeWidget.indexOfTopLevelItem(self.ordononce_treeWidget.selectedItems()[0].text(0)))
+        # for ix in self.ordononce_treeWidget.selectedIndexes():
+        #     text = ix.data(Qt.DisplayRole)  # or ix.data()
+        #     print(text)
+        for ix in self.ordononce_treeWidget.selectedIndexes():
+            # text = ix.data(Qt.DisplayRole)  # or ix.data()
+            print(ix)
+        rows = [idx.row() for idx in self.ordononce_treeWidget.selectionModel().selectedRows()]
+        print(rows[0])  # or return rows
+        self.ordononce_treeWidget.takeTopLevelItem(rows[0])
+
+        tt = [self.ordononce_treeWidget.topLevelItem(ix).text(0) for ix in range(self.ordononce_treeWidget.topLevelItemCount())]
+        print(tt)
+        if len(tt) == 0:
+            self.ordononce_rmv_pushButton.setEnabled(False)
+
+    def add_dwa_to_treeView(self):
+        self.dwa_count += 1
+        self.ordononce_treeWidget.addTopLevelItem(QTreeWidgetItem(['--> ' + self.ordononce_EditLine.text()]))
+        self.current_dwayat.append(self.ordononce_EditLine.text())
+        self.mysqlCurs.execute(f'select dwa_name from dwayat where dwa_name = "{self.ordononce_EditLine.text()}"')
+        if not self.mysqlCurs.fetchone():
+            self.mysqlCurs.execute(f'insert into dwayat (dwa_name) value ("{self.ordononce_EditLine.text()}") ')
+            self.mysqlConn.commit()
+        self.ordonoce_refresh(self.model1)
+        self.ordononce_EditLine.clear()
+
+
+
+    def enable_ordononce_add(self):
+
+        self.mysqlCurs.execute(f'select count(id) from dwayat where dwa_name = "{self.ordononce_EditLine.text()}"')
+
+        if len(self.ordononce_EditLine.text()) < 2 or self.mysqlCurs.fetchone()[0] > 1 or self.ordononce_EditLine.text() in self.current_dwayat:
+            self.ordononce_add_pushButton.setEnabled(False)
+        else:
+            self.ordononce_add_pushButton.setEnabled(True)
+
+
     def handler(self):
         if self.numbersTree.selectedItems()[0].text(1):
             print(self.numbersTree.selectedItems()[0].text(1))
@@ -186,6 +297,8 @@ class Main(QWidget, main_ui):
     def goSes(self, codeP):
         self.showSessionsForm(None)
         self.session_codeP_lineEdit.setText(str(codeP))
+
+
 
     def getData(self, m):
         self.mysqlCurs.execute('select F_name, L_name, cne, codeP from person')
@@ -397,16 +510,13 @@ class Main(QWidget, main_ui):
             self.lineEdit_12.setText('')
             self.lineEdit_23.setText('')
             self.lineEdit_18.setText('')
-            self.lineEdit_19.setText('')
-            self.lineEdit_20.setText('')
-            self.lineEdit_21.setText('')
             self.lineEdit_22.setText('')
             self.textEdit_2.setText('')
 
         else:
             try:
                     self.mysqlCurs.execute('''select person.cne, person.F_name, person.L_name, person.sex, 
-                    person.birth_date, person.address, person.tel, person.assirance, person.family_status, person.childs, person.Genetic_disease, person.Chronic_disease, max(S_date), person.note
+                    person.birth_date, person.address, person.tel, person.assirance, person.family_status, person.childs,  max(S_date), person.note
                     from person inner join sessions on person.codeP = sessions.client_code where codeP = "{}" '''.format(str(self.comboBox.currentText().split(' ')[0])))
 
                     client_info = self.mysqlCurs.fetchone()
@@ -421,10 +531,10 @@ class Main(QWidget, main_ui):
                     self.lineEdit_23.setText(str(client_info[7]))
                     self.lineEdit_18.setText(str(client_info[8]))
                     self.lineEdit_19.setText(str(client_info[9]))
-                    self.lineEdit_20.setText(str(client_info[10]))
-                    self.lineEdit_21.setText(str(client_info[11]))
-                    self.lineEdit_22.setText(str(client_info[12]))
-                    self.textEdit_2.setText(str(client_info[13]))
+                    self.lineEdit_22.setText(str(client_info[10]))
+                    self.lineEdit_2.setText(str(client_info[11]))
+                    # self.lineEdit_22.setText(str(client_info[12]))
+                    # self.textEdit_2.setText(str(client_info[13]))
             except Exception as e:
                     print(e)
                     err_log = open('src/logs.txt', 'a')
@@ -683,9 +793,6 @@ class Main(QWidget, main_ui):
 
         self.mysqlConn.commit()
 
-
-
-
     def addPerson(self, event):
         try:
             self.person_refresh()
@@ -728,7 +835,7 @@ class Main(QWidget, main_ui):
                                                          ': "{}" - ont été inscrits à : "{}"'.format(self.pdt[1], self.pdt[13]), QMessageBox.Ok)
 
         else:
-            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, work, note, inscri_date, inscri_time )values (
+            addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, working, note, inscri_date, inscri_time )values (
                             '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}', '{}' , '{}', '{}') ;"""
             try:
                 self.mysqlCurs.execute(addPq.format(self.codeP.text(), self.F_name.text(), self.L_name.text(), str(self.birth_date.date().toPyDate()), self.sexe, self.cne.text(), str(self.familly_state.currentText()),
@@ -809,8 +916,60 @@ class Main(QWidget, main_ui):
             don = QMessageBox.information(self, 'ERROR DATE', 'la date invalide', QMessageBox.Ok)
             self.birth_date.setDate(QtCore.QDate.currentDate())
 
-    def showSessionsForm(self, event):
+    def session_refresh(self):
+        try:
+            self.dwa_count = 0
+            self.current_dwayat = []
+            self.ordononce_treeWidget.clear()
+            self.current_client_code = self.session_codeP_lineEdit.text().split("--")[-1]
+            if self.current_client_code not in self.codesP:
+                self.tabWidget.resize(1, 1)
+            else:
+                self.tabWidget.resize(860, 330)
 
+        except Exception as e:
+            print(e)
+        try:
+            self.mysqlCurs.execute(f'select sex from person where codeP = "{self.current_client_code}"')
+            sex = self.mysqlCurs.fetchone()[0]
+            if sex and sex == 'HOMME':
+                self.groupBox_3.setEnabled(False)
+                self.groupBox_4.setEnabled(False)
+            else:
+                self.groupBox_3.setEnabled(True)
+                self.groupBox_4.setEnabled(True)
+
+        except Exception as e :
+            print(e)
+
+        try:
+
+            self.mysqlCurs.execute(f'select count(id) + 1 from sessions where client_code = "{self.current_client_code}"')
+            if len(self.session_codeP_lineEdit.text()) > 0:
+                self.sessions_counter_label.setText(str(self.mysqlCurs.fetchone()[0]))
+        except Exception as e:
+            print(e)
+        self.ordonoce_refresh(self.model1)
+
+
+    def ordonoce_refresh(self, m):
+        try:
+            self.mysqlCurs.execute('select dwa_name from dwayat')
+            self.dwayat = [str(i[0]) for i in self.mysqlCurs.fetchall()]
+            m.setStringList(self.dwayat)
+
+        except Exception as e:
+            print(e)
+
+
+    def showSessionsForm(self, event):
+        try:
+            self.session_refresh()
+
+        except Exception as e:
+            print(e)
+
+        self.tabWidget.setCurrentIndex(0)
         # self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
         self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))
         self.add_person_btn.setScaledContents(True)

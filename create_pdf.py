@@ -9,7 +9,6 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.pagesizes import A5, letter
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus.para import Paragraph
-from emoji import emojize
 
 class Ppdf:
     def __init__(self, ordonance):

@@ -117,10 +117,27 @@ class AdminSetting(QWidget, adminSetting_win_dir):
             success = QMessageBox.question(self, 'info', "connected successfully\nDo you want to create tables right now ?\n",QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if success == QMessageBox.Yes:
                 try:
+
+                    self.mysqlCurs.execute('''create database if not exists MOY;''')
+                    self.mysqlconn.commit()
+
+                    self.mysqlCurs.execute('''use MOY;''')
+
+
+                    self.mysqlCurs.execute('''create table if not exists users (id int auto_increment primary key not null, username varchar(30),
+                                                                                     passwrd varchar(100), role varchar(20))
+                                                                                     ENGINE=INNODB default charset = utf8;''')
+                    self.mysqlconn.commit()
+                    self.mysqlCurs.execute('select count(id) from users;')
+                    if not self.mysqlCurs.fetchone()[0]:
+                        self.mysqlCurs.execute('insert into users (username, passwrd, role) values("admin", "admin", "admin");')
+                        self.mysqlconn.commit()
+
+
                     self.mysqlCurs.execute('''create table if not exists person (codeP varchar(10) PRIMARY KEY, F_name varchar(20),
                                                                  L_name varchar(30), birth_date varchar(30) , sex varchar(10), cne varchar(12), family_status varchar (15),
                                                                  childs int , address varchar(255), tel varchar(20),
-                                                                  assirance varchar(255), work varchar(40), Genetic_disease varchar(255), Chronic_disease varchar(255), note text, inscri_date varchar(20), inscri_time varchar(20))
+                                                                  assirance varchar(255), working varchar(40), note text, inscri_date varchar(20), inscri_time varchar(20))
                                                                  ENGINE=INNODB default charset = utf8;''')
                     self.mysqlconn.commit()
                     self.mysqlCurs.execute('''
@@ -138,23 +155,35 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                         id int auto_increment primary key not null,
                                          client_code varchar(10) ,
                                          S_date varchar(20),
-                                         symp varchar(255),
+                                         checking text,
                                          price int,
                                          ordonance varchar(255),
-                                         note varchar(255),
+                                         reason text,
                                          foreign key (client_code) references person(codeP) ON DELETE CASCADE ) ENGINE=INNODB default charset = utf8;
                                     ''')
 
-
-
                     self.mysqlconn.commit()
-                    self.mysqlCurs.execute('''
-                                        create table if not exists malades (id int auto_increment primary key not null, name varchar(30), type varchar(10) )ENGINE=INNODB default charset = utf8;
-                                    ''')
-
-
-
-                    self.mysqlconn.commit()
+                    # self.mysqlCurs.execute('''
+                    #                     create table if not exists checking (
+                    #                     id int auto_increment primary key not null,
+                    #                      session_id int,
+                    #                      Medicaux varchar(255),
+                    #                      chirurgicaux varchar(255),
+                    #                      Gyneco varchar(255),
+                    #                      Accauchement varchar(255)
+                    #
+                    #                      foreign key (session_id) references sessions(id) ON DELETE CASCADE ) ENGINE=INNODB default charset = utf8;
+                    #                 ''')
+                    #
+                    # self.mysqlconn.commit()
+                    #
+                    # self.mysqlCurs.execute('''
+                    #                     create table if not exists malades (id int auto_increment primary key not null, name varchar(30), type varchar(10) )ENGINE=INNODB default charset = utf8;
+                    #                 ''')
+                    #
+                    #
+                    #
+                    # self.mysqlconn.commit()
                     self.mysqlCurs.execute('''
                                         create table if not exists nums (id int auto_increment primary key not null, 
                                         num int, 
@@ -167,6 +196,12 @@ class AdminSetting(QWidget, adminSetting_win_dir):
 
                     self.mysqlCurs.execute('''
                                         create table if not exists tools (id int auto_increment primary key not null, st varchar(20))ENGINE=INNODB default charset = utf8;
+                                    ''')
+
+                    self.mysqlconn.commit()
+
+                    self.mysqlCurs.execute('''
+                                        create table if not exists dwayat (id int auto_increment primary key not null, dwa_name varchar(255))ENGINE=INNODB default charset = utf8;
                                     ''')
 
                     self.mysqlconn.commit()
