@@ -156,7 +156,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                          client_code varchar(10) ,
                                          S_date varchar(20),
                                          checking text,
-                                         price int,
+                                         price varchar(255),
                                          ordonance varchar(255),
                                          reason text,
                                          foreign key (client_code) references person(codeP) ON DELETE CASCADE ) ENGINE=INNODB default charset = utf8;

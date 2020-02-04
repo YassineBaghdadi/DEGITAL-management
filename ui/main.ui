@@ -3533,34 +3533,6 @@ margin-bottom:20px;</string>
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="regului_lineEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>191</x>
-         <y>77</y>
-         <width>100</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="frame">
-        <bool>true</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="cursorMoveStyle">
-        <enum>Qt::VisualMoveStyle</enum>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
       <widget class="QRadioButton" name="regului_radioButton">
        <property name="geometry">
         <rect>
@@ -3572,25 +3544,6 @@ margin-bottom:20px;</string>
        </property>
        <property name="text">
         <string>Regului</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="inregului_lineEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>192</x>
-         <y>107</y>
-         <width>100</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QRadioButton" name="inregului_radioButton">
@@ -3613,6 +3566,19 @@ margin-bottom:20px;</string>
          <y>45</y>
          <width>139</width>
          <height>26</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QTextEdit" name="textEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>191</x>
+         <y>80</y>
+         <width>99</width>
+         <height>50</height>
         </rect>
        </property>
       </widget>
@@ -3902,7 +3868,7 @@ margin-bottom:20px;</string>
       <property name="title">
        <string>GroupBox</string>
       </property>
-      <widget class="QTextEdit" name="session_reason_textEdit_2">
+      <widget class="QTextEdit" name="session_price_note_textEdit">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -3951,42 +3917,23 @@ margin-bottom:20px;</string>
      <string>Save</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="session_history_btn">
+    <property name="geometry">
+     <rect>
+      <x>649</x>
+      <y>390</y>
+      <width>87</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Historique</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>regului_radioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>regului_lineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>355</x>
-     <y>293</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>482</x>
-     <y>298</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>inregului_radioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>inregului_lineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>351</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>463</x>
-     <y>325</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>fcs_checkBox</sender>
    <signal>toggled(bool)</signal>
@@ -4074,12 +4021,12 @@ margin-bottom:20px;</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>671</x>
-     <y>406</y>
+     <x>767</x>
+     <y>413</y>
     </hint>
     <hint type="destinationlabel">
-     <x>765</x>
-     <y>406</y>
+     <x>828</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
@@ -4090,12 +4037,12 @@ margin-bottom:20px;</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>863</x>
-     <y>402</y>
+     <x>857</x>
+     <y>429</y>
     </hint>
     <hint type="destinationlabel">
-     <x>792</x>
-     <y>410</y>
+     <x>828</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
@@ -4388,338 +4335,34 @@ margin-bottom:20px;</string>
    </hints>
   </connection>
   <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>diable_lineEdit</receiver>
-   <slot>clear()</slot>
+   <sender>inregului_radioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>textEdit</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>293</x>
-     <y>180</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>474</x>
-     <y>262</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>hta_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>298</x>
-     <y>181</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>476</x>
-     <y>286</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>thyroide_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>183</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>466</x>
-     <y>334</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>chol_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>176</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>452</x>
-     <y>358</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>anemie_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>237</x>
-     <y>182</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>471</x>
-     <y>399</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>thyoide_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>287</x>
-     <y>179</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>870</x>
-     <y>266</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>vb_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>279</x>
-     <y>184</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>889</x>
-     <y>304</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>amygdale_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>321</x>
-     <y>182</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>903</x>
-     <y>348</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>pelvienne_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>186</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>892</x>
-     <y>383</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>medicaux_autre</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>218</x>
-     <y>180</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>445</x>
-     <y>477</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>chirurgicaux_autre</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>201</x>
-     <y>179</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>820</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>first_regle_age_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>372</x>
-     <y>186</y>
+     <x>354</x>
+     <y>323</y>
     </hint>
     <hint type="destinationlabel">
      <x>432</x>
-     <y>264</y>
+     <y>323</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>first_rapport_age_lineEdit</receiver>
-   <slot>clear()</slot>
+   <sender>regului_radioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>textEdit</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>402</x>
-     <y>188</y>
+     <x>388</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel">
-     <x>473</x>
-     <y>355</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>P_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>343</x>
-     <y>184</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>485</x>
-     <y>381</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>G_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>381</x>
-     <y>184</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>318</x>
-     <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>fcs_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>400</x>
-     <y>186</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>493</x>
-     <y>415</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>mfiu_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>423</x>
-     <y>181</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>487</x>
-     <y>443</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>mort_ne_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>368</x>
-     <y>189</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>497</x>
-     <y>470</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>vb_lineEdit_2</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>405</x>
-     <y>181</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>864</x>
-     <y>293</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>cesarienne_lineEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>397</x>
-     <y>184</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>907</x>
-     <y>347</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>session_reason_textEdit</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>474</x>
-     <y>189</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>320</x>
-     <y>311</y>
+     <x>420</x>
+     <y>295</y>
     </hint>
    </hints>
   </connection>

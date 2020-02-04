@@ -1,4 +1,5 @@
 import datetime
+import json
 import random
 
 import pymysql
@@ -161,7 +162,7 @@ class Main(QWidget, main_ui):
         completer.setModel(model)
         self.getData(model)
         self.tabWidget.currentChanged.connect(self.session_refresh)
-        self.session_codeP_lineEdit.textChanged.connect(self.session_refresh)
+        self.session_codeP_lineEdit.textChanged.connect(self.session_codeP_editText_changed)
         self.ordononce_EditLine.textChanged.connect(self.enable_ordononce_add)
         self.session_price.setValidator(QIntValidator())
         self.ordononce_add_pushButton.clicked.connect(self.add_dwa_to_treeView)
@@ -169,41 +170,45 @@ class Main(QWidget, main_ui):
         self.dwa_count = 0
         self.ordononce_treeWidget.itemSelectionChanged.connect(self.enable_ordononce_rmv)
         self.ordononce_rmv_pushButton.clicked.connect(self.rmv_dwa_from_treeView)
-
-        self.ordononce_EditLine.setCompleter(completer)
+        completer_ = QCompleter()
+        self.ordononce_EditLine.setCompleter(completer_)
         self.model1 = QStringListModel()
-        completer.setModel(self.model1)
+        completer_.setModel(self.model1)
         self.ordonoce_refresh(self.model1)
-        self.session_json_data = {
-            'Medicaux':[{
-                    'Diabele':'n',
-                    'hta':'n',
-                    'Thyroide':'n',
-                    'Cholesterolemie':'n',
-                    'Anemie':'n',
-                    'Autre':'n'
-                }], 'chirurgicaux':[{
-                    'Thyoide':'n',
-                    'vb':'n',
-                    'Amygdales':'n',
-                    'Pelvienne':'n',
-                    'Autre':'n'
-                }], 'Gyneco':[{
-                    'first_regle_age':'n',
-                    'Cycle_menstruel':'n',
-                    'first_rapport_age':'n',
-                    'G':'n',
-                    'P':'n',
-                    'fcs':'n',
-                    'mfiu':'n',
-                    'mort_ne':'n'
-                }], 'Accauchement':[{
-                    'vb':'n',
-                    'Cesarienne':'n',
-                    'Grossesse_Actuale':'n'
-                }],
-        }
+        self.session_json_data = json.loads(""" {"Medicaux":{
+                    "Diabele":"n",
+                    "hta":"n",
+                    "Thyroide":"n",
+                    "Chol":"n",
+                    "Anemie":"n",
+                    "Autre":"n"
+                },
+            "chirurgicaux":{
+                    "Thyoide":"n",
+                    "vb":"n",
+                    "Amygdales":"n",
+                    "Pelvienne":"n",
+                    "Autre":"n"
+                },
+            "Gyneco":{
+                    "first_regle_age":"n",
+                    "Cycle_menstruel":"n",
+                    "first_rapport_age":"n",
+                    "G":"n",
+                    "P":"n",
+                    "fcs":"n",
+                    "mfiu":"n",
+                    "mort_ne":"n"
+                },
+            "Accauchement":{
+                    "vb":"n",
+                    "Cesarienne":"n",
+                    "Grossesse_Actuale":"n"
+                }
+        }""")
         self.session_save_btn.clicked.connect(self.save_session)
+
+        self.treeWidget.itemDoubleClicked.connect(self.go_to_history_specific_session)
 
         #ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
@@ -220,21 +225,170 @@ class Main(QWidget, main_ui):
         # self.Statistiques_btn.setScaledContents(True)
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
         self.pushButton.clicked.connect(self.statictic)
+        self.session_history_btn.clicked.connect(self.go_specific_detai)
 
-    def save_session(self):#TODO here we are
+    def go_specific_detai(self):
+        self.showDetailsForm(None, c = self.session_codeP_lineEdit.text().split("--")[-1])
+
+    def session_codeP_editText_changed(self):
+        self.clear_session_data()
+        self.session_refresh()
+
+
+    def save_session(self):#TODO send Price by socket to assistent account
+
+        if self.session_price.text() == '':
+            self.session_price.setText('0')
+
+        if self.diable_checkBox.isChecked():
+            self.session_json_data["Medicaux"]["Diabele"] = self.diable_lineEdit.text()
+
+        if self.hta_checkBox.isChecked():
+            self.session_json_data["Medicaux"]["hta"] = self.hta_lineEdit.text()
+
+        if self.thyroide_checkBox.isChecked():
+            self.session_json_data["Medicaux"]["Thyroide"] = self.thyroide_lineEdit.text()
+
+        if self.chol_checkBox.isChecked():
+            self.session_json_data["Medicaux"]["chol"] = self.chol_lineEdit.text()
+
+        if self.anemie_checkBox.isChecked():
+            self.session_json_data["Medicaux"]["Anemie"] = self.anemie_lineEdit.text()
+
+        self.session_json_data["Medicaux"]["Autre"] = str(self.medicaux_autre.toPlainText())
+
+
+        ###################################################################################
+
+        if self.thyoide_checkBox.isChecked():
+            self.session_json_data["chirurgicaux"]["Thyoide"] = self.thyoide_lineEdit.text()
+
+        if self.vb_checkBox.isChecked():
+            self.session_json_data["chirurgicaux"]["vb"] = self.vb_lineEdit.text()
+
+        if self.amygdale_checkBox.isChecked():
+            self.session_json_data["chirurgicaux"]["Amygdales"] = self.amygdale_lineEdit.text()
+
+        if self.pelvienne_checkBox.isChecked():
+            self.session_json_data["chirurgicaux"]["Pelvienne"] = self.pelvienne_lineEdit.text()
+
+        self.session_json_data["chirurgicaux"]["Autre"] = str(self.chirurgicaux_autre.toPlainText())
+
+
+        ###################################################################################
+        try:
+            self.mysqlCurs.execute(f'select sex from person where codeP = "{self.current_client_code}"')
+            sex = self.mysqlCurs.fetchone()[0]
+            if sex and sex == 'FEMME':
+                self.session_json_data["Gyneco"]["first_regle_age"] = str(self.first_regle_age_lineEdit.text())
+
+                if self.regului_radioButton.isChecked():
+                    self.session_json_data["Gyneco"]["Cycle_menstruel"] = str(0) + self.textEdit.text()
+
+                if self.inregului_radioButton.isChecked():
+                    self.session_json_data["Gyneco"]["Cycle_menstruel"] = str(1) + self.textEdit.text()
+
+                self.session_json_data["Gyneco"]["first_rapport_age"] = str(self.first_rapport_age_lineEdit.text())
+
+                self.session_json_data["Gyneco"]["G"] = str(self.G_lineEdit.text())
+
+                self.session_json_data["Gyneco"]["P"] = str(self.P_lineEdit.text())
+
+                if self.fcs_checkBox.isChecked():
+                    self.session_json_data["Gyneco"]["fcs"] = str(self.fcs_lineEdit.text())
+
+                if self.mfiu_checkBox.isChecked():
+                    self.session_json_data["Gyneco"]["mfiu"] = str(self.mfiu_lineEdit.text())
+
+                if self.mort_ne_checkBox.isChecked():
+                    self.session_json_data["Gyneco"]["mort_ne"] = str(self.mort_ne_lineEdit.text())
+
+        except Exception as e:
+            print(e)
+
+
+        ###################################################################################
+
+        if self.vb_checkBox_2.isChecked():
+            self.session_json_data["Accauchement"]["vb"] = str(self.vb_lineEdit_2.text())
+
+        if self.cesarienne_checkBox.isChecked():
+            self.session_json_data["Accauchement"]["Cesarienne"] = str(self.cesarienne_lineEdit.text())
+
+        if self.ddr_radioButton.isChecked():
+            self.session_json_data["Accauchement"]["Grossesse_Actuale"] = str(0) + str(str(self.ddr_dateEdit.date().toPyDate()))
+
+        if self.inpressise_radioButton.isChecked():
+            self.session_json_data["Accauchement"]["Grossesse_Actuale"] = str(1)
+
+
+        print( type(self.session_json_data), self.session_json_data)
+
         # self.session_json_data[]
         try:
             ordonance = ''
             for ix in range(self.ordononce_treeWidget.topLevelItemCount()):
-                ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0))
+                ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0) + '---')
 
             self.mysqlCurs.execute(f"""
                 insert into sessions (client_code, S_date, checking, price, ordonance, reason) 
-                values ("{self.session_codeP_lineEdit.text().split("--")[-1]}" ,"{self.today.split(' ')[0]}", "{self.session_json_data}", "{self.session_price.text()}",
-                "{ordonance}", "{self.session_reason_textEdit.toPlainText()}")
+                values ("{self.session_codeP_lineEdit.text().split("--")[-1]}", "{self.today}", "{self.session_json_data}",
+                        "{str(self.session_price.text()) + '(' + str(self.session_price_note_textEdit.toPlainText()) + ')'}",
+                        "{ordonance}", "{self.session_reason_textEdit.toPlainText()}")
             """)
+            self.mysqlConn.commit()
+
+            self.session_codeP_lineEdit.clear()
+
+
+
         except Exception as e:
             print(e)
+
+    def clear_session_data(self):
+        self.diable_checkBox.setChecked(False)
+        self.diable_lineEdit.clear()
+        self.hta_checkBox.setChecked(False)
+        self.hta_lineEdit.clear()
+        self.thyroide_checkBox.setChecked(False)
+        self.thyroide_lineEdit.clear()
+        self.chol_checkBox.setChecked(False)
+        self.chol_lineEdit.clear()
+        self.anemie_checkBox.setChecked(False)
+        self.anemie_lineEdit.clear()
+        self.medicaux_autre.clear()
+        self.thyoide_checkBox.setChecked(False)
+        self.thyoide_lineEdit.clear()
+        self.vb_checkBox.setChecked(False)
+        self.vb_lineEdit.clear()
+        self.amygdale_checkBox.setChecked(False)
+        self.amygdale_lineEdit.clear()
+        self.pelvienne_checkBox.setChecked(False)
+        self.pelvienne_lineEdit.clear()
+        self.chirurgicaux_autre.clear()
+        self.first_regle_age_lineEdit.clear()
+        self.textEdit.clear()
+        self.regului_radioButton.setChecked(False)
+        self.inregului_radioButton.setChecked(False)
+        self.first_rapport_age_lineEdit.clear()
+        self.G_lineEdit.clear()
+        self.P_lineEdit.clear()
+        self.fcs_checkBox.setChecked(False)
+        self.fcs_lineEdit.clear()
+        self.mfiu_checkBox.setChecked(False)
+        self.mfiu_lineEdit.clear()
+        self.mort_ne_checkBox.setChecked(False)
+        self.mort_ne_lineEdit.clear()
+        self.vb_checkBox_2.setChecked(False)
+        self.vb_lineEdit_2.clear()
+        self.cesarienne_checkBox.setChecked(False)
+        self.cesarienne_lineEdit.clear()
+        self.ddr_radioButton.setChecked(False)
+        self.inpressise_radioButton.setChecked(False)
+        self.session_reason_textEdit.clear()
+        self.ordononce_treeWidget.clear()
+        self.session_price.clear()
+        self.session_price_note_textEdit.clear()
 
 
     def enable_ordononce_rmv(self):
@@ -297,8 +451,6 @@ class Main(QWidget, main_ui):
     def goSes(self, codeP):
         self.showSessionsForm(None)
         self.session_codeP_lineEdit.setText(str(codeP))
-
-
 
     def getData(self, m):
         self.mysqlCurs.execute('select F_name, L_name, cne, codeP from person')
@@ -916,40 +1068,165 @@ class Main(QWidget, main_ui):
             don = QMessageBox.information(self, 'ERROR DATE', 'la date invalide', QMessageBox.Ok)
             self.birth_date.setDate(QtCore.QDate.currentDate())
 
+    def go_to_history_specific_session(self, codeP = None, date = None):#todo open history table (here we are )
+        # print(self.numbersTree.indexOfTopLevelItem(self.numbersTree.currentItem().parent()))
+        if self.numbersTree.currentItem().parent():
+            print(self.numbersTree.currentItem().parent().text(0))
+
+        for ix in self.numbersTree.selectedIndexes():
+            text = ix.data(Qt.DisplayRole)  # or ix.data()
+            print(text)
+
     def session_refresh(self):
-        try:
+
             self.dwa_count = 0
             self.current_dwayat = []
             self.ordononce_treeWidget.clear()
             self.current_client_code = self.session_codeP_lineEdit.text().split("--")[-1]
             if self.current_client_code not in self.codesP:
                 self.tabWidget.resize(1, 1)
+                self.session_save_btn.resize(1, 1)
+                self.session_history_btn.resize(1, 1)
             else:
                 self.tabWidget.resize(860, 330)
+                self.session_save_btn.resize(87, 29)
+                self.session_history_btn.resize(87, 29)
+                self.mysqlCurs.execute(f'select max(S_date) from sessions where client_code = "{self.current_client_code}"')
+                last_visit = self.mysqlCurs.fetchone()[0]
+                if last_visit:
+                    self.mysqlCurs.execute(f'select checking from sessions where client_code = "{self.current_client_code}" and S_date = "{last_visit}"')
+                    checking = json.loads(str(self.mysqlCurs.fetchone()[0]).replace("'", '"'), strict=False)
 
-        except Exception as e:
-            print(e)
-        try:
-            self.mysqlCurs.execute(f'select sex from person where codeP = "{self.current_client_code}"')
-            sex = self.mysqlCurs.fetchone()[0]
-            if sex and sex == 'HOMME':
-                self.groupBox_3.setEnabled(False)
-                self.groupBox_4.setEnabled(False)
-            else:
-                self.groupBox_3.setEnabled(True)
-                self.groupBox_4.setEnabled(True)
 
-        except Exception as e :
-            print(e)
+                    if checking["Medicaux"]["Diabele"] != 'n':
+                        self.diable_checkBox.setChecked(True)
+                        self.diable_lineEdit.setText(checking["Medicaux"]["Diabele"])
 
-        try:
+                    if checking["Medicaux"]["hta"] != 'n':
+                        self.hta_checkBox.setChecked(True)
+                        self.hta_lineEdit.setText(checking["Medicaux"]["hta"])
 
-            self.mysqlCurs.execute(f'select count(id) + 1 from sessions where client_code = "{self.current_client_code}"')
-            if len(self.session_codeP_lineEdit.text()) > 0:
-                self.sessions_counter_label.setText(str(self.mysqlCurs.fetchone()[0]))
-        except Exception as e:
-            print(e)
-        self.ordonoce_refresh(self.model1)
+                    if checking["Medicaux"]["Thyroide"] != 'n':
+                        self.thyroide_checkBox.setChecked(True)
+                        self.thyroide_lineEdit.setText(checking["Medicaux"]["Thyroide"])
+
+                    if checking["Medicaux"]["Chol"] != 'n':
+                        self.chol_checkBox.setChecked(True)
+                        self.chol_lineEdit.setText(checking["Medicaux"]["Chol"])
+
+                    if checking["Medicaux"]["Anemie"] != 'n':
+                        self.anemie_checkBox.setChecked(True)
+                        self.anemie_lineEdit.setText(checking["Medicaux"]["Anemie"])
+
+                    if checking["Medicaux"]["Autre"] != 'n':
+                        self.medicaux_autre.setText(checking["Medicaux"]["Autre"])
+
+                    if checking["chirurgicaux"]["Thyoide"] != 'n':
+                        self.thyoide_checkBox.setChecked(True)
+                        self.thyoide_lineEdit.setText(checking["chirurgicaux"]["Thyoide"])
+
+                    if checking["chirurgicaux"]["vb"] != 'n':
+                        self.vb_checkBox.setChecked(True)
+                        self.vb_lineEdit.setText(checking["chirurgicaux"]["vb"])
+
+                    if checking["chirurgicaux"]["Amygdales"] != 'n':
+                        self.amygdale_checkBox.setChecked(True)
+                        self.amygdale_lineEdit.setText(checking["chirurgicaux"]["Amygdales"])
+
+                    if checking["chirurgicaux"]["Pelvienne"] != 'n':
+                        self.pelvienne_checkBox.setChecked(True)
+                        self.pelvienne_lineEdit.setText(checking["chirurgicaux"]["Pelvienne"])
+
+                    if checking["chirurgicaux"]["Autre"] != 'n':
+                        self.chirurgicaux_autre.setText(checking["chirurgicaux"]["Autre"])
+
+
+                    if checking["Gyneco"]["first_regle_age"] != 'n':
+                        self.first_regle_age_lineEdit.setText(checking["Gyneco"]["first_regle_age"])
+
+                    if str(checking["Gyneco"]["Cycle_menstruel"][0]) != 'n':
+                        if str(checking["Gyneco"]["Cycle_menstruel"][0]) == '0':
+                            self.regului_radioButton.setChecked(True)
+                            self.textEdit.setText(checking["Gyneco"]["Cycle_menstruel"][1:])
+
+                        if str(checking["Gyneco"]["Cycle_menstruel"][0]) == '1':
+                            self.inregului_radioButton.setChecked(True)
+                            self.textEdit.setText(checking["Gyneco"]["Cycle_menstruel"][1:])
+
+                    if checking["Gyneco"]["first_rapport_age"] != 'n':
+                        self.first_rapport_age_lineEdit.setText(checking["Gyneco"]["first_rapport_age"])
+
+                    if checking["Gyneco"]["G"] != 'n':
+                        self.G_lineEdit.setText(checking["Gyneco"]["G"])
+
+                    if checking["Gyneco"]["P"] != 'n':
+                        self.P_lineEdit.setText(checking["Gyneco"]["P"])
+
+                    if str(checking["Gyneco"]["fcs"]) != 'n':
+                        self.fcs_checkBox.setChecked(True)
+                        self.fcs_lineEdit.setText(checking["Gyneco"]["fcs"])
+
+                    if str(checking["Gyneco"]["mfiu"]) != 'n':
+                        self.mfiu_checkBox.setChecked(True)
+                        self.mfiu_lineEdit.setText(checking["Gyneco"]["mfiu"])
+
+                    if str(checking["Gyneco"]["mort_ne"]) != 'n':
+                        self.mort_ne_checkBox.setChecked(True)
+                        self.mort_ne_lineEdit.setText(checking["Gyneco"]["mort_ne"])
+
+                    if str(checking["Accauchement"]["vb"]) != 'n':
+                        self.vb_checkBox_2.setChecked(True)
+                        self.vb_lineEdit_2.setText(checking["Accauchement"]["vb"])
+
+                    if str(checking["Accauchement"]["Cesarienne"]) != 'n':
+                        self.cesarienne_checkBox.setChecked(True)
+                        self.cesarienne_lineEdit.setText(checking["Accauchement"]["Cesarienne"])
+
+                    if str(checking["Accauchement"]["Grossesse_Actuale"][0]) == '0':
+                        self.ddr_radioButton.setChecked(True)
+                        self.ddr_dateEdit.setDate(int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[0]), int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[1]), int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[2]) )
+
+                    if str(checking["Accauchement"]["Grossesse_Actuale"]) == '1':
+                        self.inpressise_radioButton.setChecked(True)
+                    #
+                    # self.mysqlCurs.execute(f'select reason, ordonance, price from sessions where client_code = "{self.current_client_code}" and S_date = "{last_visit}"')
+                    # dt = self.mysqlCurs.fetchone()
+                    # self.session_reason_textEdit.setText(dt[0])
+                    # self.ordononce_treeWidget.clear()
+                    # if dt:
+                    #     for i in str(dt[1]).split('---'):
+                    #         self.ordononce_treeWidget.addTopLevelItem(QTreeWidgetItem([str(i)]))
+                    #
+                    # self.session_price.setText(str(dt[2]).split('(')[0])
+                    # self.session_price_note_textEdit.setText(str(dt[2]).split('(')[1][:-2])
+
+
+
+
+
+        # except Exception as e:
+        #     print(e)
+            try:
+                self.mysqlCurs.execute(f'select sex from person where codeP = "{self.current_client_code}"')
+                sex = self.mysqlCurs.fetchone()[0]
+                if sex and sex == 'HOMME':
+                    self.groupBox_3.setEnabled(False)
+                    self.groupBox_4.setEnabled(False)
+                else:
+                    self.groupBox_3.setEnabled(True)
+                    self.groupBox_4.setEnabled(True)
+
+            except Exception as e :
+                print(e)
+
+            try:
+
+                self.mysqlCurs.execute(f'select count(id) + 1 from sessions where client_code = "{self.current_client_code}"')
+                if len(self.session_codeP_lineEdit.text()) > 0:
+                    self.sessions_counter_label.setText(str(self.mysqlCurs.fetchone()[0]))
+            except Exception as e:
+                print(e)
+            self.ordonoce_refresh(self.model1)
 
 
     def ordonoce_refresh(self, m):
@@ -1267,8 +1544,8 @@ class Main(QWidget, main_ui):
         self.Statistiques_frame.resize(1, 1)
         self.sessions_frame.resize(1, 1)
 
+    def showDetailsForm(self, event, c = None):
 
-    def showDetailsForm(self, event):
         try:
             # self.refresh()
             # self.searshDetaisTree()
@@ -1310,7 +1587,11 @@ class Main(QWidget, main_ui):
         ##### Séance
         self.Statistiques_frame.resize(1, 1)
         self.sessions_frame.resize(1, 1)
-
+        try:
+            if c:
+                self.lineEdit_51.setText(c)
+        except Exception as e:
+            print(e)
         #
         # try:
         #     self.mysqlCurs.execute('select codeP, F_name, L_name, cne, birth_date, family_status, address, tel, inscri_date from person order by F_name asc')
@@ -1436,15 +1717,20 @@ class Main(QWidget, main_ui):
                     if sessions:
                         ch2 = QTreeWidgetItem(['Sessions History : {}'.format(len(sessions))])
                         for session in sessions:
-                            ss = QTreeWidgetItem([session[0], session[1]])
+                            ss = QTreeWidgetItem([session[0], str(session[1]).split('(')[0] + ' Dh'])
                             ch2.addChild(ss)
                             item.addChild(ch2)
+                    try:
+                        self.mysqlCurs.execute('select price from sessions where client_code like "{}"'.format(i[0]))
+                        tt_money = 0
+                        for ix in self.mysqlCurs.fetchall():
+                            tt_money += int(str(ix[0]).split('(')[0])
 
-                    self.mysqlCurs.execute('select sum(price) from sessions where client_code like "{}"'.format(i[0]))
-                    tt_money = self.mysqlCurs.fetchone()
-                    if tt_money[0]:
-                        ch3 = QTreeWidgetItem(['Total money spended : ', '{} DH'.format(tt_money[0])])
-                        item.addChild(ch3)
+                        if tt_money:
+                            ch3 = QTreeWidgetItem(['Total money spended : ', '{} DH'.format(str(tt_money))])
+                            item.addChild(ch3)
+                    except Exception as e:
+                        print(e)
 
                     self.mysqlCurs.execute(
                         'select codeP, F_name, L_name, cne, Address from person where L_name like "{}" and codeP != "{}"'.format(
@@ -1503,19 +1789,22 @@ class Main(QWidget, main_ui):
                         'select S_date, price from sessions where client_code like "{}" order by S_date desc'.format(i[0]))
                     sessions = self.mysqlCurs.fetchall()
                     if sessions:
-                        ch2 = QTreeWidgetItem(['Sessions History : {}'.format(len(sessions))])
+                        ch2 = QTreeWidgetItem([f'Sessions History : {len(sessions)}'])
                         for session in sessions:
-                            ss = QTreeWidgetItem([session[0], session[1]])
+                            ss = QTreeWidgetItem([session[0], str(session[1]).split('(')[0] + ' Dh'])
                             ch2.addChild(ss)
                             item.addChild(ch2)
+                    try:
+                        self.mysqlCurs.execute('select price from sessions where client_code like "{}"'.format(i[0]))
+                        tt_money = 0
+                        for ix in self.mysqlCurs.fetchall():
+                            tt_money += int(str(ix[0]).split('(')[0])
 
-
-
-                    self.mysqlCurs.execute('select sum(price) from sessions where client_code like "{}"'.format(i[0]))
-                    tt_money = self.mysqlCurs.fetchone()
-                    if tt_money[0]:
-                        ch3 = QTreeWidgetItem(['Total money spended : ', f'{str(tt_money[0])} DH'])
-                        item.addChild(ch3)
+                        if tt_money:
+                            ch3 = QTreeWidgetItem(['Total money spended : ', f'{str(tt_money)} DH'])
+                            item.addChild(ch3)
+                    except Exception as e:
+                        print(e)
 
 
 

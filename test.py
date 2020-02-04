@@ -35,14 +35,14 @@ class Main(QWidget, main_ui):
 
         # prepare a cursor object using cursor() method
         self.mysqlCurs = self.db.cursor()
-        self.codesP = []
-        try:
-            self.mysqlCurs.execute('''select codeP from person''')
-            for i in self.mysqlCurs.fetchall():
-                self.codesP.append(i[0])
-
-        except Exception as e:
-            print(e)
+        # self.codesP = []
+        # try:
+        #     self.mysqlCurs.execute('''select codeP from person''')
+        #     for i in self.mysqlCurs.fetchall():
+        #         self.codesP.append(i[0])
+        #
+        # except Exception as e:
+        #     print(e)
 
         # self.years = ['2022', '2021', '2020', '2019', '2018', '2017']
         # self.months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -193,6 +193,10 @@ class Main(QWidget, main_ui):
         # client_info = self.mysqlCurs.fetchone()
         #
         # print(client_info)
+        self.mysqlCurs.execute('select checking from sessions;')
+        print(str(self.mysqlCurs.fetchone()).replace("'", '"'))
+
+
         self.pushButton.clicked.connect(self.mv)
     def mv(self):
         self.comboBox.move(120, 80)

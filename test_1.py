@@ -67,8 +67,8 @@
 # t = 'test- '
 # print(t.split('-'))
 import json
-session_json_data = {[{
-            "Medicaux":{"Diabele":"n","hta":"n","Thyroide":"n","Cholesterolemie":"n","Anemie":"n","Autre":"n"}},{"chirurgicaux":{"Thyoide":"n","vb":"n","Amygdales":"n","Pelvienne":"n","Autre":"n"}}, {"Gyneco":{"first_regle_age":"n","Cycle_menstruel":"n","first_rapport_age":"n","G":"n","P":"n","fcs":"n","mfiu":"n","mort_ne":"n"}}, {"Accauchement":{"vb":"n","Cesarienne":"n","Grossesse_Actuale":"n"}}]}
+# session_json_data = {[{
+#             "Medicaux":{"Diabele":"n","hta":"n","Thyroide":"n","Cholesterolemie":"n","Anemie":"n","Autre":"n"}},{"chirurgicaux":{"Thyoide":"n","vb":"n","Amygdales":"n","Pelvienne":"n","Autre":"n"}}, {"Gyneco":{"first_regle_age":"n","Cycle_menstruel":"n","first_rapport_age":"n","G":"n","P":"n","fcs":"n","mfiu":"n","mort_ne":"n"}}, {"Accauchement":{"vb":"n","Cesarienne":"n","Grossesse_Actuale":"n"}}]}
 
 # ss = session_json_data.replace("True", "true")
 # dd = json.loads(ss)
@@ -81,7 +81,75 @@ x = {
 }
 
 # convert into JSON:
-y = json.dumps(session_json_data, indent=4)
+# y = json.dumps(session_json_data, indent=4)
 
 # the result is a JSON string:
-print(y["Medicaux"])
+# print(y["Medicaux"])
+xx =""" {"Medicaux":{
+                    "Diabele":"n",
+                    "hta":"n",
+                    "Thyroide":"n",
+                    "Cholesterolemie":"n",
+                    "Anemie":"n",
+                    "Autre":"n"
+                },
+            "chirurgicaux":{
+                    "Thyoide":"n",
+                    "vb":"n",
+                    "Amygdales":"n",
+                    "Pelvienne":"n",
+                    "Autre":"n"
+                },
+            "Gyneco":{
+                    "first_regle_age":"n",
+                    "Cycle_menstruel":"n",
+                    "first_rapport_age":"n",
+                    "G":"n",
+                    "P":"n",
+                    "fcs":"n",
+                    "mfiu":"n",
+                    "mort_ne":"n"
+                },
+            "Accauchement":{
+                    "vb":"n",
+                    "Cesarienne":"n",
+                    "Grossesse_Actuale":"n"
+                }
+        }"""
+xxx = json.loads(""" {"Medicaux":{
+                    "Diabele":"n",
+                    "hta":"n",
+                    "Thyroide":"n",
+                    "Cholesterolemie":"n",
+                    "Anemie":"n",
+                    "Autre":"n"
+                },
+            "chirurgicaux":{
+                    "Thyoide":"n",
+                    "vb":"n",
+                    "Amygdales":"n",
+                    "Pelvienne":"n",
+                    "Autre":"n"
+                },
+            "Gyneco":{
+                    "first_regle_age":"n",
+                    "Cycle_menstruel":"n",
+                    "first_rapport_age":"n",
+                    "G":"n",
+                    "P":"n",
+                    "fcs":"n",
+                    "mfiu":"n",
+                    "mort_ne":"n"
+                },
+            "Accauchement":{
+                    "vb":"n",
+                    "Cesarienne":"n",
+                    "Grossesse_Actuale":"n"
+                }
+        }""")
+xxx["Medicaux"]["hta"] = "yassine"
+# print(type(xxx))
+for parent in xxx:
+    print(parent)
+    for i in xxx[parent]:
+        print('    ---', i, ' == ', xxx[parent][i])
