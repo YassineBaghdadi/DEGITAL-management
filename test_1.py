@@ -149,7 +149,25 @@ xxx = json.loads(""" {"Medicaux":{
         }""")
 xxx["Medicaux"]["hta"] = "yassine"
 # print(type(xxx))
-for parent in xxx:
-    print(parent)
-    for i in xxx[parent]:
-        print('    ---', i, ' == ', xxx[parent][i])
+# for parent in xxx:
+#     print(parent)
+#     for i in xxx[parent]:
+#         print('    ---', i, ' == ', xxx[parent][i])
+
+import random
+id_P = ''
+chars = ['A', 'a', 0, 'B', 'b', 1, 'C', 'c', 2, 'D',
+                 'd', 3, 'E', 'e', 4, 'F', 'f', 5, 'G', 'g',
+                 6, 'H', 'h', 'I', 'i', 'J', 'j', 7, 'L', 'l',
+                 'M', 'm', 'N', 8, 'n', 'o', 'P', 'p', 'Q', 'q',
+                 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v',
+                 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', 9]
+
+
+for i in range(2):
+  id_P += str(random.choice(chars))
+  id_P += str(random.randint(0, 9))
+  id_P += str(random.choice(chars))
+
+id_P += str(random.choice(chars))
+print(id_P)

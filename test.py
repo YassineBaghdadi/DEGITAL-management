@@ -17,8 +17,11 @@ import sqlite3
 from time import gmtime, strftime
 
 
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg as FigureCanvas)
+
 today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-import noInternetAlert
+
 from db_m import DB_m
 
 main_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/test.ui"))
@@ -31,10 +34,10 @@ class Main(QWidget, main_ui):
         self.setupUi(self)
         # Open database connection
 #
-        self.db = pymysql.connect("localhost","root","root","MOY" )
-
-        # prepare a cursor object using cursor() method
-        self.mysqlCurs = self.db.cursor()
+        # self.db = pymysql.connect("localhost","root","root","MOY" )
+        #
+        # # prepare a cursor object using cursor() method
+        # self.mysqlCurs = self.db.cursor()
         # self.codesP = []
         # try:
         #     self.mysqlCurs.execute('''select codeP from person''')
@@ -193,13 +196,21 @@ class Main(QWidget, main_ui):
         # client_info = self.mysqlCurs.fetchone()
         #
         # print(client_info)
-        self.mysqlCurs.execute('select checking from sessions;')
-        print(str(self.mysqlCurs.fetchone()).replace("'", '"'))
+        # self.mysqlCurs.execute('select checking from sessions;')
+        # print(str(self.mysqlCurs.fetchone()).replace("'", '"'))
+        #
+        #
+        # self.pushButton.clicked.connect(self.mv)
 
+        # visites_graph = Graph(parent=self, data=[4, 1], labels=['Homme', 'Femme'])
 
-        self.pushButton.clicked.connect(self.mv)
-    def mv(self):
-        self.comboBox.move(120, 80)
+        self.pushButton.clicked.connect(self.evv)
+
+    def evv(self):
+        file_name, _ = QFileDialog.getSaveFileName(caption='حفظ في :', directory='.',
+                                                   filter="text files (*.doc *.docx)")
+        if file_name:
+            print(file_name)
     #
 # # Fetch a single row using fetchone() method.r
 #

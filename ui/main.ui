@@ -2472,7 +2472,7 @@ border-color: rgb(128, 128, 128);</string>
      <rect>
       <x>15</x>
       <y>101</y>
-      <width>140</width>
+      <width>1</width>
       <height>1</height>
      </rect>
     </property>
@@ -2595,110 +2595,6 @@ border-color: rgb(128, 128, 128);</string>
    <property name="frameShadow">
     <enum>QFrame::Sunken</enum>
    </property>
-   <widget class="QWidget" name="verticalLayoutWidget_19">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>100</y>
-      <width>141</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_text">
-     <item>
-      <widget class="QLabel" name="label_65">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Visites</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_64">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Clients inscription :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_67">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>RDVs :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_68">
-       <property name="font">
-        <font>
-         <family>Lucida Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>money :</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_20">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>100</y>
-      <width>111</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_count">
-     <item>
-      <widget class="QLabel" name="label_71">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_72">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_73">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_74">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QDateEdit" name="dateEdit_2">
     <property name="geometry">
      <rect>
@@ -2765,7 +2661,7 @@ border-color: rgb(128, 128, 128);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>430</x>
       <y>30</y>
       <width>75</width>
       <height>24</height>
@@ -2775,25 +2671,151 @@ border-color: rgb(128, 128, 128);</string>
      <string>ok</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_2">
+   <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
-      <x>423</x>
-      <y>28</y>
-      <width>295</width>
-      <height>25</height>
+      <x>24</x>
+      <y>60</y>
+      <width>820</width>
+      <height>360</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QGraphicsView" name="gr">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>100</y>
-      <width>410</width>
-      <height>310</height>
-     </rect>
-    </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Visites</string>
+     </attribute>
+     <widget class="QLabel" name="visites_total">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>100</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="visites_gander">
+      <property name="geometry">
+       <rect>
+        <x>28</x>
+        <y>50</y>
+        <width>240</width>
+        <height>270</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>150</y>
+         <width>130</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>show as Graph</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_30">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>170</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_44">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>90</y>
+         <width>170</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="visites_ages">
+      <property name="geometry">
+       <rect>
+        <x>288</x>
+        <y>50</y>
+        <width>240</width>
+        <height>270</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_46">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>110</y>
+         <width>54</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ages</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="visites_times">
+      <property name="geometry">
+       <rect>
+        <x>548</x>
+        <y>50</y>
+        <width>240</width>
+        <height>270</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_47">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>110</y>
+         <width>54</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>times</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="exit">

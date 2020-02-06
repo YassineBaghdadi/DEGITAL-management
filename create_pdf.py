@@ -2,6 +2,7 @@
 import textwrap
 from time import strftime, gmtime
 
+from PyQt5.QtWidgets import QFileDialog
 from fpdf import FPDF
 # Create instance of FPDF class
 from reportlab.lib.enums import TA_CENTER
@@ -10,15 +11,19 @@ from reportlab.lib.pagesizes import A5, letter
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus.para import Paragraph
 
+from reportlab.pdfgen import canvas
+
 class Ppdf:
     def __init__(self, ordonance):
-        from reportlab.pdfgen import canvas
-        self.pdf_ = canvas.Canvas('src/myfile.pdf', pagesize=A5)
+        file_name,_ = QFileDialog.getSaveFileName( caption='حفظ في :', directory='.',
+                                                   filter="text files (*.doc *.docx)")
+        if file_name :
+            self.pdf_ = canvas.Canvas(file_name, pagesize=A5)
         width, height = A5
         print(A5)
 
         self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-        self.pdf_.setLineWidth(.3)
+        self.pdf_.setLineWidth(3)
         self.yy = 450
         self.data = []
         self.DR_name = 'Dr. Fatima Zahra Moumen'
@@ -39,20 +44,20 @@ class Ppdf:
         #
         #
 
-        # for i in ordonance.split('\n'):
-        #     self.data.append(str(self.yy) + '|' + str(i) )
-        #     if self.yy == 60:
-        #         self.yy = 460
-        #     else:
-        #         self.yy -= 30
+        for i in ordonance.split('-->'):
+
+            self.data.append(str(self.yy) + '|' + str(i) )
+            if self.yy == 60:
+                self.yy = 460
+            else:
+                self.yy -= 30
 
         # print('the data :')
         # print(self.data)
         self.trass()
-        # for i in self.data:
-        #     if int(i.split('|')[0]) == 60:
-        #         self.pdf_.
-        #     self.pdf_.drawString(40, int(i.split('|')[0]), i.split('|')[1])
+        for i in self.data:
+            if i != '':
+                self.pdf_.drawString(40, i)
 
         #
         # self.pdf_.showPage()
