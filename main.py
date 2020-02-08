@@ -13,7 +13,7 @@ from os import path
 import sys
 import time
 import sqlite3
-from graph import *
+# from graph import *
 
 from graph import *
 
@@ -24,6 +24,7 @@ from setting import *
 
 import noInternetAlert
 from db_m import DB_m
+from create_pdf import *
 
 main_ui, _ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
@@ -322,31 +323,73 @@ class Main(QWidget, main_ui):
         if self.inpressise_radioButton.isChecked():
             self.session_json_data["Accauchement"]["Grossesse_Actuale"] = str(1)
 
-        print(type(self.session_json_data), self.session_json_data)
+
 
         # self.session_json_data[]
         try:
-            ordonance = ''
+            self.ordonance = ''
             for ix in range(self.ordononce_treeWidget.topLevelItemCount()):
-                ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0) + '---')
+                self.ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0) + '---')
 
             self.mysqlCurs.execute(f"""
                 insert into sessions (client_code, S_date, checking, price, ordonance, reason) 
                 values ("{self.session_codeP_lineEdit.text().split("--")[-1]}", "{self.today}", "{self.session_json_data}",
                         "{str(self.session_price.text()) + '(' + str(self.session_price_note_textEdit.toPlainText()) + ')'}",
-                        "{ordonance}", "{self.session_reason_textEdit.toPlainText()}")
+                        "{self.ordonance}", "{self.session_reason_textEdit.toPlainText()}")
             """)
+
             self.mysqlConn.commit()
 
-            self.session_codeP_lineEdit.clear()
-            self.mysqlCurs.execute(f'select max(S_date) from sessions where client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
-            self.mysqlCurs.execute(f'select ordonance from sessions where S_date like "{self.mysqlCurs.fetchone()[0]}" and client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
-            data = self.mysqlCurs.fetchall()#todo here we are 
+            try:
+                dialog = QMessageBox()
+                dialog.setIcon(QMessageBox.Question)
+                dialog.setText('test 1 ')
+                check_box = QCheckBox("Include bands?", dialog)
+                check_box.setCheckState(False)
+                dialog.setCheckBox(check_box)
+                dialog.addButton(QMessageBox.No)
+                dialog.addButton(QMessageBox.Yes)
+                result = dialog.exec()
+                self.blink = True
+                if result == QtWidgets.QMessageBox.Yes:
+                    if dialog.checkBox().checkState() == Qt.Checked:
+                        self.blink = False
+
+                    self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ', directory='.',
+                                                               filter="Pdf files (*.pdf)")
+
+                    if self.file_path:
+                        if str(self.file_path).split('.')[-1] != 'pdf':
+                            self.file_path += '.pdf'
+                            #client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False
+                        self.mysqlCurs.execute(f'select codeP, F_name, L_name, birth_date from person where codeP = "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
+                        client = self.mysqlCurs.fetchone()
+                        print_ordononce = Ppdf(client[1] + ' ' + client[2] + ' (' + client[0] + ') ', str(int(self.today.split('-')[0]) - int(str(client[3]).split('-')[0])),
+                                                   self.ordonance, ['adress', 'city', '06.30.50.46.06'], self.file_path, self.blink)
+                            # err = QMessageBox.warning(dialog, 'Error', 'invalid extention', QMessageBox.Ok)
+                        self.tabWidget.setCurrentIndex(0)
+                        self.session_codeP_lineEdit.clear()
+                else:
+                    self.session_codeP_lineEdit.clear()
+                    print('canceled')
+
+                # file_path, _ = QFileDialog.getSaveFileName(caption='حفظ في :', directory='.', filter="text files (*.doc *.docx)")
+                # if file_path:
+                #     ppdf = Ppdf(self.ordonance, file_path)
+            except Exception as e:
+                print(e)
+
+            # self.mysqlCurs.execute(f'select max(S_date) from sessions where client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
+            # self.mysqlCurs.execute(f'select ordonance from sessions where S_date like "{self.mysqlCurs.fetchone()[0]}" and client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
+            # data = self.mysqlCurs.fetchall()#todo here we are
+
 
 
 
         except Exception as e:
             print(e)
+
+
 
     def clear_session_data(self):
         self.diable_checkBox.setChecked(False)

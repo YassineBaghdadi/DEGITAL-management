@@ -207,10 +207,22 @@ class Main(QWidget, main_ui):
         self.pushButton.clicked.connect(self.evv)
 
     def evv(self):
-        file_name, _ = QFileDialog.getSaveFileName(caption='حفظ في :', directory='.',
-                                                   filter="text files (*.doc *.docx)")
-        if file_name:
-            print(file_name)
+        dialog = QMessageBox()
+        dialog.setIcon(QMessageBox.Question)
+        dialog.setText('test 1 ')
+        check_box = QCheckBox("Include bands?", dialog)
+        check_box.setCheckState(False)
+        dialog.setCheckBox(check_box)
+        dialog.addButton(QMessageBox.No)
+        dialog.addButton(QMessageBox.Yes)
+        result = dialog.exec()
+        if result == QtWidgets.QMessageBox.Yes:
+            if dialog.checkBox().checkState() == Qt.Checked:
+                print('is checked ')
+            else:
+                print('is not checked ')
+        else:
+            print('canceled')
     #
 # # Fetch a single row using fetchone() method.r
 #

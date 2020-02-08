@@ -2716,7 +2716,7 @@ border-color: rgb(128, 128, 128);</string>
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>150</y>
+         <y>180</y>
          <width>130</width>
          <height>29</height>
         </rect>
@@ -2770,14 +2770,53 @@ border-color: rgb(128, 128, 128);</string>
       <widget class="QLabel" name="label_46">
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>110</y>
-         <width>54</width>
-         <height>17</height>
+         <x>30</x>
+         <y>49</y>
+         <width>186</width>
+         <height>22</height>
         </rect>
        </property>
        <property name="text">
         <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_48">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_50">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>130</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="geometry">
+        <rect>
+         <x>51</x>
+         <y>182</y>
+         <width>130</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>show as Graph</string>
        </property>
       </widget>
      </widget>
@@ -2796,17 +2835,56 @@ border-color: rgb(128, 128, 128);</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="label_47">
+      <widget class="QLabel" name="label_51">
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>110</y>
-         <width>54</width>
-         <height>17</height>
+         <x>30</x>
+         <y>130</y>
+         <width>186</width>
+         <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>times</string>
+        <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_47">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>49</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_52">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ages</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="geometry">
+        <rect>
+         <x>61</x>
+         <y>176</y>
+         <width>130</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>show as Graph</string>
        </property>
       </widget>
      </widget>

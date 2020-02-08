@@ -1002,3 +1002,8 @@
 2020-02-06 21:37:22 'Main' object has no attribute 'comboBox_2' ( admin )
 2020-02-06 21:38:09 'Main' object has no attribute 'comboBox_2' ( admin )
 2020-02-06 21:40:41 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-08 15:20:55 division by zero ( admin )
+2020-02-08 15:20:55 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-08 15:51:15 division by zero ( admin )
+2020-02-08 15:51:15 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-08 21:26:47 'Main' object has no attribute 'comboBox_2' ( admin )

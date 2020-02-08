@@ -74,6 +74,8 @@ import json
 # dd = json.loads(ss)
 # print(dd)
 # {key:value mapping}
+from PIL import Image
+
 x = {
   "name": "John",
   "age": 30,
@@ -164,10 +166,13 @@ chars = ['A', 'a', 0, 'B', 'b', 1, 'C', 'c', 2, 'D',
                  'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', 9]
 
 
-for i in range(2):
-  id_P += str(random.choice(chars))
-  id_P += str(random.randint(0, 9))
-  id_P += str(random.choice(chars))
+# for i in range(2):
+#   id_P += str(random.choice(chars))
+#   id_P += str(random.randint(0, 9))
+#   id_P += str(random.choice(chars))
+#
+# id_P += str(random.choice(chars))
+# print(id_P)
 
-id_P += str(random.choice(chars))
-print(id_P)
+head_img = Image.open('img/head.jpeg')
+print(head_img.size[1])
