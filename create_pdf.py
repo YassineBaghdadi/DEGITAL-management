@@ -14,113 +14,130 @@ from reportlab.platypus.para import Paragraph
 from reportlab.pdfgen import canvas
 
 class Ppdf:
-    def __init__(self, ordonance):
-        file_name,_ = QFileDialog.getSaveFileName( caption='حفظ في :', directory='.',
-                                                   filter="text files (*.doc *.docx)")
-        if file_name :
-            self.pdf_ = canvas.Canvas(file_name, pagesize=A5)
-        width, height = A5
-        print(A5)
+    def __init__(self, ordonance , path , blink_page = False):
+        self.blink_page = blink_page
 
-        self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-        self.pdf_.setLineWidth(3)
-        self.yy = 450
-        self.data = []
-        self.DR_name = 'Dr. Fatima Zahra Moumen'
-        self.DR_role = 'Médecine Générale'
-        self.city = 'Guercif'
-        self.client_info = ['codeP', 'yassine', 'baghdadi', 22 ]
-        self.adress = 'hay hamria Guercif'
-        self.tele = '06.30.50.46.06'
-        self.codeP = 'thsg753'
+        if path :
+            self.pdf_ = canvas.Canvas(path, pagesize=A5)
 
+            width, height = A5
+            print(f'A5 width : {width}')
+            print(f'A5 height : {height}')
+            print(A5)
 
-        self.DR_studies = 'Laureat de la faculte de medecine et de pharmacie - Fes, Diplome en gynecologie suivie de grossesse et infertilite de la faculte de bordeau - France, echographie - Elechogardigramme agrement de delivre les certificats d\'aptitude pour permis de conduite.'
-        # for o in range(50):
-        #     self.DR_studies += str(o) + ','
-        #     if o % 5 == 0:
-        #         self.DR_studies += ' '
-        # print(len(self.DR_studies))
-        #
-        #
-
-        for i in ordonance.split('-->'):
-
-            self.data.append(str(self.yy) + '|' + str(i) )
-            if self.yy == 60:
-                self.yy = 460
-            else:
-                self.yy -= 30
-
-        # print('the data :')
-        # print(self.data)
-        self.trass()
-        for i in self.data:
-            if i != '':
-                self.pdf_.drawString(40, i)
-
-        #
-        # self.pdf_.showPage()
-        # for font in self.pdf_.getAvailableFonts():
-        #     print(font)
-            # self.pdf_.setFont(font, 11)
-        #     self.pdf_.drawString(140, self.yy, 'this is the "{}" font '.format(font))
-        #     self.yy -= 15
-        # self.yy = 415
-        # self.pdf_.setFont('Helvetica', 11)
-        # for i in ordonance.split('\n'):
-        #     if i == '':
-        #         print('')
-        #     else:
-        #         self.pdf_.drawString(40, self.yy,'-> ' +  str(i))
-        #         if self.yy <= 50:
-        #             self.yy = 415
-        #             self.pdf_.showPage()
-        #         else:
-        #             self.yy -= 25
+            self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+            self.pdf_.setLineWidth(3)
+            self.yy = 450
+            self.data = []
+            self.DR_name = 'Dr. Fatima Zahra Moumen'
+            self.DR_role = 'Médecine Générale'
+            self.city = 'Guercif'
+            self.client_info = ['codeP', 'yassine', 'baghdadi', 22 ]
+            self.adress = 'hay hamria Guercif'
+            self.tele = '06.30.50.46.06'
+            self.codeP = 'thsg753'
 
 
-        self.pdf_.save()
+            self.DR_studies = 'Laureat de la faculte de medecine et de pharmacie - Fes, Diplome en gynecologie suivie de grossesse et infertilite de la faculte de bordeau - France, echographie - Elechogardigramme agrement de delivre les certificats d\'aptitude pour permis de conduite.'
+            # for o in range(50):
+            #     self.DR_studies += str(o) + ','
+            #     if o % 5 == 0:
+            #         self.DR_studies += ' '
+            # print(len(self.DR_studies))
+            #
+            #
+
+
+
+            if blink_page:#todo set image as header
+
+
+                #todo
+
+                ##############################
+                self.pdf_.setFont('Helvetica-Bold', 13)
+                self.pdf_.drawString(140, 560, self.DR_name)
+
+                self.pdf_.setFont('Courier-BoldOblique', 9)
+                self.pdf_.drawString(178, 545, self.DR_role)
+                self.pdf_.line(182, 535, 267, 535)
+
+                # if len(self.DR_studies) > 25:
+                #     self.yco = 520
+                #     for i in textwrap.wrap(self.DR_studies, width=26, alignment=TA_CENTER):
+                #     # wrap_text = textwrap.wrap(self.DR_studies, width=45)
+                #         self.pdf_.drawString(155, self.yco, i)
+                #         self.yco -= 15
+                #     self.yco = 520
+                # else:
+                #     self.pdf_.drawString(155, 520, self.DR_studies)
+
+                self.pdf_.line(182, 535, 267, 535)
+                message_style = ParagraphStyle('Normal', alignment=TA_CENTER, fontName='Courier-BoldOblique',
+                                               fontSize=7, leading=9.6)
+                # message = self.DR_studies.replace('\n', '<br />')
+                message = Paragraph(self.DR_studies, style=message_style)
+                w, h = message.wrap(145, 90)
+
+                message.drawOn(self.pdf_, 155, 530 - h)
+
+                self.pdf_.line(182, 450, 267, 450)
+
+                self.pdf_.setFont('Courier-BoldOblique', 7)
+                self.pdf_.drawString(12, 580, self.city + ', le : ' + self.today.split(' ')[0])
+                self.pdf_.drawString(120, 438, 'Nom et Prénom : ' + str(self.client_info[1]) + ' ' + str(
+                    self.client_info[2]) + ', `#{' + self.codeP + '} ' + ', Age : ' + str(
+                    self.client_info[3]) + ' ans. ')
+
+                self.pdf_.line(30, 430, 380, 430)
+
+                #########################################
+
+                self.pdf_.line(30, 35, 380, 35)
+
+                self.pdf_.drawString(50, 18, str(self.adress) + ' - ' + str(self.city) + ' | Tel : ' + str(self.tele))
+            else:#todo create on full page
+                pass
+
+            for i in ordonance:
+                self.data.append(str(self.yy) + '|' + str(i) )
+                if self.yy == 60:
+                    self.yy = 460
+                else:
+                    self.yy -= 30
+
+            # self.trass()
+            # for i in self.data:
+            #     if i != '':
+            #         self.pdf_.drawString(40, i)
+
+            #
+            # self.pdf_.showPage()
+            # for font in self.pdf_.getAvailableFonts():
+            #     print(font)
+                # self.pdf_.setFont(font, 11)
+            #     self.pdf_.drawString(140, self.yy, 'this is the "{}" font '.format(font))
+            #     self.yy -= 15
+            # self.yy = 415
+            # self.pdf_.setFont('Helvetica', 11)
+            for i in ordonance:
+                if i :
+                    self.pdf_.drawString(40, self.yy, str(i))
+                    if self.yy <= 50:
+                        self.yy = 415
+                        self.pdf_.showPage()
+                    else:
+                        self.yy -= 25
+
+
+            self.pdf_.save()
+
+    def get_path(self):
+        return QFileDialog.getSaveFileName(caption='حفظ في :', directory='.', filter="text files (*.doc *.docx)")
 
     def trass(self):
 
-        self.pdf_.setFont('Helvetica-Bold', 13)
-        self.pdf_.drawString(140, 560, self.DR_name)
-
-        self.pdf_.setFont('Courier-BoldOblique', 9)
-        self.pdf_.drawString(178, 545, self.DR_role)
-        self.pdf_.line(182, 535, 267, 535)
-
-        # if len(self.DR_studies) > 25:
-        #     self.yco = 520
-        #     for i in textwrap.wrap(self.DR_studies, width=26, alignment=TA_CENTER):
-        #     # wrap_text = textwrap.wrap(self.DR_studies, width=45)
-        #         self.pdf_.drawString(155, self.yco, i)
-        #         self.yco -= 15
-        #     self.yco = 520
-        # else:
-        #     self.pdf_.drawString(155, 520, self.DR_studies)
-
-        self.pdf_.line(182, 535, 267, 535)
-        message_style = ParagraphStyle('Normal', alignment=TA_CENTER, fontName='Courier-BoldOblique', fontSize=7, leading=9.6)
-        # message = self.DR_studies.replace('\n', '<br />')
-        message = Paragraph(self.DR_studies, style=message_style)
-        w, h = message.wrap(145, 90)
-
-        message.drawOn(self.pdf_, 155, 530 - h)
-
-        self.pdf_.line(182, 450, 267, 450)
-
-        self.pdf_.setFont('Courier-BoldOblique', 7)
-        self.pdf_.drawString(12, 580, self.city + ', le : ' + self.today.split(' ')[0])
-        self.pdf_.drawString(120, 438, 'Nom et Prénom : ' + str(self.client_info[1])+ ' ' + str(self.client_info[2]) + ', `#{' + self.codeP + '} ' +  ', Age : ' + str(self.client_info[3]) + ' ans. ')
-
-        self.pdf_.line(30, 430, 380, 430)
-
-
-        self.pdf_.line(30, 35, 380, 35)
-
-        self.pdf_.drawString(50, 18,  str(self.adress)+ ' - ' + str(self.city) + ' | Tel : ' + str(self.tele))
+        pass
 
         # self.pdf_.drawString(420, 580, 'x420')
         # self.pdf_.drawString(400, 580, 'x400')
@@ -273,7 +290,7 @@ class Ppdf:
 
 
 # w = Create_PDF()
-f =''
-for i in open('src/login_logs.txt', 'r').readlines():
-    f += str(i)
-w = Ppdf(f)
+# f =''
+# for i in open('src/login_logs.txt', 'r').readlines():
+#     f += str(i)
+# w = Ppdf(f)
