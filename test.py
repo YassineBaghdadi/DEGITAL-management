@@ -34,10 +34,10 @@ class Main(QWidget, main_ui):
         self.setupUi(self)
         # Open database connection
 #
-        # self.db = pymysql.connect("localhost","root","root","MOY" )
+        self.db = pymysql.connect("localhost","root","root","MOY" )
         #
         # # prepare a cursor object using cursor() method
-        # self.mysqlCurs = self.db.cursor()
+        self.mysqlCurs = self.db.cursor()
         # self.codesP = []
         # try:
         #     self.mysqlCurs.execute('''select codeP from person''')
@@ -205,6 +205,8 @@ class Main(QWidget, main_ui):
         # visites_graph = Graph(parent=self, data=[4, 1], labels=['Homme', 'Femme'])
 
         self.pushButton.clicked.connect(self.evv)
+        self.mysqlCurs.execute(f'select price, S_date from sessions')
+        print(self.mysqlCurs.fetchall())
 
     def evv(self):
         dialog = QMessageBox()

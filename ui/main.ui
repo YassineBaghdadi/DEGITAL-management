@@ -2595,82 +2595,6 @@ border-color: rgb(128, 128, 128);</string>
    <property name="frameShadow">
     <enum>QFrame::Sunken</enum>
    </property>
-   <widget class="QDateEdit" name="dateEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>30</y>
-      <width>150</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="displayFormat">
-     <string>yyyy-MM-dd</string>
-    </property>
-    <property name="calendarPopup">
-     <bool>true</bool>
-    </property>
-    <property name="timeSpec">
-     <enum>Qt::LocalTime</enum>
-    </property>
-   </widget>
-   <widget class="QDateEdit" name="dateEdit_3">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>30</y>
-      <width>150</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="displayFormat">
-     <string>yyyy-MM-dd</string>
-    </property>
-    <property name="calendarPopup">
-     <bool>true</bool>
-    </property>
-    <property name="timeSpec">
-     <enum>Qt::LocalTime</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_87">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>33</y>
-      <width>47</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Lucida Sans</family>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Date :</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>30</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ok</string>
-    </property>
-   </widget>
    <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
@@ -2680,6 +2604,9 @@ border-color: rgb(128, 128, 128);</string>
       <height>360</height>
      </rect>
     </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
       <string>Visites</string>
@@ -2687,9 +2614,9 @@ border-color: rgb(128, 128, 128);</string>
      <widget class="QLabel" name="visites_total">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>20</y>
-        <width>100</width>
+        <x>650</x>
+        <y>25</y>
+        <width>140</width>
         <height>17</height>
        </rect>
       </property>
@@ -2701,9 +2628,9 @@ border-color: rgb(128, 128, 128);</string>
       <property name="geometry">
        <rect>
         <x>28</x>
-        <y>50</y>
+        <y>70</y>
         <width>240</width>
-        <height>270</height>
+        <height>250</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -2716,7 +2643,7 @@ border-color: rgb(128, 128, 128);</string>
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>180</y>
+         <y>190</y>
          <width>130</width>
          <height>29</height>
         </rect>
@@ -2751,14 +2678,27 @@ border-color: rgb(128, 128, 128);</string>
         <string>TextLabel</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_45">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>10</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Le Sexe :</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QFrame" name="visites_ages">
       <property name="geometry">
        <rect>
         <x>288</x>
-        <y>50</y>
+        <y>70</y>
         <width>240</width>
-        <height>270</height>
+        <height>250</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -2771,46 +2711,46 @@ border-color: rgb(128, 128, 128);</string>
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>49</y>
+         <y>32</y>
          <width>186</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>1 - 10</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_48">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>90</y>
+         <y>63</y>
          <width>186</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>11 - 20</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_50">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>130</y>
+         <y>93</y>
          <width>186</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>21 - 30</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_3">
        <property name="geometry">
         <rect>
          <x>51</x>
-         <y>182</y>
+         <y>192</y>
          <width>130</width>
          <height>29</height>
         </rect>
@@ -2819,14 +2759,53 @@ border-color: rgb(128, 128, 128);</string>
         <string>show as Graph</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_53">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>123</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>31 - 40</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_54">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>153</y>
+         <width>186</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&gt;40</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_55">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>10</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>L'Age  :</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QFrame" name="visites_times">
       <property name="geometry">
        <rect>
         <x>548</x>
-        <y>50</y>
+        <y>70</y>
         <width>240</width>
-        <height>270</height>
+        <height>250</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -2845,7 +2824,7 @@ border-color: rgb(128, 128, 128);</string>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>16h - 19h</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_47">
@@ -2858,7 +2837,7 @@ border-color: rgb(128, 128, 128);</string>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>07h - 11h</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_52">
@@ -2871,14 +2850,14 @@ border-color: rgb(128, 128, 128);</string>
         </rect>
        </property>
        <property name="text">
-        <string>ages</string>
+        <string>12h - 15h</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_4">
        <property name="geometry">
         <rect>
          <x>61</x>
-         <y>176</y>
+         <y>186</y>
          <width>130</width>
          <height>29</height>
         </rect>
@@ -2887,12 +2866,192 @@ border-color: rgb(128, 128, 128);</string>
         <string>show as Graph</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_56">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>10</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Le Temp :</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>20</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ok</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateEdit_3">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>20</y>
+        <width>150</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="displayFormat">
+       <string>yyyy-MM-dd</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="timeSpec">
+       <enum>Qt::LocalTime</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_87">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>23</y>
+        <width>47</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Lucida Sans</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Date :</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateEdit_2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>20</y>
+        <width>150</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="displayFormat">
+       <string>yyyy-MM-dd</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+      <property name="timeSpec">
+       <enum>Qt::LocalTime</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>money</string>
      </attribute>
+     <widget class="QComboBox" name="comboBox_years">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>20</y>
+        <width>220</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>2020</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2021</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2022</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2023</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2024</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2025</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2026</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2027</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2028</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2029</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2030</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_57">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>130</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>210</y>
+        <width>87</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

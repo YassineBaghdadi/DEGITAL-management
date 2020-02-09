@@ -156,12 +156,7 @@ class Main(QWidget, main_ui):
         # self.sessions_btn.setPixmap(QtGui.QPixmap('img/btns/off/seionse_btn.png'))
         # self.sessions_btn.setScaledContents(True)
         self.sessions_btn.mousePressEvent = self.showSessionsForm
-        completer = QCompleter()
 
-        self.session_codeP_lineEdit.setCompleter(completer)
-        model = QStringListModel()
-        completer.setModel(model)
-        self.getData(model)
         self.tabWidget.currentChanged.connect(self.session_tab_changed_event)
         self.session_codeP_lineEdit.textChanged.connect(self.session_codeP_editText_changed)
         self.ordononce_EditLine.textChanged.connect(self.enable_ordononce_add)
@@ -171,11 +166,7 @@ class Main(QWidget, main_ui):
         self.dwa_count = 0
         self.ordononce_treeWidget.itemSelectionChanged.connect(self.enable_ordononce_rmv)
         self.ordononce_rmv_pushButton.clicked.connect(self.rmv_dwa_from_treeView)
-        completer_ = QCompleter()
-        self.ordononce_EditLine.setCompleter(completer_)
-        self.model1 = QStringListModel()
-        completer_.setModel(self.model1)
-        self.ordonoce_refresh(self.model1)
+
         self.session_json_data = json.loads(""" {"Medicaux":{
                     "Diabele":"n",
                     "hta":"n",
@@ -209,6 +200,9 @@ class Main(QWidget, main_ui):
         }""")
         self.session_save_btn.clicked.connect(self.save_session)
 
+        self.completer_ = QCompleter()
+        self.completer = QCompleter()
+
         # ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
         # self.Ditails_btn.setPixmap(QtGui.QPixmap('img/btns/off/detais.png'))
@@ -227,6 +221,9 @@ class Main(QWidget, main_ui):
         self.pushButton.clicked.connect(self.statictic)
         self.session_history_btn.clicked.connect(self.go_specific_detai)
         self.pushButton_2.clicked.connect(self.show_visites_graph)
+        self.pushButton_3.clicked.connect(self.show_visites_ages_graph)
+        self.pushButton_4.clicked.connect(self.show_visites_times_graph)
+        self.pushButton_5.clicked.connect(self.show_money_graph)
 
     def session_tab_changed_event(self):
         if len(self.session_codeP_lineEdit.text()) > 0:
@@ -381,7 +378,7 @@ class Main(QWidget, main_ui):
 
             # self.mysqlCurs.execute(f'select max(S_date) from sessions where client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
             # self.mysqlCurs.execute(f'select ordonance from sessions where S_date like "{self.mysqlCurs.fetchone()[0]}" and client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
-            # data = self.mysqlCurs.fetchall()#todo here we are
+            # data = self.mysqlCurs.fetchall()
 
 
 
@@ -1118,10 +1115,15 @@ class Main(QWidget, main_ui):
 
     def session_refresh(self, data=None):
 
+
         self.dwa_count = 0
         self.current_dwayat = []
         self.ordononce_treeWidget.clear()
         self.current_client_code = self.session_codeP_lineEdit.text().split("--")[-1]
+        self.mysqlCurs.execute('''select codeP from person''')
+        self.codesP.clear()
+        for i in self.mysqlCurs.fetchall():
+            self.codesP.append(i[0])
         if self.current_client_code not in self.codesP:
             self.tabWidget.resize(1, 1)
             self.session_save_btn.resize(1, 1)
@@ -1281,6 +1283,15 @@ class Main(QWidget, main_ui):
             print(e)
 
     def showSessionsForm(self, event=None):
+        self.model1 = QStringListModel()
+        self.completer_.setModel(self.model1)
+        self.ordonoce_refresh(self.model1)
+        self.ordononce_EditLine.setCompleter(self.completer_)
+
+        model = QStringListModel()
+        self.completer.setModel(model)
+        self.getData(model)
+        self.session_codeP_lineEdit.setCompleter(self.completer)
         try:
             self.session_refresh()
 
@@ -1659,6 +1670,19 @@ class Main(QWidget, main_ui):
         #     print(e)
 
     def statistic_refresh(self, start_date = None, end_date = None):
+        self.ages = []
+        self.from_0_to_10 = 0
+        self.from_11_to_20 = 0
+        self.from_21_to_30 = 0
+        self.from_31_to_40 = 0
+        self.bigger_than_40 = 0
+        self.vistes_times = []
+        self.from_7h_to_11h = 0
+        self.from_12h_to_15h = 0
+        self.from_16h_to_19h = 0
+        # self.months = {'01' : 0, '02' : 0, '03' : 0, '04' : 0, '05' : 0, '06' : 0, '07' : 0, '08' : 0, '09' : 0, '10' : 0, '11' : 0, '12' : 0}
+        # self.prices = {'jan' : 0, 'feb' : 0, 'mar' : 0, 'apr' : 0, 'may' : 0, 'jun' : 0, 'jul' : 0, 'aug' : 0, 'sep' : 0, 'oct' : 0, 'nov' : 0, 'dec' : 0}
+
         if start_date and end_date:
             self.mysqlCurs.execute("""
                     select count(client_code) from sessions where S_date >= '{}' and S_date <= '{}'
@@ -1676,6 +1700,22 @@ class Main(QWidget, main_ui):
                     select sum(price) from sessions where S_date >= '{}' and S_date <= '{}'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.money = self.mysqlCurs.fetchone()[0]
+            self.mysqlCurs.execute(
+                f"""select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME' 
+                    and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+            self.males_count = self.mysqlCurs.fetchone()[0]
+            self.mysqlCurs.execute(
+                f"""select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME' 
+                    and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+            self.females_count = self.mysqlCurs.fetchone()[0]
+            self.mysqlCurs.execute(
+                f"""select  client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code where
+                        S_date >=  {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+            self.ages =  self.mysqlCurs.fetchall()
+
+            self.mysqlCurs.execute(f'select S_date from sessions where S_date >=  {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())} ')
+            self.vistes_times = self.mysqlCurs.fetchall()
+
 
 
         else:
@@ -1694,45 +1734,106 @@ class Main(QWidget, main_ui):
                 self.money += int(str(i[0]).split('(')[0])
                 # print(int(str(i[0]).split('(')[0]))
             # print(f'money : {self.money}')
+            self.mysqlCurs.execute(
+                """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME'""")
+            self.males_count = self.mysqlCurs.fetchone()[0]
+            self.mysqlCurs.execute(
+                """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME'""")
+            self.females_count = self.mysqlCurs.fetchone()[0]
+            self.mysqlCurs.execute(
+                f"""select client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code""")
 
+            self.ages = self.mysqlCurs.fetchall()
+
+            self.mysqlCurs.execute(f'select S_date from sessions')
+            self.vistes_times = self.mysqlCurs.fetchall()
+
+        self.mysqlCurs.execute(f'select price, S_date from sessions')
+        self.price_and_date_list = self.mysqlCurs.fetchall()
+
+
+
+
+
+        self.blackList = []
+        for c, d in self.ages:
+            if c not in self.blackList:
+                self.blackList.append(c)
+                if 1 <= int(self.today.split('-')[0]) - int(str(d).split('-')[0]) <= 10:
+                    self.from_0_to_10 += 1
+                if 11 <= int(self.today.split('-')[0]) - int(str(d).split('-')[0]) <= 20:
+                    self.from_11_to_20 += 1
+                if 21 <= int(self.today.split('-')[0]) - int(str(d).split('-')[0]) <= 30:
+                    self.from_21_to_30 += 1
+                if 31 <= int(self.today.split('-')[0]) - int(str(d).split('-')[0]) <= 40:
+                    self.from_31_to_40 += 1
+                if int(self.today.split('-')[0]) - int(str(d).split('-')[0]) > 40:
+                    self.bigger_than_40 += 1
+
+        for i in self.vistes_times:
+            if 7 <= int(str(i[0]).split(' ')[1].split(':')[0]) <= 11:
+                self.from_7h_to_11h += 1
+
+            if 12 <= int(str(i[0]).split(' ')[1].split(':')[0]) <= 15:
+                self.from_12h_to_15h += 1
+
+            if 16 <= int(str(i[0]).split(' ')[1].split(':')[0]) <= 19:
+                self.from_16h_to_19h += 1
+
+        tt_money = 0
+        for p, d in self.price_and_date_list:
+            tt_money += int(str(p).split('(')[0])
 
 
         self.visites_total.setText(f'Total Visites : {self.visits}')
+        self.label_30.setText(f'Hommes : {self.males_count} ( {(self.males_count / self.visits) * 100} % ).')
+        self.label_44.setText(f'Femmes : {self.females_count} ( {(self.females_count / self.visits) * 100} % ).')
 
-        self.mysqlCurs.execute(
-            """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME'""")
-        dt1 = self.mysqlCurs.fetchone()[0]
-
-        self.label_30.setText(f'Hommes : {dt1} ( {(dt1 / self.visits) * 100} % ).')
-        self.males_count = 0
-        if dt1:
-            self.males_count += int(dt1)
-        # print(males)
-
-        self.mysqlCurs.execute(
-            """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME'""")
-        dt2 = self.mysqlCurs.fetchone()[0]
-        self.label_44.setText(f'Femmes : {dt2} ( {(dt2 / self.visits) * 100} % ).')
-        self.females_count = 0
-        if dt2:
-            self.females_count += int(dt2)
+        # self.clients_total_2.setText(f'Total client : {self.cls_incription}')
+        self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 1)} % ).')
+        self.label_48.setText(f'11 - 20 ans  : {self.from_11_to_20} ( {round((self.from_11_to_20 / len(self.blackList)) * 100, 1)} % ).')
+        self.label_50.setText(f'21 - 30 ans  : {self.from_21_to_30} ( {round ((self.from_21_to_30 / len(self.blackList)) * 100, 1)} % ).')
+        self.label_53.setText(f'31 - 40 ans  : {self.from_31_to_40} ( {round((self.from_31_to_40 / len(self.blackList)) * 100, 1)} % ).')
+        self.label_54.setText(f' > 40 ans    : {self.bigger_than_40} ( {round((self.bigger_than_40 / len(self.blackList)) * 100, 1)} % ).')
 
 
-        # visites_graph = Graph(parent=self.visites_gander, data=[males, females], labels=['Homme', 'Femme'])
-        # visites_graph = Graph(parent=self.visites_gander, data=[males, females], labels=['Homme', 'Femme'])
+        self.label_47.setText(f'07h - 11h  : {self.from_7h_to_11h} ( {round ((self.from_7h_to_11h / self.visits) * 100, 1)} % ).')
+        self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 1)} % ).')
+        self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 1)} % ).')
+
+        self.label_57.setText(str(tt_money)) # todo here we are 
+
+
+    def show_money_graph(self):
+        bar_graph = Bar_graph(self.price_and_date_list, self.comboBox_years.currentText())
+
+
 
     def show_visites_graph(self):
-        visites_graph = Graph('inscriptions order by gander', [self.males_count, self.females_count], ['Homme', 'Femme'], (0.05, 0))
+        visites_graph = Graph('vitors order by gander', [self.males_count, self.females_count], ['Homme', 'Femme'], (0.05, 0))
+
+    def show_visites_times_graph(self):
+        dt = [self.from_7h_to_11h, self.from_12h_to_15h, self.from_16h_to_19h]
+        tm = list((0.01, 0.01, 0.01))
+        tm[dt.index(max(dt))] += 0.04
+        visites_times_graph = Graph('vitors order by time', dt, ['07h - 11h', '12h - 15h', '16h - 19h'], tuple(tm))
+
+    def show_visites_ages_graph(self):
+        dt = [self.from_0_to_10, self.from_11_to_20, self.from_21_to_30, self.from_31_to_40, self.bigger_than_40]
+        tm = list((0.01, 0.01, 0.01, 0.01, 0.01))
+        tm[dt.index(max(dt))] += 0.04
+        visites_ages_graph = Graph('visitors order by age', dt,
+                                   ['01 - 10 ans ', '11 - 20 ans ', '21 - 30 ans ', '31 - 40 ans ', ' > 40 ans '], tuple(tm))
 
 
 
     def showStatistiquesForm(self, event):
-        try:
-            self.statistic_refresh()
-        except Exception as e:
-            print(e)
-            err_log = open('src/logs.txt', 'a')
-            err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
+        self.statistic_refresh()
+        # try:
+        # except Exception as e:
+        #     print(e)
+        #     err_log = open('src/logs.txt', 'a')
+        #     err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
 
         # self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
         self.add_person_btn.setPixmap(QtGui.QPixmap('img/btns/off/add_person_btn.png'))

@@ -74,6 +74,8 @@ import json
 # dd = json.loads(ss)
 # print(dd)
 # {key:value mapping}
+from time import strftime, gmtime
+
 from PIL import Image
 
 x = {
@@ -174,5 +176,62 @@ chars = ['A', 'a', 0, 'B', 'b', 1, 'C', 'c', 2, 'D',
 # id_P += str(random.choice(chars))
 # print(id_P)
 
-head_img = Image.open('img/head.jpeg')
-print(head_img.size[1])
+# head_img = Image.open('img/head.jpeg')
+# print(head_img.size[1])
+# d = int(strftime("%Y-%m-%d", gmtime()).split('-')[0])
+# print(d-int('1998-08-23'))
+
+
+
+###############################################################
+#
+# import matplotlib
+# import matplotlib.pyplot as plt
+# import numpy as np
+#
+#
+# labels = ['G1', 'G2', 'G3', 'G4', 'G5', 'G5', 'G5', 'G5', 'G5', 'G5', 'G5', 'G5']
+# women_means = [100, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+#
+# x = np.arange(len(labels))  # the label locations
+# width = 0.35  # the width of the bars
+#
+# fig, ax = plt.subplots()
+# # rects1 = ax.bar(x - width/2, men_means, width, label='Men')
+# rects2 = ax.bar(x + width/2, women_means, width)
+# # rects2 = ax.bar(x + width/2, women_means, width, label='Women')
+#
+# # Add some text for labels, title and custom x-axis tick labels, etc.
+# ax.set_xlabel('Scores')
+# ax.set_title('Scores by group and gender')
+# ax.set_xticks(x)
+# ax.set_xticklabels(labels)
+# ax.legend()
+#
+#
+# def autolabel(rects):
+#     """Attach a text label above each bar in *rects*, displaying its height."""
+#     for rect in rects:
+#         height = rect.get_height()
+#         ax.annotate('{}'.format(height),
+#                     xy=(rect.get_x() + rect.get_width() / 2, height),
+#                     xytext=(0, 3),  # 3 points vertical offset
+#                     textcoords="offset points",
+#                     ha='center', va='bottom')
+#
+#
+# # autolabel(rects1)
+# autolabel(rects2)
+#
+# fig.tight_layout()
+#
+# plt.show()
+
+
+# m = {'01': 'jan', '02': 'feb', '03': 'mar', '04': 'apr', '05': 'may', '06': 'jun', '07': 'jul', '08': 'aug',
+#                '09': 'sep', '10': 'oct', '11': 'nov', '12': 'dec'}
+
+m = {'01': 'jan', '02': 'feb', '03': 'mar', '04': 'apr', '05': 'may', '06': 'jun', '07': 'jul', '08': 'aug',
+               '09': 'sep', '10': 'oct', '11': 'nov', '12': 'dec'}
+for i in m:
+    print(i, ' = ', m[i])
