@@ -79,7 +79,15 @@ class LogIn(QWidget, logIn_ui):
         else:
             acc_type = self.db_.logIn( self.username_in.text(), self.passwrd_in.text())
             open('src/login_logs.txt', 'a').write('\n{},  user : {}, as : {}'.format(self.today, self.username_in.text(), acc_type))
-            if acc_type == 'admin':
+            if acc_type == 'error':
+                # system error
+                self.passwrd_in.setText('')
+                self.username_in.setText('')
+                self.err = noInternetAlert.NoInternetAlert()
+                self.err.show()
+                self.close()
+
+            elif acc_type == 'wrong':
                 #the admin
                 print('profile : ', self.db_.logIn(self.username_in.text(), self.passwrd_in.text()))
                 self.main_ = Main('admin')
@@ -87,26 +95,12 @@ class LogIn(QWidget, logIn_ui):
                 self.main_.show()
                 self.close()
 
-            elif self.db_.logIn( self.username_in.text(), self.passwrd_in.text()) == 'ass':
-                #the assistent
-                print('profile : ', self.db_.logIn(self.username_in.text(), self.passwrd_in.text()))
-                self.main_ = Main('ass')
+            else:
+                self.main_ = Main(acc_type)
                 self.main_.show()
                 self.close()
 
-            elif self.db_.logIn( self.username_in.text(), self.passwrd_in.text()) == 'wrong':
-                #some input wrong
-                self.passwrd_in.setText('')
-                self.username_in.setText('')
 
-
-            elif self.db_.logIn(self.username_in.text(), self.passwrd_in.text()) == 'error':
-                #system error
-                self.passwrd_in.setText('')
-                self.username_in.setText('')
-                self.err = noInternetAlert.NoInternetAlert()
-                self.err.show()
-                self.close()
 
 
 

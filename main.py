@@ -64,6 +64,26 @@ class Main(QWidget, main_ui):
         if self.acc_type == 'admin':
             pass
         else:
+            permissions = str(self.acc_type).split()
+            self.setting_btn.setEnabled(False)
+            if '0' not in permissions:
+                self.add_person_btn.setEnabled(False)
+
+            if '1' not in permissions:
+                self.RDV_btn.setEnabled(False)
+
+            if '2' not in permissions:
+                self.search_btn.setEnabled(False)
+
+            if '3' not in permissions:
+                self.Ditails_btn.setEnabled(False)
+
+            if '4' not in permissions:
+                self.sessions_btn.setEnabled(False)
+
+            if '5' not in permissions:
+                self.Statistiques_btn.setEnabled(False)
+
             self.setting_btn.setEnabled(False)
             self.sessions_btn.setEnabled(False)
             self.Statistiques_btn.setEnabled(False)
@@ -228,13 +248,19 @@ class Main(QWidget, main_ui):
         self.pushButton_5.clicked.connect(self.show_money_graph)
 
     def last_session_price(self):
-        self.mysqlCurs.execute('select max(id) from sessions')
-        self.mysqlCurs.execute(f'''
-            select F_name, L_name, price from sessions inner join person on person.codeP = sessions.client_code where sessions.id = {self.mysqlCurs.fetchone()[0]}
-        ''')
-        dt = self.mysqlCurs.fetchone()
-        self.label_58.setText(f'{dt[0]} {dt[1]}')
-        self.label_59.setText(f'{str(dt[2]).split("(")[0]} DH .')
+        try:
+            self.mysqlCurs.execute('select max(id) from sessions')
+            self.mysqlCurs.execute(f'''
+                select F_name, L_name, price from sessions inner join person on person.codeP = sessions.client_code where sessions.id = {self.mysqlCurs.fetchone()[0]}
+                and S_date like "{self.today.split(':')[0]}%"
+            ''')
+
+            dt = self.mysqlCurs.fetchone()
+            if dt:
+                self.label_58.setText(f'{dt[0]} {dt[1]}')
+                self.label_59.setText(f'{str(dt[2]).split("(")[0]} DH .')
+        except Exception as e:
+            print(e)
 
 
 
@@ -376,9 +402,9 @@ class Main(QWidget, main_ui):
                         if str(self.file_path).split('.')[-1] != 'pdf':
                             self.file_path += '.pdf'
                             #client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False
-
+                        p_info = self.sqliteCurs.execute('select adress, city, num from info ').fetchone()
                         print_ordononce = Ppdf(client[1] + ' ' + client[2] + ' (' + client[0] + ') ', str(int(self.today.split('-')[0]) - int(str(client[3]).split('-')[0])),
-                                                   self.ordonance, ['adress', 'city', '06.30.50.46.06'], self.file_path, self.blink)
+                                                   self.ordonance, [p_info[0], p_info[1], p_info[2]], self.file_path, self.blink)
                             # err = QMessageBox.warning(dialog, 'Error', 'invalid extention', QMessageBox.Ok)
                         self.tabWidget.setCurrentIndex(0)
                         self.session_codeP_lineEdit.clear()
@@ -1809,24 +1835,26 @@ class Main(QWidget, main_ui):
         for p, d in self.price_and_date_list:
             tt_money += int(str(p).split('(')[0])
 
+        if self.visits:
+            self.visites_total.setText(f'Total Visites : {self.visits}')
+            self.label_30.setText(f'Hommes : {len(self.males_count)} ( {(len(self.males_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
+            self.label_44.setText(f'Femmes : {len(self.females_count)} ( {(len(self.females_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
 
-        self.visites_total.setText(f'Total Visites : {self.visits}')
-        self.label_30.setText(f'Hommes : {len(self.males_count)} ( {(len(self.males_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
-        self.label_44.setText(f'Femmes : {len(self.females_count)} ( {(len(self.females_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
-
-        # self.clients_total_2.setText(f'Total client : {self.cls_incription}')
-        self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 1)} % ).')
-        self.label_48.setText(f'11 - 20 ans  : {self.from_11_to_20} ( {round((self.from_11_to_20 / len(self.blackList)) * 100, 1)} % ).')
-        self.label_50.setText(f'21 - 30 ans  : {self.from_21_to_30} ( {round ((self.from_21_to_30 / len(self.blackList)) * 100, 1)} % ).')
-        self.label_53.setText(f'31 - 40 ans  : {self.from_31_to_40} ( {round((self.from_31_to_40 / len(self.blackList)) * 100, 1)} % ).')
-        self.label_54.setText(f' > 40 ans    : {self.bigger_than_40} ( {round((self.bigger_than_40 / len(self.blackList)) * 100, 1)} % ).')
+            # self.clients_total_2.setText(f'Total client : {self.cls_incription}')
+            self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 1)} % ).')
+            self.label_48.setText(f'11 - 20 ans  : {self.from_11_to_20} ( {round((self.from_11_to_20 / len(self.blackList)) * 100, 1)} % ).')
+            self.label_50.setText(f'21 - 30 ans  : {self.from_21_to_30} ( {round ((self.from_21_to_30 / len(self.blackList)) * 100, 1)} % ).')
+            self.label_53.setText(f'31 - 40 ans  : {self.from_31_to_40} ( {round((self.from_31_to_40 / len(self.blackList)) * 100, 1)} % ).')
+            self.label_54.setText(f' > 40 ans    : {self.bigger_than_40} ( {round((self.bigger_than_40 / len(self.blackList)) * 100, 1)} % ).')
 
 
-        self.label_47.setText(f'07h - 11h  : {self.from_7h_to_11h} ( {round ((self.from_7h_to_11h / self.visits) * 100, 1)} % ).')
-        self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 1)} % ).')
-        self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 1)} % ).')
+            self.label_47.setText(f'07h - 11h  : {self.from_7h_to_11h} ( {round ((self.from_7h_to_11h / self.visits) * 100, 1)} % ).')
+            self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 1)} % ).')
+            self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 1)} % ).')
 
-        self.label_57.setText(f'Total : {str(tt_money)} DH .') # todo here we are
+            self.label_57.setText(f'Total : {str(tt_money)} DH .')
+        else:
+            pass# todo here we are
 
 
     def show_money_graph(self):

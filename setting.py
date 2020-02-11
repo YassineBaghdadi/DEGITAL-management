@@ -24,24 +24,22 @@ class Setting(QWidget, _ui):
         self.setupUi(self)
         self.tabIndex = 0
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        self.w = 441
-        self.h = 321
-        self.label_9.setText('1/3')
         self.setWindowTitle('Setting')
         self.today = str(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+        self.pushButton.clicked.connect(self.save_info)
 
-
-        self.right.setPixmap(QtGui.QPixmap('img/right.png'))
-        self.right.setScaledContents(True)
-
-        self.addUser.resize(self.w, self.h)
-        self.addMG.resize(1, 1)
-        self.addMCh.resize(1, 1)
-
-        self.right.mousePressEvent = self.forward
         self.save.clicked.connect(self.save_user)
         self.sqliteConn = sqlite3.connect('src/setting.db')
         self.sqliteCurs = self.sqliteConn.cursor()
+        p_info = self.sqliteCurs.execute('select adress, city, num from info ').fetchone()
+
+        self.lineEdit_4.setText(str(p_info[0]))
+        self.lineEdit_2.setText(str(p_info[1]))
+        self.lineEdit_3.setText(str(p_info[2]))
+        self.lineEdit_4.textChanged.connect(self.adress_typing)
+        self.label_7.setText(f'{str(len(self.lineEdit_4.text()))}/75')
+
+
         self.host_db, self.user_db, self.passwrd_db, self.DBname, self.port_db = self.sqliteCurs.execute(
             'select host, db_user, db_pass, db_name, port from admin_setting').fetchone()
         self.mysqlConn = pymysql.connect(
@@ -53,54 +51,59 @@ class Setting(QWidget, _ui):
 
         )
         self.mysqlCurs = self.mysqlConn.cursor()
+
+
         self.refresh()
         self.users.itemSelectionChanged.connect(self.selectUser)
-        self.treeWidget.itemSelectionChanged.connect(self.selectChM)
-        self.treeWidget_2.itemSelectionChanged.connect(self.selectGM)
         self.delete_2.clicked.connect(self.deleteUser)
-        self.pushButton_8.clicked.connect(self.deleteChM)
-        self.pushButton_6.clicked.connect(self.deleteGM)
-        self.pushButton_7.clicked.connect(self.addChM)
-        self.pushButton_5.clicked.connect(self.addGM)
 
-    def addChM(self):
-        try:
-            self.mysqlCurs.execute('select * from malades where name = "{}"'.format(self.lineEdit_9.text()))
-            if self.mysqlCurs.fetchone():
-                err = QMessageBox.warning(self, 'ERROR', 'this "malade" is already exists on the database', QMessageBox.Ok)
-            elif self.lineEdit_9.text() != '':
-                self.mysqlCurs.execute('insert into malades (name , type) values("{}", "chronic")'.format(self.lineEdit_9.text()))
-                self.mysqlConn.commit()
-                self.lineEdit_9.setText('')
-                self.refresh()
-        except Exception as e:
-            print(e)
-            if self.lineEdit_9.text() != '':
-                self.mysqlCurs.execute(
-                    'insert into malades (name , type) values("{}", "chronic")'.format(self.lineEdit_9.text()))
-                self.mysqlConn.commit()
-                self.lineEdit_9.setText('')
-                self.refresh()
+        self.tabWidget.currentChanged.connect(self.tab_changed_refresh)
 
-    def addGM(self):
-        try:
-            self.mysqlCurs.execute('select * from malades where name = "{}"'.format(self.lineEdit_8.text()))
-            if self.mysqlCurs.fetchone():
-                err = QMessageBox.warning(self, 'ERROR', 'this "malade" is already exists on the database', QMessageBox.Ok)
-            elif self.lineEdit_8.text() != '':
-                self.mysqlCurs.execute('insert into malades (name , type) values("{}", "ginic")'.format(self.lineEdit_8.text()))
-                self.mysqlConn.commit()
-                self.lineEdit_8.setText('')
-                self.refresh()
+        self.comboBox.currentTextChanged.connect(self.perm_ref)
+        self.pushButton_2.clicked.connect(self.seve_permissions)
 
-        except Exception as e:
-            print(e)
-            if self.lineEdit_8.text() != '':
-                self.mysqlCurs.execute(
-                    'insert into malades (name , type) values("{}", "ginic")'.format(self.lineEdit_8.text()))
-                self.mysqlConn.commit()
-                self.lineEdit_8.setText('')
-                self.refresh()
+    def seve_permissions(self):
+        permissions = ''
+        if self.checkBox.isChecked():
+            permissions += '0'
+
+        if self.checkBox_2.isChecked():
+            permissions += '1'
+
+        if self.checkBox_6.isChecked():
+            permissions += '2'
+
+        if self.checkBox_3.isChecked():
+            permissions += '3'
+
+        if self.checkBox_4.isChecked():
+            permissions += '4'
+
+        if self.checkBox_5.isChecked():
+            permissions += '5'
+
+        self.mysqlCurs.execute(f'update users set role = "{permissions}" where username like "{self.comboBox.currentText()}"')
+        self.mysqlConn.commit()
+
+
+    def save_info(self):
+        #Édifice Tariq - n ° 5 (au-dessus de la pharmacie Tariq)- rue Bani Marin
+        #05.35.20.15.70
+        self.sqliteCurs.execute('delete from info')
+        self.sqliteConn.commit()
+        self.sqliteCurs.execute(f'insert into info values ("{str(self.lineEdit_4.text())}", "{str(self.lineEdit_2.text())}", "{str(self.lineEdit_3.text())}")')
+        self.sqliteConn.commit()
+
+    def adress_typing(self):
+        self.label_7.setText(f'{str(len(self.lineEdit_4.text()))}/75')
+        if len(self.lineEdit_4.text()) > 75:
+            self.pushButton.setEnabled(False)
+            self.label_7.setText('error')
+        else:
+            self.pushButton.setEnabled(True)
+
+
+
 
     def deleteUser(self):
         try:
@@ -112,30 +115,6 @@ class Setting(QWidget, _ui):
             print(e)
             open('src/login_logs.txt', 'a').write(
                 '\n{},  err : {}'.format(self.today, e))
-
-    def deleteChM(self):
-
-        try:
-            self.mysqlCurs.execute(''' delete from malades where id = {}'''.format(self.treeWidget.selectedItems()[0].text(0)))
-            self.mysqlConn.commit()
-            self.refresh()
-            print('deleted done')
-        except Exception as e:
-            print(e)
-            open('src/login_logs.txt', 'a').write(
-                '\n{},  err  : {}'.format(self.today, e))
-
-    def deleteGM(self):
-
-        try:
-            self.mysqlCurs.execute(''' delete from malades where id = {}'''.format(self.treeWidget_2.selectedItems()[0].text(0)))
-            self.mysqlConn.commit()
-            self.refresh()
-            print('deleted done')
-        except Exception as e:
-            print(e)
-            open('src/login_logs.txt', 'a').write(
-                '\n{},  err  : {}'.format(self.today, e))
 
     def selectUser(self):
         try:
@@ -153,39 +132,65 @@ class Setting(QWidget, _ui):
         #     # value = getSelected.text(0)
             # print (value)
 
-    def selectChM(self):
-        try:
-            if self.treeWidget.selectedItems()[0].text(0):
-                self.pushButton_8.setEnabled(True)
-                self.lineEdit_9.setText(self.treeWidget.selectedItems()[0].text(1))
+    def tab_changed_refresh(self):
+        if self.tabWidget.currentIndex() == 2:
+            # self.perm_ref()
+            self.mysqlCurs.execute('select username from users where role not like "admin"')
+            dt = list(self.mysqlCurs.fetchall())
 
-                print(self.treeWidget.selectedItems()[0].text(0))
+            users_ass = ['']
+            if dt:
+                for i in dt:
+                    users_ass.append(i[0])
 
-        except Exception as e:
-            print(e)
-        # if getSelected:
-        #     # value = getSelected.text(0)
-            # print (value)
+                self.comboBox.clear()
+                self.comboBox.addItems(users_ass)
+
+    def perm_ref(self):
+        if self.comboBox.currentText():
+            self.pushButton_2.setEnabled(True)
+            self.mysqlCurs.execute(f'select role from users where role not like "admin" and username like "{self.comboBox.currentText()}"')
+            # print(self.mysqlCurs.fetchone())
+            dt1 = str(self.mysqlCurs.fetchone()[0]).split()
+
+            self.checkBox.setChecked(False)
+            if '0' in dt1:
+                self.checkBox.setChecked(True)
+
+            self.checkBox_2.setChecked(False)
+            if '1' in dt1:
+                self.checkBox_2.setChecked(True)
 
 
+            self.checkBox_6.setChecked(False)
+            if '2' in dt1:
+                self.checkBox_6.setChecked(True)
 
-    def selectGM(self):
-        try:
-            if self.treeWidget_2.selectedItems()[0].text(0):
-                self.pushButton_6.setEnabled(True)
-                self.lineEdit_8.setText(self.treeWidget_2.selectedItems()[0].text(1))
+            self.checkBox_3.setChecked(False)
+            if '3' in dt1:
+                self.checkBox_3.setChecked(True)
 
-                print(self.treeWidget_2.selectedItems()[0].text(0))
-        #
-        except Exception as e:
-            print(e)
-        # if getSelected:
-        #     # value = getSelected.text(0)
-            # print (value)
+            self.checkBox_4.setChecked(False)
+            if '4' in dt1:
+                self.checkBox_4.setChecked(True)
+
+
+            self.checkBox_5.setChecked(False)
+            if '5' in dt1:
+                self.checkBox_5.setChecked(True)
+        else:
+            self.checkBox.setChecked(False)
+            self.checkBox_2.setChecked(False)
+            self.checkBox_6.setChecked(False)
+            self.checkBox_3.setChecked(False)
+            self.checkBox_4.setChecked(False)
+            self.pushButton_2.setEnabled(False)
+
+
 
 
     def refresh(self):
-
+        # self.perm_ref()
         self.username.setText('')
         self.passwrd.setText('')
         self.passwrd_2.setText('')
@@ -198,31 +203,6 @@ class Setting(QWidget, _ui):
             for i in data:
                 item = QTreeWidgetItem([str(i[0]), str(i[1]), str(i[2]), str(i[3])])
                 self.users.addTopLevelItem(item)
-
-
-        self.lineEdit_9.setText('')
-        self.treeWidget.clear()
-        self.mysqlCurs.execute('select id, name from malades where type = "chronic"')
-        data = self.mysqlCurs.fetchall()
-        if data:
-            self.treeWidget.setHeaderLabels(['ID', 'Name'])
-            for i in data:
-                item = QTreeWidgetItem([str(i[0]), str(i[1])])
-                self.treeWidget.addTopLevelItem(item)
-
-
-
-        self.lineEdit_8.setText('')
-        self.treeWidget_2.clear()
-        self.mysqlCurs.execute('select id, name from malades where type = "ginic" ')
-        data = self.mysqlCurs.fetchall()
-        if data:
-            self.treeWidget_2.setHeaderLabels(['ID', 'Name'])
-            for i in data:
-                item = QTreeWidgetItem([str(i[0]), str(i[1])])
-                self.treeWidget_2.addTopLevelItem(item)
-
-
 
 
 
@@ -254,31 +234,7 @@ class Setting(QWidget, _ui):
             self.passwrd.setText('')
             self.passwrd_2.setText('')
             self.refresh()
-
-    def forward(self, event):
-        self.refresh()
-        if self.tabIndex == 0:
-            self.addUser.resize(1, 1)
-            self.addMG.resize(self.w, self.h)
-            self.addMCh.resize(1, 1)
-            self.tabIndex = 1
-            self.label_9.setText('2/3')
-
-        elif self.tabIndex == 1:
-            self.addUser.resize(1, 1)
-            self.addMG.resize(1, 1)
-            self.addMCh.resize(self.w, self.h)
-            self.tabIndex = 2
-            self.label_9.setText('3/3')
-
-        elif self.tabIndex == 2:
-            self.addUser.resize(self.w, self.h)
-            self.addMG.resize(1, 1)
-            self.addMCh.resize(1, 1)
-            self.tabIndex = 0
-            self.label_9.setText('1/3')
-
-
+#
 def main():
     app = QtWidgets.QApplication(sys.argv)
     splash_wn = Setting()

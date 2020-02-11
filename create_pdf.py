@@ -188,11 +188,13 @@ class Ppdf:
 
 
     def draw_footer(self):
-        self.pdf_.setFont('Courier', 9)
+        self.pdf_.setFont('Courier', 7)
 
         self.pdf_.line(30, 35, 380, 35)
 
-        self.pdf_.drawString(50, 18, str(self.adress) + ' - ' + str(self.city) + ' | Tel : ' + str(self.tele))
+        self.pdf_.drawString(35, 24, f'{str(self.adress)} - {str(self.city) }')
+        self.pdf_.drawString(35, 11, f'Tel : { str(self.tele)}')
+
         self.pdf_.drawString(400, 8,str(self.pdf_.getPageNumber()))
 
 
