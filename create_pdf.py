@@ -158,8 +158,13 @@ class Ppdf:
         options.add_experimental_option("prefs", profile)
         self.brower = None
         try:
-            self.brower = webdriver.Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver', chrome_options=options)
+            try:
+                self.brower = webdriver.Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78', chrome_options=options)
+            except Exception as e:
+                print(e)
+                self.brower = webdriver.Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77', chrome_options=options)
             print(f'your OS is : {platform.system()}')
+
         except Exception as e:
             print(e)
             self.brower = webdriver.Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe', chrome_options=options)
@@ -348,20 +353,20 @@ class Ppdf:
 
 # w = Create_PDF()
 
-f ='''
---> dfssf-----> dddddddd-----> ssssssss-----> ddddddddddd-----> vvvvvvvvvvvv-----> errrrrre---
---> sssssssss-----> sssssssssssss-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww
-'''
+# f ='''
+# --> dfssf-----> dddddddd-----> ssssssss-----> ddddddddddd-----> vvvvvvvvvvvv-----> errrrrre---
+# --> sssssssss-----> sssssssssssss-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww
+# '''
 
 # ppp = os.path.dirname(os.path.realpath(__file__)) + '/src/ordooooonnnnnnnn.pdf'
 # print(ppp)

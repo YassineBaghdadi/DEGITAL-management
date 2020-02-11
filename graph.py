@@ -95,6 +95,8 @@ class Bar_graph:
 
         fig.tight_layout()
 
+
+
         plt.show()
 
 

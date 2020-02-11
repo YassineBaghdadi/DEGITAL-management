@@ -42,6 +42,7 @@ class Main(QWidget, main_ui):
         self.height_ = 431
         self.acc_type = account_type
         self.today = str(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+        print(self.today)
         # self.today = '2020-01-27 3456'
         self.sqliteConn = sqlite3.connect('src/setting.db')
         self.sqliteCurs = self.sqliteConn.cursor()
@@ -109,6 +110,7 @@ class Main(QWidget, main_ui):
         self.children_num.setValidator(QIntValidator())
 
         self.person_refresh()
+        self.pushButton_6.clicked.connect(self.last_session_price)
 
         # RDV part:
         self.newRDVDateEdit.setDate(QtCore.QDate.currentDate())
@@ -225,6 +227,17 @@ class Main(QWidget, main_ui):
         self.pushButton_4.clicked.connect(self.show_visites_times_graph)
         self.pushButton_5.clicked.connect(self.show_money_graph)
 
+    def last_session_price(self):
+        self.mysqlCurs.execute('select max(id) from sessions')
+        self.mysqlCurs.execute(f'''
+            select F_name, L_name, price from sessions inner join person on person.codeP = sessions.client_code where sessions.id = {self.mysqlCurs.fetchone()[0]}
+        ''')
+        dt = self.mysqlCurs.fetchone()
+        self.label_58.setText(f'{dt[0]} {dt[1]}')
+        self.label_59.setText(f'{str(dt[2]).split("(")[0]} DH .')
+
+
+
     def session_tab_changed_event(self):
         if len(self.session_codeP_lineEdit.text()) > 0:
             self.session_refresh()
@@ -328,20 +341,22 @@ class Main(QWidget, main_ui):
             for ix in range(self.ordononce_treeWidget.topLevelItemCount()):
                 self.ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0) + '---')
 
-            self.mysqlCurs.execute(f"""
-                insert into sessions (client_code, S_date, checking, price, ordonance, reason) 
-                values ("{self.session_codeP_lineEdit.text().split("--")[-1]}", "{self.today}", "{self.session_json_data}",
-                        "{str(self.session_price.text()) + '(' + str(self.session_price_note_textEdit.toPlainText()) + ')'}",
-                        "{self.ordonance}", "{self.session_reason_textEdit.toPlainText()}")
-            """)
+            self.mysqlCurs.execute(f'select count(ordonance) from sessions where client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}" and S_date like "{str(self.today.split(" ")[0])}%"')
+            # print(f'select count(ordonance) from sessions where client_code like "{self.session_codeP_lineEdit.text().split("--")[-1]}" and S_date like "{str(self.today.split(" ")[0])}%"')
 
-            self.mysqlConn.commit()
+            if self.mysqlCurs.fetchone()[0] == 0:
+                self.mysqlCurs.execute(f"""insert into sessions (client_code, S_date, checking, price, ordonance, reason) 
+                    values ("{self.session_codeP_lineEdit.text().split("--")[-1]}", "{self.today}", "{self.session_json_data}",
+                            "{str(self.session_price.text()) + '(' + str(self.session_price_note_textEdit.toPlainText()) + ')'}",
+                            "{self.ordonance}", "{self.session_reason_textEdit.toPlainText()}")""")
+
+                self.mysqlConn.commit()
 
             try:
                 dialog = QMessageBox()
                 dialog.setIcon(QMessageBox.Question)
-                dialog.setText('test 1 ')
-                check_box = QCheckBox("Include bands?", dialog)
+                dialog.setText('would you print it ?')
+                check_box = QCheckBox("use Template ?", dialog)
                 check_box.setCheckState(False)
                 dialog.setCheckBox(check_box)
                 dialog.addButton(QMessageBox.No)
@@ -351,16 +366,17 @@ class Main(QWidget, main_ui):
                 if result == QtWidgets.QMessageBox.Yes:
                     if dialog.checkBox().checkState() == Qt.Checked:
                         self.blink = False
-
-                    self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ', directory='.',
+                    self.mysqlCurs.execute(
+                        f'select codeP, F_name, L_name, birth_date from person where codeP = "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
+                    client = self.mysqlCurs.fetchone()
+                    self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ', directory=f'./{client[1]} {client[2]} ({client[0]}) [{str(self.today)[:-3]}].pdf',
                                                                filter="Pdf files (*.pdf)")
 
                     if self.file_path:
                         if str(self.file_path).split('.')[-1] != 'pdf':
                             self.file_path += '.pdf'
                             #client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False
-                        self.mysqlCurs.execute(f'select codeP, F_name, L_name, birth_date from person where codeP = "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
-                        client = self.mysqlCurs.fetchone()
+
                         print_ordononce = Ppdf(client[1] + ' ' + client[2] + ' (' + client[0] + ') ', str(int(self.today.split('-')[0]) - int(str(client[3]).split('-')[0])),
                                                    self.ordonance, ['adress', 'city', '06.30.50.46.06'], self.file_path, self.blink)
                             # err = QMessageBox.warning(dialog, 'Error', 'invalid extention', QMessageBox.Ok)
@@ -816,6 +832,7 @@ class Main(QWidget, main_ui):
             self.nums_combo.addItems(clients__)
 
     def person_refresh(self):
+        self.last_session_price()
         self.codesP = []
         try:
             self.mysqlCurs.execute('''select codeP from person''')
@@ -1701,13 +1718,13 @@ class Main(QWidget, main_ui):
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.money = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute(
-                f"""select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME' 
+                f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME' 
                     and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
-            self.males_count = self.mysqlCurs.fetchone()[0]
+            self.males = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
-                f"""select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME' 
+                f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME' 
                     and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
-            self.females_count = self.mysqlCurs.fetchone()[0]
+            self.females = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select  client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code where
                         S_date >=  {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
@@ -1735,11 +1752,11 @@ class Main(QWidget, main_ui):
                 # print(int(str(i[0]).split('(')[0]))
             # print(f'money : {self.money}')
             self.mysqlCurs.execute(
-                """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME'""")
-            self.males_count = self.mysqlCurs.fetchone()[0]
+                """select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME'""")
+            self.males = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
-                """select count(sessions.id) from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME'""")
-            self.females_count = self.mysqlCurs.fetchone()[0]
+                """select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME'""")
+            self.females = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code""")
 
@@ -1752,7 +1769,15 @@ class Main(QWidget, main_ui):
         self.price_and_date_list = self.mysqlCurs.fetchall()
 
 
+        self.females_count = []
+        for i in self.females:
+            if i not in self.females_count:
+                self.females_count.append(i)
 
+        self.males_count = []
+        for i in self.males:
+            if i not in self.males_count:
+                self.males_count.append(i)
 
 
         self.blackList = []
@@ -1786,8 +1811,8 @@ class Main(QWidget, main_ui):
 
 
         self.visites_total.setText(f'Total Visites : {self.visits}')
-        self.label_30.setText(f'Hommes : {self.males_count} ( {(self.males_count / self.visits) * 100} % ).')
-        self.label_44.setText(f'Femmes : {self.females_count} ( {(self.females_count / self.visits) * 100} % ).')
+        self.label_30.setText(f'Hommes : {len(self.males_count)} ( {(len(self.males_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
+        self.label_44.setText(f'Femmes : {len(self.females_count)} ( {(len(self.females_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
 
         # self.clients_total_2.setText(f'Total client : {self.cls_incription}')
         self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 1)} % ).')
@@ -1801,7 +1826,7 @@ class Main(QWidget, main_ui):
         self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 1)} % ).')
         self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 1)} % ).')
 
-        self.label_57.setText(str(tt_money)) # todo here we are 
+        self.label_57.setText(f'Total : {str(tt_money)} DH .') # todo here we are
 
 
     def show_money_graph(self):
@@ -1810,7 +1835,7 @@ class Main(QWidget, main_ui):
 
 
     def show_visites_graph(self):
-        visites_graph = Graph('vitors order by gander', [self.males_count, self.females_count], ['Homme', 'Femme'], (0.05, 0))
+        visites_graph = Graph('vitors order by gander', [len(self.males_count), len(self.females_count)], ['Homme', 'Femme'], (0.05, 0))
 
     def show_visites_times_graph(self):
         dt = [self.from_7h_to_11h, self.from_12h_to_15h, self.from_16h_to_19h]

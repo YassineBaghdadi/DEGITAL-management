@@ -205,6 +205,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                     ''')
 
                     self.mysqlconn.commit()
+
                     self.mysqlCurs.execute('select count(id) from tools')
                     if not self.mysqlCurs.fetchone()[0]:
                         self.mysqlCurs.execute('''
