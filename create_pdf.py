@@ -19,7 +19,7 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from pyqtgraph.graphicsItems.ScatterPlotItem import tr
-from selenium import webdriver
+from selenium.webdriver import Chrome, ChromeOptions
 import time
 
 from reportlab.pdfgen import canvas
@@ -66,6 +66,7 @@ class Ppdf:
         if blink_page:#todo set image as header
 
                 self.draw_head()
+                self.draw_footer()
                 #todo
                 #
                 # ##############################
@@ -133,7 +134,6 @@ class Ppdf:
 
 
 
-        self.draw_footer()
         self.pdf_.setFont('Courier-Bold', 12)
         for i in str(ordonance).split('---'):
                 if i :
@@ -150,7 +150,7 @@ class Ppdf:
 
 
         self.pdf_.save()
-        options = webdriver.ChromeOptions()
+        options = ChromeOptions()
         # self.path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '', 'PDF files (*.pdf)')[0]
         self.path = path
         profile = {
@@ -159,15 +159,17 @@ class Ppdf:
         self.brower = None
         try:
             try:
-                self.brower = webdriver.Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78', chrome_options=options)
+                self.brower = Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78', chrome_options=options)
             except Exception as e:
                 print(e)
-                self.brower = webdriver.Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77', chrome_options=options)
+                self.brower = Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77', chrome_options=options)
             print(f'your OS is : {platform.system()}')
 
         except Exception as e:
             print(e)
-            self.brower = webdriver.Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe', chrome_options=options)
+            self.brower = Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe', chrome_options=options)
+
+        # self.brower = Chrome()
 
         # try:
         # except Exception as e:
@@ -355,23 +357,23 @@ class Ppdf:
 
 # w = Create_PDF()
 
-# f ='''
-# --> dfssf-----> dddddddd-----> ssssssss-----> ddddddddddd-----> vvvvvvvvvvvv-----> errrrrre---
-# --> sssssssss-----> sssssssssssss-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
-# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
-# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
-# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
-# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
-# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
-# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
-# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
-# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
-# --> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
-# --> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww
-# '''
+f ='''
+--> dfssf-----> dddddddd-----> ssssssss-----> ddddddddddd-----> vvvvvvvvvvvv-----> errrrrre---
+--> sssssssss-----> sssssssssssss-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+--> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+--> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+--> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+--> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+--> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+--> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+--> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+--> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
+--> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
+--> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww
+'''
 
 # ppp = os.path.dirname(os.path.realpath(__file__)) + '/src/ordooooonnnnnnnn.pdf'
 # print(ppp)
 # # ppp = loadUiType(path.join(path.dirname(__file__), "src/ordooooonnnnnnnn.pdf"))
-# # w = Ppdf(ordonance=f.replace('\n', ''), path='src/ordooooonnnnnnnn.pdf', blink_page=True)
+# w = Ppdf(ordonance=f.replace('---', '\n'), path='src/ordooooonnnnnnnn.pdf', blink_page=True)
 # w = Ppdf(ordonance=f.replace('\n', ''), path=ppp, blink_page=True)

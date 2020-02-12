@@ -25,6 +25,7 @@ from setting import *
 import noInternetAlert
 from db_m import DB_m
 from create_pdf import *
+import logIn
 
 main_ui, _ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
@@ -109,6 +110,7 @@ class Main(QWidget, main_ui):
         self.home_refresh()
         self.num_close.clicked.connect(self.deleteNums)
         self.num_addNew.clicked.connect(self.addPersonFrame)
+        self.exit_2.clicked.connect(self.logout)
 
         ##########################  add person part :  ##########################################################
         self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
@@ -246,6 +248,13 @@ class Main(QWidget, main_ui):
         self.pushButton_3.clicked.connect(self.show_visites_ages_graph)
         self.pushButton_4.clicked.connect(self.show_visites_times_graph)
         self.pushButton_5.clicked.connect(self.show_money_graph)
+
+
+    def logout(self):
+        self.lg = logIn.LogIn()
+        self.lg.show()
+        self.close()
+
 
     def last_session_price(self):
         try:

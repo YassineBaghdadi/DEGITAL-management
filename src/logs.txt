@@ -1067,3 +1067,6 @@
 2020-02-11 17:20:46 'Main' object has no attribute 'comboBox_2' ( admin )
 2020-02-11 17:20:46 'Main' object has no attribute 'comboBox_2' ( admin )
 2020-02-11 19:15:59 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-11 23:19:21 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-11 23:19:21 'Main' object has no attribute 'comboBox_2' ( admin )
+2020-02-11 23:19:21 'Main' object has no attribute 'comboBox_2' ( admin )
