@@ -226,6 +226,8 @@ class Main(QWidget, main_ui):
 
         self.completer_ = QCompleter()
         self.completer = QCompleter()
+        self.ordononce_cls_pushButton.clicked.connect(self.clear_ordonance)
+        self.checkBox.stateChanged.connect(self.change_to_permit)
 
         # ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
@@ -242,12 +244,24 @@ class Main(QWidget, main_ui):
         # self.Statistiques_btn.setPixmap(QtGui.QPixmap('img/btns/off/statistiques_btn.png'))
         # self.Statistiques_btn.setScaledContents(True)
         self.Statistiques_btn.mousePressEvent = self.showStatistiquesForm
-        self.pushButton.clicked.connect(self.statictic)
+        self.pushButton.clicked.connect(self.statictic)#todo here is the problem
         self.session_history_btn.clicked.connect(self.go_specific_detai)
         self.pushButton_2.clicked.connect(self.show_visites_graph)
         self.pushButton_3.clicked.connect(self.show_visites_ages_graph)
         self.pushButton_4.clicked.connect(self.show_visites_times_graph)
         self.pushButton_5.clicked.connect(self.show_money_graph)
+
+
+    def change_to_permit(self):
+        if self.checkBox.isChecked():
+            self.clear_ordonance()
+            self.session_reason_textEdit.setText('Auto Ecole : \n\nPermit Type : \n\nndader(oui/non) : ')
+        else:
+            self.session_reason_textEdit.clear()
+            self.clear_ordonance()
+
+    def clear_ordonance(self):
+        self.ordononce_treeWidget.clear()
 
 
     def logout(self):
@@ -606,16 +620,6 @@ class Main(QWidget, main_ui):
     def goSetting(self, event):
         self.sett = Setting()
         self.sett.show()
-
-    def statictic(self):
-        # self.visits = 0
-        # self.cls_incription = 0
-        # self.rdvs = 0
-        # self.money = 0
-        if str(self.dateEdit_2.date().toPyDate()) >= str(self.dateEdit_3.date().toPyDate()):
-            err = QMessageBox.warning(self, 'ERROR', 'invalid dates ', QMessageBox.Ok)
-        else:
-            pass
 
 
 
@@ -1168,7 +1172,7 @@ class Main(QWidget, main_ui):
 
     def session_refresh(self, data=None):
 
-
+        self.checkBox.setChecked(False)
         self.dwa_count = 0
         self.current_dwayat = []
         self.ordononce_treeWidget.clear()
@@ -1330,6 +1334,9 @@ class Main(QWidget, main_ui):
                 self.inpressise_radioButton.setChecked(True)
 
         if dt[1]:
+            if 'Auto Ecole' in dt[1]:
+                self.checkBox.setChecked(True)
+
             self.session_reason_textEdit.setText(dt[1])
 
         if dt[2]:
@@ -1338,8 +1345,8 @@ class Main(QWidget, main_ui):
 
         if dt[3]:
             self.session_price.setText(str(dt[3]).split('(')[0])
+            self.session_price_note_textEdit.setText(str(dt[3]).split('(')[1][:-1]) #todo here iam
 
-            self.session_price_note_textEdit.setText(str(dt[3]).split('(')[1][:-1]) #todo here iam 
     def ordonoce_refresh(self, m):
         try:
             self.mysqlCurs.execute('select dwa_name from dwayat')
@@ -1736,6 +1743,18 @@ class Main(QWidget, main_ui):
         # except Exception as e:
         #     print(e)
 
+
+    def statictic(self):
+        # self.visits = 0
+        # self.cls_incription = 0
+        # self.rdvs = 0
+        # self.money = 0
+        if str(self.dateEdit_2.date().toPyDate()) > str(self.dateEdit_3.date().toPyDate()):
+            err = QMessageBox.warning(self, 'ERROR', 'invalid dates ', QMessageBox.Ok)
+        else:
+            self.statistic_refresh(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate()))
+
+
     def statistic_refresh(self, start_date = None, end_date = None):
         self.ages = []
         self.from_0_to_10 = 0
@@ -1752,35 +1771,35 @@ class Main(QWidget, main_ui):
 
         if start_date and end_date:
             self.mysqlCurs.execute("""
-                    select count(client_code) from sessions where S_date >= '{}' and S_date <= '{}'
+                    select count(id) from sessions where S_date >= '{}%' and S_date <= '{}%'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.visits = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select count(codeP) from person where inscri_date >= '{}' and inscri_date <= '{}'
+                    select count(codeP) from person where inscri_date >= '{}%' and inscri_date <= '{}%'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.cls_incription = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select count(id) from RDV where rdv_date >= '{}' and rdv_date <= '{}' 
+                    select count(id) from RDV where rdv_date >= '{}%' and rdv_date <= '{}%' 
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.rdvs = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select sum(price) from sessions where S_date >= '{}' and S_date <= '{}'
+                    select sum(price) from sessions where S_date >= '{}%' and S_date <= '{}%'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.money = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute(
                 f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME' 
-                    and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
             self.males = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME' 
-                    and S_date >= {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
             self.females = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select  client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code where
-                        S_date >=  {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())}""")
+                        S_date >=  '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
             self.ages =  self.mysqlCurs.fetchall()
 
-            self.mysqlCurs.execute(f'select S_date from sessions where S_date >=  {str(self.dateEdit_2.date().toPyDate())} and S_date <= {str(self.dateEdit_3.date().toPyDate())} ')
+            self.mysqlCurs.execute(f'select S_date from sessions where S_date >=  "{str(self.dateEdit_2.date().toPyDate())}%" and S_date <= "{str(self.dateEdit_3.date().toPyDate())}%" ')
             self.vistes_times = self.mysqlCurs.fetchall()
 
 
@@ -1861,30 +1880,68 @@ class Main(QWidget, main_ui):
 
         if self.visits:
             self.visites_total.setText(f'Total Visites : {self.visits}')
-            self.label_30.setText(f'Hommes : {len(self.males_count)} ( {(len(self.males_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
-            self.label_44.setText(f'Femmes : {len(self.females_count)} ( {(len(self.females_count) / (len(self.males_count) + len(self.females_count))) * 100} % ).')
+            self.mysqlCurs.execute('select count(id) from sessions where reason like "%auto ecole%" ')
+            tt = self.mysqlCurs.fetchone()[0]
+
+            self.visites_total_2.setText(f'Total Visites por permis : {tt} ( {round((tt / self.visits)*100, 2)} % )')
+            if self.males_count:
+                self.label_30.setText(f'Hommes : {len(self.males_count)} ( {round((len(self.males_count) / (len(self.males_count) + len(self.females_count))) * 100, 2)} % ).')
+            else:
+                self.label_30.setText(f'Hommes : 0')
+            if self.females_count:
+                self.label_44.setText(f'Femmes : {len(self.females_count)} ( {round((len(self.females_count) / (len(self.males_count) + len(self.females_count))) * 100, 2)} % ).')
+            else:
+                self.label_44.setText(f'Femmes : 0')
 
             # self.clients_total_2.setText(f'Total client : {self.cls_incription}')
-            self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 1)} % ).')
-            self.label_48.setText(f'11 - 20 ans  : {self.from_11_to_20} ( {round((self.from_11_to_20 / len(self.blackList)) * 100, 1)} % ).')
-            self.label_50.setText(f'21 - 30 ans  : {self.from_21_to_30} ( {round ((self.from_21_to_30 / len(self.blackList)) * 100, 1)} % ).')
-            self.label_53.setText(f'31 - 40 ans  : {self.from_31_to_40} ( {round((self.from_31_to_40 / len(self.blackList)) * 100, 1)} % ).')
-            self.label_54.setText(f' > 40 ans    : {self.bigger_than_40} ( {round((self.bigger_than_40 / len(self.blackList)) * 100, 1)} % ).')
+            if self.from_0_to_10:
+                self.label_46.setText(f'01 - 10 ans  : {self.from_0_to_10} ( {round ((self.from_0_to_10 / len(self.blackList)) * 100, 2)} % ).')
+            else:
+                self.label_46.setText(f'01 - 10 ans  : 0')
+
+            if self.from_11_to_20:
+                self.label_48.setText(f'11 - 20 ans  : {self.from_11_to_20} ( {round((self.from_11_to_20 / len(self.blackList)) * 100, 2)} % ).')
+            else:
+                self.label_48.setText(f'11 - 20 ans  : 0')
+
+            if self.from_21_to_30:
+                self.label_50.setText(f'21 - 30 ans  : {self.from_21_to_30} ( {round ((self.from_21_to_30 / len(self.blackList)) * 100, 2)} % ).')
+            else:
+                self.label_50.setText(f'21 - 30 ans  : 0')
+
+            if self.from_31_to_40:
+                self.label_53.setText(f'31 - 40 ans  : {self.from_31_to_40} ( {round((self.from_31_to_40 / len(self.blackList)) * 100, 2)} % ).')
+            else:
+                self.label_53.setText(f'31 - 40 ans  : 0')
+
+            if self.bigger_than_40:
+                self.label_54.setText(f' > 40 ans    : {self.bigger_than_40} ( {round((self.bigger_than_40 / len(self.blackList)) * 100, 2)} % ).')
+            else:
+                self.label_54.setText(f' > 40 ans    : 0')
 
 
-            self.label_47.setText(f'07h - 11h  : {self.from_7h_to_11h} ( {round ((self.from_7h_to_11h / self.visits) * 100, 1)} % ).')
-            self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 1)} % ).')
-            self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 1)} % ).')
+            if self.from_7h_to_11h:
+                self.label_47.setText(f'07h - 11h  : {self.from_7h_to_11h} ( {round ((self.from_7h_to_11h / self.visits) * 100, 2)} % ).')
+            else:
+                self.label_47.setText(f'07h - 11h  : 0')
+
+            if self.from_12h_to_15h:
+                self.label_52.setText(f'12h - 15h  : {self.from_12h_to_15h} ( {round((self.from_12h_to_15h / self.visits) * 100, 2)} % ).')
+            else:
+                self.label_52.setText(f'12h - 15h  : 0')
+
+            if self.from_16h_to_19h:
+                self.label_51.setText(f'16h - 19h    : {self.from_16h_to_19h} ( {round((self.from_16h_to_19h / self.visits) * 100, 2)} % ).')
+            else:
+                self.label_51.setText(f'16h - 19h    : 0')
+
 
             self.label_57.setText(f'Total : {str(tt_money)} DH .')
         else:
-            pass# todo here we are
-
+            self.visites_total.setText(f'Total Visites : 0')
 
     def show_money_graph(self):
         bar_graph = Bar_graph(self.price_and_date_list, self.comboBox_years.currentText())
-
-
 
     def show_visites_graph(self):
         visites_graph = Graph('vitors order by gander', [len(self.males_count), len(self.females_count)], ['Homme', 'Femme'], (0.05, 0))

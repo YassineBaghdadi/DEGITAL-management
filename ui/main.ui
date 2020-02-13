@@ -2687,8 +2687,8 @@ border-color: rgb(128, 128, 128);</string>
      <widget class="QLabel" name="visites_total">
       <property name="geometry">
        <rect>
-        <x>650</x>
-        <y>25</y>
+        <x>550</x>
+        <y>10</y>
         <width>140</width>
         <height>17</height>
        </rect>
@@ -3027,6 +3027,19 @@ border-color: rgb(128, 128, 128);</string>
       </property>
       <property name="timeSpec">
        <enum>Qt::LocalTime</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="visites_total_2">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>30</y>
+        <width>240</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
       </property>
      </widget>
     </widget>
@@ -4025,6 +4038,9 @@ margin-bottom:20px;</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="ddr_dateEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>203</x>
@@ -4093,21 +4109,21 @@ margin-bottom:20px;</string>
         <rect>
          <x>20</x>
          <y>50</y>
-         <width>86</width>
+         <width>140</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>CheckBox</string>
+        <string>Visite pour permis</string>
        </property>
       </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
        <rect>
-        <x>306</x>
+        <x>303</x>
         <y>10</y>
-        <width>330</width>
+        <width>374</width>
         <height>288</height>
        </rect>
       </property>
@@ -4135,7 +4151,7 @@ margin-bottom:20px;</string>
         <rect>
          <x>10</x>
          <y>80</y>
-         <width>310</width>
+         <width>356</width>
          <height>196</height>
         </rect>
        </property>
@@ -4154,7 +4170,7 @@ margin-bottom:20px;</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>270</x>
+         <x>262</x>
          <y>40</y>
          <width>50</width>
          <height>29</height>
@@ -4175,6 +4191,22 @@ margin-bottom:20px;</string>
        </property>
        <property name="placeholderText">
         <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ordononce_cls_pushButton">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>314</x>
+         <y>40</y>
+         <width>50</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>clear</string>
        </property>
       </widget>
      </widget>
@@ -4201,9 +4233,9 @@ margin-bottom:20px;</string>
      <widget class="QGroupBox" name="groupBox_7">
       <property name="geometry">
        <rect>
-        <x>641</x>
+        <x>680</x>
         <y>10</y>
-        <width>210</width>
+        <width>170</width>
         <height>286</height>
        </rect>
       </property>
@@ -4215,7 +4247,7 @@ margin-bottom:20px;</string>
         <rect>
          <x>10</x>
          <y>100</y>
-         <width>190</width>
+         <width>151</width>
          <height>177</height>
         </rect>
        </property>
@@ -4225,7 +4257,7 @@ margin-bottom:20px;</string>
         <rect>
          <x>10</x>
          <y>45</y>
-         <width>190</width>
+         <width>151</width>
          <height>29</height>
         </rect>
        </property>
@@ -4686,6 +4718,22 @@ margin-bottom:20px;</string>
     <hint type="destinationlabel">
      <x>420</x>
      <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ddr_radioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ddr_dateEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>802</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>886</x>
+     <y>393</y>
     </hint>
    </hints>
   </connection>
