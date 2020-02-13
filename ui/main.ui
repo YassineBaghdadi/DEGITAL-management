@@ -1116,7 +1116,7 @@ border-color: rgb(128, 128, 128);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Situation Sanitaux :</string>
+     <string>couverture medical:</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1311,7 +1311,7 @@ border-color: rgb(128, 128, 128);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Situation Familial :</string>
+     <string>Situation Familiale :</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -3151,7 +3151,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>272</y>
+     <y>288</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3179,7 +3179,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>134</y>
+     <y>150</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3207,7 +3207,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>203</y>
+     <y>219</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3241,7 +3241,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>410</y>
+     <y>426</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3269,7 +3269,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>341</y>
+     <y>357</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3297,7 +3297,7 @@ border-color: rgb(128, 128, 128);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>480</y>
+     <y>496</y>
      <width>138</width>
      <height>48</height>
     </rect>
@@ -3350,7 +3350,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -3549,12 +3549,12 @@ margin-bottom:20px;</string>
         <rect>
          <x>28</x>
          <y>90</y>
-         <width>50</width>
+         <width>80</width>
          <height>22</height>
         </rect>
        </property>
        <property name="text">
-        <string>V.B</string>
+        <string>V.Biliair</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="pelvienne_checkBox">
@@ -3894,7 +3894,7 @@ margin-bottom:20px;</string>
         </rect>
        </property>
        <property name="text">
-        <string>Inregului</string>
+        <string>Irregulier</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="first_regle_age_lineEdit">
@@ -3913,7 +3913,7 @@ margin-bottom:20px;</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>191</x>
+         <x>194</x>
          <y>80</y>
          <width>99</width>
          <height>50</height>
@@ -3998,25 +3998,6 @@ margin-bottom:20px;</string>
         <string>D.D.R</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="ddr_dateEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>185</y>
-         <width>110</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="displayFormat">
-        <string>yyyy-MM-dd</string>
-       </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
-       </property>
-      </widget>
       <widget class="QRadioButton" name="inpressise_radioButton">
        <property name="geometry">
         <rect>
@@ -4027,7 +4008,7 @@ margin-bottom:20px;</string>
         </rect>
        </property>
        <property name="text">
-        <string>Inpressise</string>
+        <string>Impressise</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_29">
@@ -4041,6 +4022,16 @@ margin-bottom:20px;</string>
        </property>
        <property name="text">
         <string>Grossesse Actuale :</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ddr_dateEdit">
+       <property name="geometry">
+        <rect>
+         <x>203</x>
+         <y>180</y>
+         <width>130</width>
+         <height>29</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -4065,7 +4056,7 @@ margin-bottom:20px;</string>
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>40</y>
+         <y>30</y>
          <width>90</width>
          <height>17</height>
         </rect>
@@ -4078,7 +4069,7 @@ margin-bottom:20px;</string>
        <property name="geometry">
         <rect>
          <x>116</x>
-         <y>40</y>
+         <y>30</y>
          <width>60</width>
          <height>17</height>
         </rect>
@@ -4093,8 +4084,21 @@ margin-bottom:20px;</string>
          <x>10</x>
          <y>80</y>
          <width>260</width>
-         <height>198</height>
+         <height>200</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>86</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>CheckBox</string>
        </property>
       </widget>
      </widget>
@@ -4204,7 +4208,7 @@ margin-bottom:20px;</string>
        </rect>
       </property>
       <property name="title">
-       <string>GroupBox</string>
+       <string/>
       </property>
       <widget class="QTextEdit" name="session_price_note_textEdit">
        <property name="geometry">
@@ -4362,38 +4366,6 @@ margin-bottom:20px;</string>
     <hint type="destinationlabel">
      <x>796</x>
      <y>351</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ddr_radioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ddr_dateEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>767</x>
-     <y>413</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>828</x>
-     <y>416</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>inpressise_radioButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ddr_dateEdit</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>857</x>
-     <y>429</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>828</x>
-     <y>416</y>
     </hint>
    </hints>
   </connection>

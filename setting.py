@@ -63,6 +63,7 @@ class Setting(QWidget, _ui):
         self.pushButton_2.clicked.connect(self.seve_permissions)
 
     def seve_permissions(self):
+        self.refresh()
         permissions = ''
         if self.checkBox.isChecked():
             permissions += '0'
@@ -133,6 +134,7 @@ class Setting(QWidget, _ui):
             # print (value)
 
     def tab_changed_refresh(self):
+        self.refresh()
         if self.tabWidget.currentIndex() == 2:
             # self.perm_ref()
             self.mysqlCurs.execute('select username from users where role not like "admin"')
@@ -151,7 +153,8 @@ class Setting(QWidget, _ui):
             self.pushButton_2.setEnabled(True)
             self.mysqlCurs.execute(f'select role from users where role not like "admin" and username like "{self.comboBox.currentText()}"')
             # print(self.mysqlCurs.fetchone())
-            dt1 = str(self.mysqlCurs.fetchone()[0]).split()
+            dt1 = str(self.mysqlCurs.fetchone()[0])
+            print(dt1.split())
 
             self.checkBox.setChecked(False)
             if '0' in dt1:

@@ -363,7 +363,7 @@ class Main(QWidget, main_ui):
 
         if self.ddr_radioButton.isChecked():
             self.session_json_data["Accauchement"]["Grossesse_Actuale"] = str(0) + str(
-                str(self.ddr_dateEdit.date().toPyDate()))
+                str(self.ddr_dateEdit.text()))
 
         if self.inpressise_radioButton.isChecked():
             self.session_json_data["Accauchement"]["Grossesse_Actuale"] = str(1)
@@ -1154,8 +1154,9 @@ class Main(QWidget, main_ui):
                   self.treeWidget.currentItem().parent().text(0), ' --> ', self.treeWidget.currentItem().text(0))
 
             self.mysqlCurs.execute(
-                f'select checking from sessions where client_code = "{str(self.treeWidget.currentItem().parent().parent().text(0))}" and S_date = "{str(self.treeWidget.currentItem().text(0))}"')
-            dt = self.mysqlCurs.fetchone()[0]
+                f'select checking, reason, ordonance, price from sessions where client_code = "{str(self.treeWidget.currentItem().parent().parent().text(0))}" and S_date = "{str(self.treeWidget.currentItem().text(0))}"')
+            dt = self.mysqlCurs.fetchone()
+            print(dt)
             self.session_codeP_lineEdit.clear()
             self.showSessionsForm()
             # self.session_save_btn.setEnabled(False)
@@ -1176,6 +1177,7 @@ class Main(QWidget, main_ui):
         self.codesP.clear()
         for i in self.mysqlCurs.fetchall():
             self.codesP.append(i[0])
+
         if self.current_client_code not in self.codesP:
             self.tabWidget.resize(1, 1)
             self.session_save_btn.resize(1, 1)
@@ -1187,10 +1189,9 @@ class Main(QWidget, main_ui):
             self.mysqlCurs.execute(f'select max(S_date) from sessions where client_code = "{self.current_client_code}"')
             last_visit = self.mysqlCurs.fetchone()[0]
             if last_visit:
-                self.mysqlCurs.execute(
-                    f'select checking from sessions where client_code = "{self.current_client_code}" and S_date = "{last_visit}"')
+                self.mysqlCurs.execute(f'select checking, reason, ordonance, price from sessions where client_code = "{self.current_client_code}" and S_date = "{last_visit}"')
                 # checking = json.loads(str(self.mysqlCurs.fetchone()[0]).replace("'", '"'), strict=False)
-                self.fill_session_data_from_json(str(self.mysqlCurs.fetchone()[0]))
+                self.fill_session_data_from_json(self.mysqlCurs.fetchone())
 
             #
             # self.mysqlCurs.execute(f'select reason, ordonance, price from sessions where client_code = "{self.current_client_code}" and S_date = "{last_visit}"')
@@ -1229,9 +1230,11 @@ class Main(QWidget, main_ui):
             print(e)
         self.ordonoce_refresh(self.model1)
 
-    def fill_session_data_from_json(self, dt=None):
+    def fill_session_data_from_json(self, dt):
         if dt:
-            checking = json.loads(dt.replace("'", '"'), strict=False)
+            print(dt)
+            print(dt[0])
+            checking = json.loads(str(dt[0]).replace("'", '"'), strict=False)
 
             if checking["Medicaux"]["Diabele"] != 'n':
                 self.diable_checkBox.setChecked(True)
@@ -1318,13 +1321,25 @@ class Main(QWidget, main_ui):
 
             if str(checking["Accauchement"]["Grossesse_Actuale"][0]) == '0':
                 self.ddr_radioButton.setChecked(True)
-                self.ddr_dateEdit.setDate(int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[0]),
-                                          int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[1]),
-                                          int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[2]))
+                # self.ddr_dateEdit.setDate(int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[0]),
+                #                           int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[1]),
+                #                           int(str(checking["Accauchement"]["Grossesse_Actuale"][1:]).split('-')[2]))
+                self.ddr_dateEdit.setText(str(checking["Accauchement"]["Grossesse_Actuale"][1:]))
 
             if str(checking["Accauchement"]["Grossesse_Actuale"]) == '1':
                 self.inpressise_radioButton.setChecked(True)
 
+        if dt[1]:
+            self.session_reason_textEdit.setText(dt[1])
+
+        if dt[2]:
+            for i in str(dt[2]).split('---'):
+                self.ordononce_treeWidget.addTopLevelItem(QTreeWidgetItem([i]))
+
+        if dt[3]:
+            self.session_price.setText(str(dt[3]).split('(')[0])
+
+            self.session_price_note_textEdit.setText(str(dt[3]).split('(')[1][:-1]) #todo here iam 
     def ordonoce_refresh(self, m):
         try:
             self.mysqlCurs.execute('select dwa_name from dwayat')
