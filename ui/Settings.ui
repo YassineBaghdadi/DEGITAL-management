@@ -750,6 +750,19 @@ QGroupBox::title {
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QPushButton" name="buckup">
+     <property name="geometry">
+      <rect>
+       <x>192</x>
+       <y>260</y>
+       <width>87</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Savegarder</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">

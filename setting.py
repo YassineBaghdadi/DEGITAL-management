@@ -1,3 +1,5 @@
+import pipes
+
 import pymysql
 from PyQt5 import QtWidgets, QtCore, QtGui, QtPrintSupport
 from PyQt5.QtWidgets import *
@@ -61,6 +63,20 @@ class Setting(QWidget, _ui):
 
         self.comboBox.currentTextChanged.connect(self.perm_ref)
         self.pushButton_2.clicked.connect(self.seve_permissions)
+        self.buckup.clicked.connect(self.back_up)
+
+
+
+    def back_up(self):
+
+        BACKUP_PATH = QFileDialog.getSaveFileName(caption='save as : ', directory=f"./bck_{self.today.replace(' ', '_')}.sql",
+                                                               filter="Sql files (*.sql)")
+
+
+        if BACKUP_PATH:
+            print(BACKUP_PATH)
+            os.system("mysqldump -h " + self.host_db + " -u " + self.user_db + " -p" + self.passwrd_db + " " + self.DBname + " > " + BACKUP_PATH[0])
+            os.system("gzip " + BACKUP_PATH[0])
 
     def seve_permissions(self):
         self.refresh()
