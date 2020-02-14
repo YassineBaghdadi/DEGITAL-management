@@ -1770,36 +1770,34 @@ class Main(QWidget, main_ui):
         # self.prices = {'jan' : 0, 'feb' : 0, 'mar' : 0, 'apr' : 0, 'may' : 0, 'jun' : 0, 'jul' : 0, 'aug' : 0, 'sep' : 0, 'oct' : 0, 'nov' : 0, 'dec' : 0}
 
         if start_date and end_date:
-            self.mysqlCurs.execute("""
-                    select count(id) from sessions where S_date >= '{}%' and S_date <= '{}%'
-                """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
+            self.mysqlCurs.execute(f"""select count(id) from sessions where S_date > '{str(self.dateEdit_2.date().toPyDate())}' and S_date < '{str(self.dateEdit_3.date().toPyDate())}'""")
             self.visits = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select count(codeP) from person where inscri_date >= '{}%' and inscri_date <= '{}%'
+                    select count(codeP) from person where inscri_date > '{}' and inscri_date < '{}'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.cls_incription = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select count(id) from RDV where rdv_date >= '{}%' and rdv_date <= '{}%' 
+                    select count(id) from RDV where rdv_date > '{}' and rdv_date < '{}' 
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.rdvs = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute("""
-                    select sum(price) from sessions where S_date >= '{}%' and S_date <= '{}%'
+                    select sum(price) from sessions where S_date >= '{}' and S_date <= '{}'
                 """.format(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate())))
             self.money = self.mysqlCurs.fetchone()[0]
             self.mysqlCurs.execute(
                 f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'HOMME' 
-                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
+                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}'""")
             self.males = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select codeP from sessions inner join person on person.codeP = sessions.client_code where sex like 'FEMME' 
-                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
+                    and S_date >= '{str(self.dateEdit_2.date().toPyDate())}' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}'""")
             self.females = self.mysqlCurs.fetchall()
             self.mysqlCurs.execute(
                 f"""select  client_code, birth_date from sessions inner join person on person.codeP = sessions.client_code where
-                        S_date >=  '{str(self.dateEdit_2.date().toPyDate())}%' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}%'""")
+                        S_date >=  '{str(self.dateEdit_2.date().toPyDate())}' and S_date <= '{str(self.dateEdit_3.date().toPyDate())}'""")
             self.ages =  self.mysqlCurs.fetchall()
 
-            self.mysqlCurs.execute(f'select S_date from sessions where S_date >=  "{str(self.dateEdit_2.date().toPyDate())}%" and S_date <= "{str(self.dateEdit_3.date().toPyDate())}%" ')
+            self.mysqlCurs.execute(f'select S_date from sessions where S_date >=  "{str(self.dateEdit_2.date().toPyDate())}" and S_date <= "{str(self.dateEdit_3.date().toPyDate())}" ')
             self.vistes_times = self.mysqlCurs.fetchall()
 
 
@@ -1875,9 +1873,11 @@ class Main(QWidget, main_ui):
                 self.from_16h_to_19h += 1
 
         tt_money = 0
-        for p, d in self.price_and_date_list:
-            tt_money += int(str(p).split('(')[0])
-
+        try:
+            for p, d in self.price_and_date_list:
+                tt_money += int(str(p).split('(')[0])
+        except Exception as e:
+            print(e)
         if self.visits:
             self.visites_total.setText(f'Total Visites : {self.visits}')
             self.mysqlCurs.execute('select count(id) from sessions where reason like "%auto ecole%" ')

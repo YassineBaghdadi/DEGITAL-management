@@ -155,6 +155,7 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                         id int auto_increment primary key not null,
                                          client_code varchar(10) ,
                                          S_date varchar(20),
+                                         
                                          checking text,
                                          price varchar(255),
                                          ordonance varchar(255),

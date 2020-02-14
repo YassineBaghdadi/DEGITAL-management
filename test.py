@@ -138,6 +138,13 @@ class Main(QWidget, main_ui):
 #             self.mysqlCurs.execute('update person set inscri_date = "{}"'.format(i[0].split(' ')[0]))
 #             self.mysqlCurs.execute('update person set inscri_time = "{}"'.format(i[0].split(' ')[1]))
 #             self.db.commit()
+        self.mysqlCurs.execute(f'select price, S_date from sessions')
+        tt_money = 0
+        for p, d in self.mysqlCurs.fetchall():
+            print(p, d)
+            print(tt_money, ' + ' , int(str(p).split('(')[0]), '=', tt_money + int(str(p).split('(')[0]))
+            tt_money += int(str(p).split('(')[0])
+        print(tt_money)
         # self.mysqlCurs.execute(
         #     '''select F_name, L_name, tel, address, assirance from person where codeP = "a3pj90V" ''')
         #
