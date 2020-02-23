@@ -14,7 +14,7 @@ import sys
 import time
 import sqlite3
 # from graph import *
-
+from about import *
 from graph import *
 
 import pyqtgraph as pg
@@ -29,7 +29,7 @@ import logIn
 
 main_ui, _ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
-
+from bilan import *
 # main_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
 class Main(QWidget, main_ui):
@@ -57,6 +57,7 @@ class Main(QWidget, main_ui):
             port=int(self.port_db)
 
         )
+        self.home_icon_2.mousePressEvent = self.aboutUs
         self.mysqlCurs = self.mysqlConn.cursor()
 
         self.setWindowTitle('Home')
@@ -96,6 +97,8 @@ class Main(QWidget, main_ui):
         self.home_icon.setPixmap(QtGui.QPixmap('img/btns/house.png'))
         self.setting_btn.setPixmap(QtGui.QPixmap('img/btns/settings.png'))
         self.home_icon.setScaledContents(True)
+        self.home_icon_2.setPixmap(QtGui.QPixmap('img/about.png'))
+        self.home_icon_2.setScaledContents(True)
         self.setting_btn.setScaledContents(True)
         self.setting_btn.mousePressEvent = self.goSetting
         palette = QPalette()
@@ -111,6 +114,7 @@ class Main(QWidget, main_ui):
         self.num_close.clicked.connect(self.deleteNums)
         self.num_addNew.clicked.connect(self.addPersonFrame)
         self.exit_2.clicked.connect(self.logout)
+        self.pushButton_7.clicked.connect(self.go_to_bilan)
 
         ##########################  add person part :  ##########################################################
         self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
@@ -133,6 +137,7 @@ class Main(QWidget, main_ui):
 
         self.person_refresh()
         self.pushButton_6.clicked.connect(self.last_session_price)
+
 
         # RDV part:
         self.newRDVDateEdit.setDate(QtCore.QDate.currentDate())
@@ -251,11 +256,21 @@ class Main(QWidget, main_ui):
         self.pushButton_4.clicked.connect(self.show_visites_times_graph)
         self.pushButton_5.clicked.connect(self.show_money_graph)
 
+        self.bck_done = 0
+
+    def aboutUs(self, event):
+        self.abt = About()
+
+
+    def go_to_bilan(self):
+        self.bb = Bilan()
+        self.bb.show()
+
 
     def change_to_permit(self):
         if self.checkBox.isChecked():
             self.clear_ordonance()
-            self.session_reason_textEdit.setText('Auto Ecole : \n\nPermit Type : \n\nndader(oui/non) : ')
+            self.session_reason_textEdit.setText('Auto Ecole : \n\nCategorie Permis : \n\nRestriction(oui/non) : ')
         else:
             self.session_reason_textEdit.clear()
             self.clear_ordonance()
@@ -264,10 +279,6 @@ class Main(QWidget, main_ui):
         self.ordononce_treeWidget.clear()
 
 
-    def logout(self):
-        self.lg = logIn.LogIn()
-        self.lg.show()
-        self.close()
 
 
     def last_session_price(self):
@@ -275,7 +286,6 @@ class Main(QWidget, main_ui):
             self.mysqlCurs.execute('select max(id) from sessions')
             self.mysqlCurs.execute(f'''
                 select F_name, L_name, price from sessions inner join person on person.codeP = sessions.client_code where sessions.id = {self.mysqlCurs.fetchone()[0]}
-                and S_date like "{self.today.split(':')[0]}%"
             ''')
 
             dt = self.mysqlCurs.fetchone()
@@ -386,6 +396,7 @@ class Main(QWidget, main_ui):
 
         # self.session_json_data[]
         try:
+            price = str(self.session_price.text())
             self.ordonance = ''
             for ix in range(self.ordononce_treeWidget.topLevelItemCount()):
                 self.ordonance += str(self.ordononce_treeWidget.topLevelItem(ix).text(0) + '---')
@@ -426,8 +437,20 @@ class Main(QWidget, main_ui):
                             self.file_path += '.pdf'
                             #client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False
                         p_info = self.sqliteCurs.execute('select adress, city, num from info ').fetchone()
-                        print_ordononce = Ppdf(client[1] + ' ' + client[2] + ' (' + client[0] + ') ', str(int(self.today.split('-')[0]) - int(str(client[3]).split('-')[0])),
-                                                   self.ordonance, [p_info[0], p_info[1], p_info[2]], self.file_path, self.blink)
+                        self.mysqlCurs.execute(f'select assirance from sessions inner join person on person.codeP = sessions.client_code where codeP = "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
+                        self.mitual = False
+                        assirnce = self.mysqlCurs.fetchone()[0]
+                        if assirnce == 'CNOPS' or assirnce == 'CNSS' or assirnce == 'FAR' or assirnce == 'SAHAM' :
+                            self.mitual = True
+                        print_ordononce = Ppdf(client = client[1] + ' ' + client[2] + ' (' + client[0] + ') ',
+                                                age = str(int(self.today.split('-')[0]) - int(str(client[3]).split('-')[0])),
+                                                ordonance = self.ordonance,
+                                                DR_info = [p_info[0], p_info[1], p_info[2]],
+                                                path = self.file_path,
+                                                blink_page = self.blink,
+                                                mitual = self.mitual,
+                                                price = price)
+
                             # err = QMessageBox.warning(dialog, 'Error', 'invalid extention', QMessageBox.Ok)
                         self.tabWidget.setCurrentIndex(0)
                         self.session_codeP_lineEdit.clear()
@@ -771,8 +794,42 @@ class Main(QWidget, main_ui):
         self.tel.setText('')
 
     def quit_(self):
-        self.mysqlConn.close()
-        self.close()
+        is_the_day = self.today.split('-')[2].split(' ')[0] == '01'or self.today.split('-')[2].split(' ')[0] == '10' or self.today.split('-')[2].split(' ')[0] == '20'
+        print(self.today.split('-')[2].split(' ')[0])
+        if self.bck_done == 0 and is_the_day:
+            backup_remander = QMessageBox.information(self, 'buck up remander : ',
+                                                      "c'est le meilleur moment pour faire la sauvegarde .",
+                                                      QMessageBox.Yes, QMessageBox.No)
+            if backup_remander == QMessageBox.Yes:
+                self.stt = Setting()
+                self.stt.show()
+                self.bck_done +=1
+            else:
+                self.mysqlConn.close()
+                self.close()
+        else:
+            self.mysqlConn.close()
+            self.close()
+
+    def logout(self):
+        is_the_day = self.today.split('-')[2].split(' ')[0] == '01' or self.today.split('-')[2].split(' ')[0] == '10' or self.today.split('-')[2].split(' ')[0] == '20'
+        print(self.today.split('-')[2].split(' ')[0])
+        if self.bck_done == 0 and is_the_day:
+            backup_remander = QMessageBox.information(self, 'buck up remander : ',
+                                                      "c'est le meilleur moment pour faire la sauvegarde .",
+                                                      QMessageBox.Yes, QMessageBox.No)
+            if backup_remander == QMessageBox.Yes:
+                self.stt = Setting()
+                self.stt.show()
+                self.bck_done += 1
+            else:
+                self.lg = logIn.LogIn()
+                self.lg.show()
+                self.close()
+        else:
+            self.lg = logIn.LogIn()
+            self.lg.show()
+            self.close()
 
     def generatecode(self):
         self.id_P = ''
@@ -796,6 +853,7 @@ class Main(QWidget, main_ui):
 
     def home_refresh(self):
         self.searsh_refresh()
+
         try:
             self.mysqlCurs.execute("""select token_date from nums order by token_date desc""")
             dt = self.mysqlCurs.fetchall()

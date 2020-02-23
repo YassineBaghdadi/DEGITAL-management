@@ -24,13 +24,15 @@ import time
 
 from reportlab.pdfgen import canvas
 from PIL import Image
+date_ = str(strftime("%d-%m-%Y %H:%M", gmtime()))
 class Ppdf:
-    def __init__(self, client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False):
+    def __init__(self, client = 'Nom Prenom', age = 'age', ordonance =None, DR_info = ['adress', 'city', '06.30.50.46.06'] , path = None, blink_page = False, mitual = False, price = ''):
         self.blink_page = blink_page
-        self.date_ = str(strftime("%d-%m-%Y %H:%M", gmtime()))
+
         self.client = client
         self.age = age
-        self.pdf_ = canvas.Canvas(path, pagesize=A5)
+
+        self.ordonance = ordonance
 
 
         self.page_width, self.page_height = A5
@@ -38,6 +40,8 @@ class Ppdf:
         # print(f'A5 height : {height}')
         # print(A5)
 
+        self.pdf_ = canvas.Canvas(path, pagesize=A5)
+        self.p = canvas.Canvas(path + '@@@.pdf', pagesize=A5)
         self.pdf_.setLineWidth(2)
         self.data = []
         # self.DR_name = 'Dr. Fatima Zahra Moumen'
@@ -47,9 +51,7 @@ class Ppdf:
         # self.client_info = ['codeP', 'yassine', 'baghdadi', 22 ]
         self.tele = DR_info[2]
 
-
-
-        self.DR_studies = 'Laureat de la faculte de medecine et de pharmacie - Fes, Diplome en gynecologie suivie de grossesse et infertilite de la faculte de bordeau - France, echographie - Elechogardigramme agrement de delivre les certificats d\'aptitude pour permis de conduite.'
+        #self.DR_studies = 'Laureat de la faculte de medecine et de pharmacie - Fes, Diplome en gynecologie suivie de grossesse et infertilite de la faculte de bordeau - France, echographie - Elechogardigramme agrement de delivre les certificats d\'aptitude pour permis de conduite.'
             # for o in range(50):
             #     self.DR_studies += str(o) + ','
             #     if o % 5 == 0:
@@ -61,12 +63,16 @@ class Ppdf:
 
         self.head_img = Image.open('img/head.jpeg')
         # self.yy = self.page_height - self.head_img.size[1]
-        self.yy = 380
+
 
         if blink_page:#todo set image as header
 
-                self.draw_head()
-                self.draw_footer()
+                self.draw_head(self.pdf_)
+                self.draw_footer(self.pdf_)
+
+                if mitual:
+                    self.draw_head(self.p)
+                    self.draw_footer(self.p)
                 #todo
                 #
                 # ##############################
@@ -133,71 +139,99 @@ class Ppdf:
         #         self.yy -= 15
 
 
-
-        self.pdf_.setFont('Courier-Bold', 12)
-        for i in str(ordonance).split('---'):
-                if i :
-                    self.pdf_.drawString(40, self.yy, str(i))
-
-                    if self.yy <= 60:
-                        self.yy = 380
-                        self.pdf_.showPage()
-                        self.draw_head()
-                        self.draw_footer()
-                        self.pdf_.setFont('Courier-Bold', 12)
-                    else:
-                        self.yy -= 25
+        self.create_ordo()
+        if mitual:
+            self.p.setFont('Courier-Bold', 14)
+            self.p.drawString(40, 370, 'Examane Fait : ')
+            # self.p.line(55, 365, 350, 365)
+            # self.p.line(55, 365, 55, 95)
+            # self.p.line(55, 95, 350, 95)
+            # self.p.line(350, 365, 350, 95)
+            self.p.drawString(40, 80, f'Mantant Payer : {str(price)} DH.')
+            self.p.save()
+            self.open_pdf(f'{path}@@@.pdf')
 
 
-        self.pdf_.save()
+        self.open_pdf(path)
+
+
+
+
+
+
+    def open_pdf(self, pth):
         options = ChromeOptions()
         # self.path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '', 'PDF files (*.pdf)')[0]
-        self.path = path
+
         profile = {
             "plugins.plugins_list": [{"enabled": True, "name": "Chrome PDF Viewer"}]}  # Disable Chrome's PDF Viewer
         options.add_experimental_option("prefs", profile)
         self.brower = None
         try:
             try:
-                self.brower = Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78', chrome_options=options)
+                self.brower = Chrome(
+                    executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78',
+                    chrome_options=options)
+
             except Exception as e:
                 print(e)
-                self.brower = Chrome(executable_path= os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77', chrome_options=options)
+                self.brower = Chrome(
+                    executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77',
+                    chrome_options=options)
             print(f'your OS is : {platform.system()}')
 
         except Exception as e:
             print(e)
-            self.brower = Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe', chrome_options=options)
+            self.brower = Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe',
+                                 chrome_options=options)
 
         # self.brower = Chrome()
 
         # try:
         # except Exception as e:
         #     print(e)
-            # self.brower = webdriver.Chrome(executable_path="src/chromedriver_V77", chrome_options=options)
+        # self.brower = webdriver.Chrome(executable_path="src/chromedriver_V77", chrome_options=options)
 
         # self.brower.maximize_window()
         # website_URL ="https://www.google.co.in/"
         # website_URL ="file:///home/yassine-baghdadi/works/Desktop/DEGITAL-M.O.Y-Dc-.-management/src/print.pdf"
 
-        self.brower.get('file://' + str(self.path))
+        self.brower.get('file://' + str(pth))
 
-    def draw_head(self):
-        self.pdf_.setFont('Courier', 9)
-        self.pdf_.drawImage('img/head.jpeg', 0, self.page_height - 180, 420, 180)
-        self.pdf_.drawString(140, 420, f'Guercif, le : {self.date_} ')
-        self.pdf_.drawString(100, 410, f'Client : {self.client}, Age : {self.age} ans .')
+    def create_ordo(self):
+        self.pdf_.setFont('Courier-Bold', 12)
+        self.yy = 380
+        for i in str(self.ordonance).split('---'):
+            if i:
+                self.pdf_.drawString(40, self.yy, str(i))
+
+                if self.yy <= 60:
+                    self.yy = 380
+                    self.pdf_.showPage()
+                    self.draw_head(self.pdf_)
+                    self.draw_footer(self.pdf_)
+                    self.pdf_.setFont('Courier-Bold', 12)
+                else:
+                    self.yy -= 25
+
+        self.pdf_.save()
 
 
-    def draw_footer(self):
-        self.pdf_.setFont('Courier', 7)
+    def draw_head(self, p):
+        p.setFont('Courier', 9)
+        p.drawImage('img/head.jpeg', 0, self.page_height - 180, 420, 180)
+        p.drawString(140, 420, f'Guercif, le : {date_} ')
+        p.drawString(100, 410, f'Patient : {self.client}, Age : {self.age} ans .')
 
-        self.pdf_.line(30, 35, 380, 35)
+    def draw_footer(self, p):
+        p.setFont('Courier', 7)
 
-        self.pdf_.drawString(35, 24, f'{str(self.adress)} - {str(self.city) }')
-        self.pdf_.drawString(35, 11, f'Tel : { str(self.tele)}')
+        p.line(30, 35, 380, 35)
 
-        self.pdf_.drawString(400, 8,str(self.pdf_.getPageNumber()))
+        p.drawString(35, 24, f'{str(self.adress)} - {str(self.city) }')
+        p.drawString(35, 11, f'Tel : { str(self.tele)}')
+
+        p.drawString(400, 8,str(self.pdf_.getPageNumber()))
 
 
     # def get_path(self):
@@ -258,6 +292,109 @@ class Ppdf:
         self.pdf_.drawString(10, 40, "y40")
         self.pdf_.drawString(10, 20, "y20")
         self.pdf_.drawString(10, 00, "y00")
+
+
+class Tahalil_pdf:
+    def __init__(self, client, age, data, DR_info, path):
+        self.path = path
+        self.client = client
+        self.adress = DR_info[0]
+        self.city = DR_info[1]
+        self.num = DR_info[2]
+        self.age = age
+
+        self.page = canvas.Canvas(self.path, pagesize=A5)
+
+        self.page_width, self.page_height = A5
+        self.data = str(data).split('@')
+        start_Y = 380
+        start_X = 40
+        self.draw_head(self.page)
+        self.draw_footer(self.page)
+        for i, d in enumerate(self.data):
+            self.page.setFont('Courier', 10)
+            self.page.line(start_X-10, start_Y+10, start_X, start_Y+10)
+            self.page.line(start_X-10, start_Y, start_X, start_Y)
+            self.page.line(start_X-10, start_Y+10, start_X-10, start_Y)
+            self.page.line(start_X, start_Y+10, start_X, start_Y)
+            self.page.drawString(start_X + 5, start_Y, f'{i + 1}- {d}')
+
+            if start_Y <= 60 and start_X == 225:
+                start_Y = 380
+                start_X = 40
+                self.page.showPage()
+                self.draw_head(self.page)
+                self.draw_footer(self.page)
+                continue
+            if start_Y <= 60:
+                start_Y = 380
+                start_X = 225
+                continue
+            start_Y -= 18
+
+        self.page.save()
+        self.open_pdf(path)
+
+
+
+
+    def open_pdf(self, pth):
+        options = ChromeOptions()
+        # self.path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '', 'PDF files (*.pdf)')[0]
+
+        profile = {
+            "plugins.plugins_list": [{"enabled": True, "name": "Chrome PDF Viewer"}]}  # Disable Chrome's PDF Viewer
+        options.add_experimental_option("prefs", profile)
+        self.brower = None
+        try:
+            try:
+                self.brower = Chrome(
+                    executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V78',
+                    chrome_options=options)
+
+            except Exception as e:
+                print(e)
+                self.brower = Chrome(
+                    executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver_V77',
+                    chrome_options=options)
+            print(f'your OS is : {platform.system()}')
+
+        except Exception as e:
+            print(e)
+            self.brower = Chrome(executable_path=os.path.dirname(os.path.realpath(__file__)) + '/src/chromedriver.exe',
+                                 chrome_options=options)
+
+        # self.brower = Chrome()
+
+        # try:
+        # except Exception as e:
+        #     print(e)
+        # self.brower = webdriver.Chrome(executable_path="src/chromedriver_V77", chrome_options=options)
+
+        # self.brower.maximize_window()
+        # website_URL ="https://www.google.co.in/"
+        # website_URL ="file:///home/yassine-baghdadi/works/Desktop/DEGITAL-M.O.Y-Dc-.-management/src/print.pdf"
+
+        self.brower.get('file://' + str(pth))
+
+    def draw_head(self, p):
+        p.setFont('Courier', 9)
+        p.drawImage('img/head.jpeg', 0, self.page_height - 180, 420, 180)
+        p.drawString(140, 420, f'Guercif, le : {date_} ')
+        if self.client != 'choisir un patient':
+            p.drawString(100, 410, f'Patient : {self.client}, {self.age} ans.')
+
+
+    def draw_footer(self, p):
+        p.setFont('Courier', 7)
+
+        p.line(30, 35, 380, 35)
+
+        p.drawString(35, 24, f'{str(self.adress)} - {str(self.city) }')
+        p.drawString(35, 11, f'Tel : { str(self.num)}')
+
+        p.drawString(400, 8,str(self.page.getPageNumber()))
+
 
 #
 # class Create_PDF(FPDF):
@@ -356,24 +493,100 @@ class Ppdf:
 
 
 # w = Create_PDF()
-
-f ='''
---> dfssf-----> dddddddd-----> ssssssss-----> ddddddddddd-----> vvvvvvvvvvvv-----> errrrrre---
---> sssssssss-----> sssssssssssss-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww-----> ssssssssssss-----> svvvvvvvvvv-----> ssssssssssssss-----> sssssssssssssss---
---> ssssssssssssssssss-----> ssssssssssssssss-----> sssssssssss-----> ssssssssss-----> sssssssssssssssssss-----> dddddddddddd---
---> eeeeeeeeeee-----> xxxxxxxxxxxxx-----> ssssssssssssssssd-----> ssssssssse-----> wwwwwwwwwwwwww
-'''
+#
+# f ='''dfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwwwdfssf@ dddddddd@ ssssssss@ ddddddddddd@ vvvvvvvvvvvv@ errrrrre@
+#  sssssssss@ sssssssssssss@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww@ ssssssssssss@ svvvvvvvvvv@ ssssssssssssss@ sssssssssssssss@
+#  ssssssssssssssssss@ ssssssssssssssss@ sssssssssss@ ssssssssss@ sssssssssssssssssss@ dddddddddddd@
+#  eeeeeeeeeee@ xxxxxxxxxxxxx@ ssssssssssssssssd@ ssssssssse@ wwwwwwwwwwwwww
+# '''
+# ff = ''
+# for i in range(1, 501):
+#     ff += f'Bilan  ("{i}")'
+#     if i != 500:
+#         ff += '@'
+#
+# print(ff)
+# tt = Tahalil_pdf('yassine baghdadi (codeP)', '22', ff, ['adrr', 'city', 'num'], '/home/yassine-baghdadi/works/Desktop_app/DEGITAL-M.O.Y-Dc-.-management/src/test4 sddf (f4ra0Rv) Bilan Biologique [2020-02-23 10:36].pdf')
 
 # ppp = os.path.dirname(os.path.realpath(__file__)) + '/src/ordooooonnnnnnnn.pdf'
 # print(ppp)
 # # ppp = loadUiType(path.join(path.dirname(__file__), "src/ordooooonnnnnnnn.pdf"))
 # w = Ppdf(ordonance=f.replace('---', '\n'), path='src/ordooooonnnnnnnn.pdf', blink_page=True)
 # w = Ppdf(ordonance=f.replace('\n', ''), path=ppp, blink_page=True)
+
+
+
