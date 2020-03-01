@@ -88,12 +88,10 @@ class LogIn(QWidget, logIn_ui):
                 self.close()
 
             elif acc_type == 'wrong':
-                #the admin
-                print('profile : ', self.db_.logIn(self.username_in.text(), self.passwrd_in.text()))
-                self.main_ = Main('admin')
-
-                self.main_.show()
-                self.close()
+            	self.passwrd_in.setText('')
+            	self.username_in.setText('')
+            	self.passwrd_in.setStyleSheet('border : 2px solid red')
+            	self.username_in.setStyleSheet('border : 2px solid red')
 
             else:
                 self.main_ = Main(acc_type)

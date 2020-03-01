@@ -3051,7 +3051,7 @@ border-color: rgb(128, 128, 128);</string>
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>20</y>
+        <y>134</y>
         <width>220</width>
         <height>30</height>
        </rect>
@@ -3115,8 +3115,8 @@ border-color: rgb(128, 128, 128);</string>
      <widget class="QLabel" name="label_57">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>140</y>
+        <x>320</x>
+        <y>10</y>
         <width>220</width>
         <height>40</height>
        </rect>
@@ -3130,18 +3130,56 @@ border-color: rgb(128, 128, 128);</string>
       <property name="text">
        <string>TextLabel</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
      <widget class="QPushButton" name="pushButton_5">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>210</y>
+        <x>640</x>
+        <y>180</y>
         <width>110</width>
         <height>29</height>
        </rect>
       </property>
       <property name="text">
        <string>show as Graph</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_61">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>220</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Dyuthi</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_8">
+      <property name="geometry">
+       <rect>
+        <x>66</x>
+        <y>220</y>
+        <width>110</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Details</string>
       </property>
      </widget>
     </widget>

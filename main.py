@@ -21,7 +21,7 @@ import pyqtgraph as pg
 
 from time import gmtime, strftime
 from setting import *
-
+from today_money_details import *
 import noInternetAlert
 from db_m import DB_m
 from create_pdf import *
@@ -63,33 +63,40 @@ class Main(QWidget, main_ui):
         self.setWindowTitle('Home')
         # self.db_ = DB_m(self.host_db, self.user_db, self.passwrd_db, self.DBname, self.port_db)
 
-        if self.acc_type == 'admin':
-            pass
-        else:
-            permissions = str(self.acc_type).split()
+        if self.acc_type != 'admin':
+
+            self.permissions = [i for i in str(self.acc_type)]
             self.setting_btn.setEnabled(False)
-            if '0' not in permissions:
-                self.add_person_btn.setEnabled(False)
-
-            if '1' not in permissions:
-                self.RDV_btn.setEnabled(False)
-
-            if '2' not in permissions:
-                self.search_btn.setEnabled(False)
-
-            if '3' not in permissions:
-                self.Ditails_btn.setEnabled(False)
-
-            if '4' not in permissions:
-                self.sessions_btn.setEnabled(False)
-
-            if '5' not in permissions:
-                self.Statistiques_btn.setEnabled(False)
-
-            self.setting_btn.setEnabled(False)
+            self.add_person_btn.setEnabled(False)
+            self.RDV_btn.setEnabled(False)
+            self.search_btn.setEnabled(False)
+            self.Ditails_btn.setEnabled(False)
             self.sessions_btn.setEnabled(False)
             self.Statistiques_btn.setEnabled(False)
+            self.pushButton_7.resize(0, 0)
+            if '0' in self.permissions:
 
+                self.add_person_btn.setEnabled(True)
+
+            if '1' in self.permissions:
+                self.RDV_btn.setEnabled(True)
+
+            if '2' in self.permissions:
+                self.search_btn.setEnabled(True)
+
+            if '3' in self.permissions:
+                self.Ditails_btn.setEnabled(True)
+
+            if '4' in self.permissions:
+                self.sessions_btn.setEnabled(True)
+
+            if '5' in self.permissions:
+                self.Statistiques_btn.setEnabled(True)
+
+            # self.setting_btn.setEnabled(False)
+            # self.sessions_btn.setEnabled(False)
+            # self.Statistiques_btn.setEnabled(False)
+            print(f'account type : {self.acc_type} \npermissions : {self.permissions}')
         self.home_frame.resize(self.width_, self.height_)
         self.home_icon.mousePressEvent = self.showHomeFrame
         # self.home_icon.setStyleSheet('background-image: url(img/btns/house.png);')
@@ -255,8 +262,22 @@ class Main(QWidget, main_ui):
         self.pushButton_3.clicked.connect(self.show_visites_ages_graph)
         self.pushButton_4.clicked.connect(self.show_visites_times_graph)
         self.pushButton_5.clicked.connect(self.show_money_graph)
+        self.pushButton_8.clicked.connect(self.details_today_money)
+
 
         self.bck_done = 0
+
+
+    def details_today_money(self):
+        self.mysqlCurs.execute(f'select * from person inner join sessions on person.codeP = sessions.client_code where S_date like "{self.today.split(" ")[0]}%"')
+        data = []
+        for i in self.mysqlCurs.fetchall():
+            temp_data = list([i[0] ,i[1], i[2], i[17], i[19]])
+            data.append(temp_data)
+
+        self.tmd = Today_money_details(data)
+        self.tmd.show()
+
 
     def aboutUs(self, event):
         self.abt = About()
@@ -1079,6 +1100,9 @@ class Main(QWidget, main_ui):
                                    .format(self.F_name.text(), self.L_name.text(),
                                            str(self.birth_date.date().toPyDate())))
             self.pdt = self.mysqlCurs.fetchone()
+
+            self.mysqlCurs.execute(f'select * from person where cne like "{self.cne.text()}"')
+            self.is_cne_exists = self.mysqlCurs.fetchone()
         except Exception as e:
             print(e)
             err_log = open('src/logs.txt', 'a')
@@ -1107,6 +1131,9 @@ class Main(QWidget, main_ui):
                                           'cette personne existe déjà dans la base de données Sous cette code  '
                                           ': "{}" - ont été inscrits à : "{}"'.format(self.pdt[1], self.pdt[13]),
                                           QMessageBox.Ok)
+
+        elif self.is_cne_exists:
+            err = QMessageBox.information(self, 'Alert', f'cette C.N.I existe déjà dans la base de données Sous : "{self.is_cne_exists[1]} {self.is_cne_exists[2]} ({self.is_cne_exists[5]})" - ont été inscrits à : "{self.is_cne_exists[13]}"',QMessageBox.Ok)
 
         else:
             addPq = """insert into person (codeP, F_name,L_name, birth_date, sex, cne, family_status,childs, address, tel, assirance, working, note, inscri_date, inscri_time )values (
@@ -1403,7 +1430,7 @@ class Main(QWidget, main_ui):
 
         if dt[3]:
             self.session_price.setText(str(dt[3]).split('(')[0])
-            self.session_price_note_textEdit.setText(str(dt[3]).split('(')[1][:-1]) #todo here iam
+            self.session_price_note_textEdit.setText(str(dt[3]).split('(')[1][:-1])
 
     def ordonoce_refresh(self, m):
         try:
@@ -1931,9 +1958,12 @@ class Main(QWidget, main_ui):
                 self.from_16h_to_19h += 1
 
         tt_money = 0
+        today_money = 0
         try:
             for p, d in self.price_and_date_list:
                 tt_money += int(str(p).split('(')[0])
+                if str(d).split(' ')[0] == self.today.split(' ')[0]:
+                    today_money += int(str(p).split('(')[0])
         except Exception as e:
             print(e)
         if self.visits:
@@ -1993,8 +2023,13 @@ class Main(QWidget, main_ui):
             else:
                 self.label_51.setText(f'16h - 19h    : 0')
 
+            if today_money == 0:
+                self.pushButton_8.resize(1, 1)
+            else:
+                self.pushButton_8.resize(110, 29)
 
             self.label_57.setText(f'Total : {str(tt_money)} DH .')
+            self.label_61.setText(f'Aujourd\'hui : {str(today_money)} DH .')
         else:
             self.visites_total.setText(f'Total Visites : 0')
 
