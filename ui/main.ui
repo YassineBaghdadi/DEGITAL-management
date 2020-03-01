@@ -673,6 +673,12 @@ border-color: rgb(128, 128, 128);</string>
      <height>1</height>
     </rect>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>1</width>
+     <height>1</height>
+    </size>
+   </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
    </property>
@@ -702,7 +708,7 @@ border-color: rgb(128, 128, 128);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Save</string>
+     <string>Enregistrer</string>
     </property>
    </widget>
    <widget class="QPushButton" name="num_addNew">
@@ -710,12 +716,12 @@ border-color: rgb(128, 128, 128);</string>
      <rect>
       <x>480</x>
       <y>28</y>
-      <width>87</width>
+      <width>130</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
-     <string>Add New</string>
+     <string>Ajouter un nouveau</string>
     </property>
    </widget>
    <widget class="QTreeWidget" name="numbersTree">
@@ -814,7 +820,7 @@ border-color: rgb(128, 128, 128);</string>
      </rect>
     </property>
     <property name="text">
-     <string>close</string>
+     <string>Fermer</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_6">

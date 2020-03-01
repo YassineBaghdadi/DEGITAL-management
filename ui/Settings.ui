@@ -632,7 +632,7 @@ QGroupBox::title {
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>personel Info</string>
+     <string>Informations Personnelles</string>
     </attribute>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -766,7 +766,7 @@ QGroupBox::title {
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
-     <string>users</string>
+     <string>Utilisateurs</string>
     </attribute>
     <widget class="QFrame" name="addUser">
      <property name="geometry">
@@ -974,7 +974,7 @@ QGroupBox::title {
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
-     <string>permisions</string>
+     <string>autorisations</string>
     </attribute>
     <widget class="QCheckBox" name="checkBox">
      <property name="geometry">
