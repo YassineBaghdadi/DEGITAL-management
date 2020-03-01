@@ -1127,3 +1127,4 @@
 2020-03-01 10:45:26 'Main' object has no attribute 'comboBox_2' ( 012345 )
 2020-03-01 10:46:22 'Main' object has no attribute 'comboBox_2' ( 012345 )
 2020-03-01 10:46:56 'Main' object has no attribute 'comboBox_2' ( 012345 )
+2020-03-01 12:57:58 'NoneType' object is not subscriptable ( admin )

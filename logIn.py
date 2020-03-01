@@ -58,7 +58,7 @@ class LogIn(QWidget, logIn_ui):
             # self.port_db = data[3]
             # self.DBname = data[4]
             self.host_db, self.user_db, self.passwrd_db, self.port_db, self.DBname = self.curs.fetchone()
-            self.db_ = DB_m(self.host_db, self.user_db, self.passwrd_db, self.DBname)
+            self.db_ = DB_m(self.host_db, self.user_db, self.passwrd_db, self.DBname, int(self.port_db))
         except Exception as e:
 
             err_log = open('src/logs.txt', 'a')

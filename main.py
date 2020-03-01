@@ -780,12 +780,13 @@ class Main(QWidget, main_ui):
 
         else:
             try:
-                self.mysqlCurs.execute('''select person.cne, person.F_name, person.L_name, person.sex, 
-                    person.birth_date, person.address, person.tel, person.assirance, person.family_status, person.childs,  max(S_date), person.note
-                    from person inner join sessions on person.codeP = sessions.client_code where codeP = "{}" '''.format(
-                    str(self.comboBox.currentText().split(' ')[0])))
+                self.mysqlCurs.execute(f'''select cne, F_name, L_name, sex, 
+                    birth_date, address, tel, assirance, family_status, childs, note
+                    from person where codeP = "{str(self.comboBox.currentText().split(' ')[0])}" ''')
 
                 client_info = self.mysqlCurs.fetchone()
+
+                print(client_info)
 
                 self.lineEdit_11.setText(str(client_info[0]))
                 self.lineEdit_14.setText(str(client_info[1]))
@@ -797,10 +798,13 @@ class Main(QWidget, main_ui):
                 self.lineEdit_23.setText(str(client_info[7]))
                 self.lineEdit_18.setText(str(client_info[8]))
                 self.lineEdit_19.setText(str(client_info[9]))
-                self.lineEdit_22.setText(str(client_info[10]))
-                self.lineEdit_2.setText(str(client_info[11]))
-                # self.lineEdit_22.setText(str(client_info[12]))
-                # self.textEdit_2.setText(str(client_info[13]))
+                self.lineEdit_2.setText(str(client_info[10]))
+                
+                self.mysqlCurs.execute('select max(S_date) from sessions where client_code = "{}"'.format(str(self.comboBox.currentText().split(' ')[0])))
+                lastV = self.mysqlCurs.fetchone()[0]
+                if lastV:
+                	self.lineEdit_22.setText(lastV)
+
             except Exception as e:
                 print(e)
                 err_log = open('src/logs.txt', 'a')
@@ -1132,7 +1136,7 @@ class Main(QWidget, main_ui):
                                           ': "{}" - ont été inscrits à : "{}"'.format(self.pdt[1], self.pdt[13]),
                                           QMessageBox.Ok)
 
-        elif self.is_cne_exists:
+        elif len(self.cne.text()) < 0 and self.is_cne_exists:
             err = QMessageBox.information(self, 'Alert', f'cette C.N.I existe déjà dans la base de données Sous : "{self.is_cne_exists[1]} {self.is_cne_exists[2]} ({self.is_cne_exists[5]})" - ont été inscrits à : "{self.is_cne_exists[13]}"',QMessageBox.Ok)
 
         else:
