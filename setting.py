@@ -68,8 +68,8 @@ class Setting(QWidget, _ui):
 
 
     def back_up(self):
-
-        BACKUP_PATH = QFileDialog.getSaveFileName(caption='save as : ', directory=f"./bck_{self.today.replace(' ', '_')}.sql",
+        tt = str(time.strftime("%Y-%m-%d %Hh%M", time.gmtime()))
+        BACKUP_PATH = QFileDialog.getSaveFileName(caption='save as : ', directory=f"./bck_{tt}.sql",
                                                                filter="Sql files (*.sql)")
 
 

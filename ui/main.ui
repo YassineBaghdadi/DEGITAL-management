@@ -3407,7 +3407,7 @@ margin-bottom:20px;</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -4148,19 +4148,6 @@ margin-bottom:20px;</string>
         </rect>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBox">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>140</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Visite pour permis</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
@@ -4382,6 +4369,19 @@ margin-bottom:20px;</string>
      <y>30</y>
      <width>26</width>
      <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pirmis_btn">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>7</y>
+     <width>60</width>
+     <height>60</height>
     </rect>
    </property>
    <property name="text">

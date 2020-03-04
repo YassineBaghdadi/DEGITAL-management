@@ -74,6 +74,7 @@ import json
 # dd = json.loads(ss)
 # print(dd)
 # {key:value mapping}
+import time
 from time import strftime, gmtime
 
 from PIL import Image
@@ -237,5 +238,22 @@ m = {'01': 'jan', '02': 'feb', '03': 'mar', '04': 'apr', '05': 'may', '06': 'jun
 #     print(i, ' = ', m[i])
 
 
-l = [3, 4, 5, 6, 7, 3, 6 ,7, 8, 4]
-print(l[:-1])
+# l = [3, 4, 5, 6, 7, 3, 6 ,7, 8, 4]
+
+# print(l[:-1])
+import pymysql
+con = pymysql.connect(
+            host='localhost',
+            user='root',
+            passwd='root',
+            db='MOY',
+            port=int(3306)
+)
+cur = con.cursor()
+
+cur.execute('select data from pirmis_completer_data')
+dt = [i[0] for i in cur.fetchall()]
+#
+# date_ = str(time.strftime("%Y-%m-%d %Hh%M", time.gmtime()))
+
+print('cat 1' in list(dt))

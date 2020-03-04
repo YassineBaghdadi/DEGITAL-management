@@ -31,6 +31,7 @@ main_ui, _ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
 
 from bilan import *
 # main_ui,_ = loadUiType(path.join(path.dirname(__file__), "ui/main.ui"))
+from pirmis import *
 
 class Main(QWidget, main_ui):
     def __init__(self, account_type, parent=None):
@@ -122,6 +123,12 @@ class Main(QWidget, main_ui):
         self.num_addNew.clicked.connect(self.addPersonFrame)
         self.exit_2.clicked.connect(self.logout)
         self.pushButton_7.clicked.connect(self.go_to_bilan)
+
+        self.pirmis_btn.setPixmap(QtGui.QPixmap('img/car.png'))
+        self.pirmis_btn.setScaledContents(True)
+
+        self.pirmis_btn.mousePressEvent = self.pirmis
+
 
         ##########################  add person part :  ##########################################################
         self.add_person_btn.setStyleSheet('background-image: url(img/btns/off/add_person_btn.png);')
@@ -239,7 +246,7 @@ class Main(QWidget, main_ui):
         self.completer_ = QCompleter()
         self.completer = QCompleter()
         self.ordononce_cls_pushButton.clicked.connect(self.clear_ordonance)
-        self.checkBox.stateChanged.connect(self.change_to_permit)
+        # self.checkBox.stateChanged.connect(self.change_to_permit)
 
         # ditais part :
         self.Ditails_btn.setStyleSheet('background-image: url(img/btns/off/detais.png);')
@@ -267,6 +274,11 @@ class Main(QWidget, main_ui):
 
         self.bck_done = 0
 
+    def pirmis(self, event):
+        self.p = Pirmis(self.acc_type)
+        self.p.show()
+        self.close()
+
 
     def details_today_money(self):
         self.mysqlCurs.execute(f'select * from person inner join sessions on person.codeP = sessions.client_code where S_date like "{self.today.split(" ")[0]}%"')
@@ -288,13 +300,13 @@ class Main(QWidget, main_ui):
         self.bb.show()
 
 
-    def change_to_permit(self):
-        if self.checkBox.isChecked():
-            self.clear_ordonance()
-            self.session_reason_textEdit.setText('Auto Ecole : \n\nCategorie Permis : \n\nRestriction(oui/non) : ')
-        else:
-            self.session_reason_textEdit.clear()
-            self.clear_ordonance()
+    # def change_to_permit(self):
+    #     if self.checkBox.isChecked():
+    #         self.clear_ordonance()
+    #         self.session_reason_textEdit.setText('Auto Ecole : \n\nCategorie Permis : \n\nRestriction(oui/non) : ')
+    #     else:
+    #         self.session_reason_textEdit.clear()
+    #         self.clear_ordonance()
 
     def clear_ordonance(self):
         self.ordononce_treeWidget.clear()
@@ -450,7 +462,7 @@ class Main(QWidget, main_ui):
                     self.mysqlCurs.execute(
                         f'select codeP, F_name, L_name, birth_date from person where codeP = "{self.session_codeP_lineEdit.text().split("--")[-1]}"')
                     client = self.mysqlCurs.fetchone()
-                    self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ', directory=f'./{client[1]} {client[2]} ({client[0]}) [{str(self.today)[:-3]}].pdf',
+                    self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ', directory=f'./{client[1]} {client[2]} ({client[0]}) [{str(time.strftime("%Y-%m-%d %Hh%M", time.gmtime()))}].pdf',
                                                                filter="Pdf files (*.pdf)")
 
                     if self.file_path:
@@ -1261,7 +1273,7 @@ class Main(QWidget, main_ui):
 
     def session_refresh(self, data=None):
 
-        self.checkBox.setChecked(False)
+        # self.checkBox.setChecked(False)
         self.dwa_count = 0
         self.current_dwayat = []
         self.ordononce_treeWidget.clear()
@@ -1423,8 +1435,8 @@ class Main(QWidget, main_ui):
                 self.inpressise_radioButton.setChecked(True)
 
         if dt[1]:
-            if 'Auto Ecole' in dt[1]:
-                self.checkBox.setChecked(True)
+            # if 'Auto Ecole' in dt[1]:
+            #     # self.checkBox.setChecked(True)
 
             self.session_reason_textEdit.setText(dt[1])
 

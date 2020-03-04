@@ -212,6 +212,11 @@ class AdminSetting(QWidget, adminSetting_win_dir):
                                     ''')
 
                     self.mysqlconn.commit()
+                    self.mysqlCurs.execute('''
+                                        create table if not exists pirmis_completer_data (id int auto_increment primary key not null, data varchar(255), type varchar(10))ENGINE=INNODB default charset = utf8;
+                                    ''')
+
+                    self.mysqlconn.commit()
 
                     self.mysqlCurs.execute('select count(id) from tools')
                     if not self.mysqlCurs.fetchone()[0]:

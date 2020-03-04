@@ -69,7 +69,7 @@ class Bilan(QWidget, _ui):
                 self.data += self.treeWidget.topLevelItem(i).text(0) + '@'
 
             self.file_path, _ = QFileDialog.getSaveFileName(caption='save as : ',
-                                                            directory=f"""./{client.replace('"', '')} Bilan Biologique [{str(self.today)[:-3]}].pdf""",
+                                                            directory=f"""./{client.replace('"', '')} Bilan Biologique [{str(time.strftime("%Y-%m-%d %Hh%M", time.gmtime()))}].pdf""",
                                                             filter="Pdf files (*.pdf)")
             print(f'the path : {self.file_path}')
             print(str(self.comboBox.currentText()).split("(")[1].split(")")[0])
