@@ -681,8 +681,9 @@ class Main(QWidget, main_ui):
 
 
     def newRdvFill(self):
-        client_info = []
-        if self.clientListcombo.currentText() == 'choisir un client':
+        self.mysqlCurs.execute('select codeP from person')
+        current_client = [i[0] for i in self.mysqlCurs.fetchall()]
+        if self.clientListcombo.currentText() == 'choisir un client' or str(self.clientListcombo.currentText().split(' ')[0]) not in current_client:
             self.newRDVF_name.setText('')
             self.newRDVL_name.setText('')
             self.newRDVtel.setText('')
@@ -691,43 +692,18 @@ class Main(QWidget, main_ui):
             self.newRDVLast_visit.setText('')
 
         else:
-            try:
-                try:
-                    self.mysqlCurs.execute('''select person.F_name, person.L_name, person.tel, person.address, person.assirance, max(S_date) 
-                    from person inner join sessions on person.codeP = sessions.client_code where codeP = "{}" '''.format(
-                        str(self.clientListcombo.currentText().split(' ')[0])))
+            self.mysqlCurs.execute(f'''select F_name, L_name, tel, address, assirance from person where codeP = "{str(self.clientListcombo.currentText().split(' ')[0])}" ''')
+            cl_info = self.mysqlCurs.fetchone()
 
-                    client_info = self.mysqlCurs.fetchone()
+            self.newRDVF_name.setText(str(cl_info[0]))
+            self.newRDVL_name.setText(str(cl_info[1]))
+            self.newRDVtel.setText(str(cl_info[2]))
+            self.newRDVAddress.setText(str(cl_info[3]))
+            self.newRDVAssir.setText(str(cl_info[4]))
 
-                    self.newRDVF_name.setText(str(client_info[0]))
-                    self.newRDVL_name.setText(str(client_info[1]))
-                    self.newRDVtel.setText(str(client_info[2]))
-                    self.newRDVAddress.setText(str(client_info[3]))
-                    self.newRDVAssir.setText(str(client_info[4]))
-                    if len(str(client_info[5])) > 4:
-                        self.newRDVLast_visit.setText(str(client_info[5]))
-                    else:
-                        self.newRDVLast_visit.setText('------')
-                except Exception as e:
-                    print(e)
-                    err_log = open('src/logs.txt', 'a')
-                    err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
-                    self.mysqlCurs.execute('''select person.F_name, person.L_name, person.tel, person.address, person.assirance
-                                    from person where codeP = "{}" '''.format(
-                        str(self.clientListcombo.currentText().split(' ')[0])))
+            self.mysqlCurs.execute(f'select max(S_date) from sessions where id = "{str(self.clientListcombo.currentText().split(" ")[0])}"')
+            self.newRDVLast_visit.setText(self.mysqlCurs.fetchone()[0])
 
-                    client_info = self.mysqlCurs.fetchone()
-
-                    self.newRDVF_name.setText(str(client_info[0]))
-                    self.newRDVL_name.setText(str(client_info[1]))
-                    self.newRDVtel.setText(str(client_info[2]))
-                    self.newRDVAddress.setText(str(client_info[3]))
-                    self.newRDVAssir.setText(str(client_info[4]))
-
-            except Exception as e:
-                print(e)
-                err_log = open('src/logs.txt', 'a')
-                err_log.write('\n{} {} ( {} )'.format(self.today, str(e), self.acc_type))
 
                 # self.clientListcombo.setEnabled(False)
 

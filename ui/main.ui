@@ -2339,7 +2339,7 @@ border-color: rgb(128, 128, 128);</string>
         </size>
        </property>
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -2404,7 +2404,7 @@ border-color: rgb(128, 128, 128);</string>
         </size>
        </property>
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -4380,7 +4380,7 @@ margin-bottom:20px;</string>
     <rect>
      <x>550</x>
      <y>7</y>
-     <width>60</width>
+     <width>61</width>
      <height>60</height>
     </rect>
    </property>
