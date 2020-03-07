@@ -748,7 +748,7 @@ class Main(QWidget, main_ui):
                        self.lineEdit_13.text(), self.lineEdit_12.text(), self.lineEdit_19.text(),
                        self.textEdit_2.toPlainText(), str(self.comboBox.currentText().split(' ')[0])))
             self.mysqlConn.commit()
-            err = QMessageBox.information(self, 'DONE', 'the updated successfully', QMessageBox.Ok)
+            err = QMessageBox.information(self, 'DONE', 'la mise a jour ete marche bien', QMessageBox.Ok)
 
             self.searsh_refresh()
 
@@ -1143,7 +1143,7 @@ class Main(QWidget, main_ui):
                                                     self.today.split(' ')[0],
                                                     self.today.split(' ')[1]
                                                     ))
-                err = QMessageBox.information(self, '', 'the adding operation successfully', QMessageBox.Ok)
+                err = QMessageBox.information(self, '', 'le patient ete ajoute', QMessageBox.Ok)
                 # try:
                 #     self.mysqlCurs.execute(addPq.format(self.codeP.text(), self.F_name.text(), self.L_name.text(), str(self.birth_date.date().toPyDate()), self.sexe, self.cne.text(), str(self.familly_state.currentText()),
                 #         self.children_num.text(),
@@ -1827,7 +1827,7 @@ class Main(QWidget, main_ui):
         # self.rdvs = 0
         # self.money = 0
         if str(self.dateEdit_2.date().toPyDate()) > str(self.dateEdit_3.date().toPyDate()):
-            err = QMessageBox.warning(self, 'ERROR', 'invalid dates ', QMessageBox.Ok)
+            err = QMessageBox.warning(self, 'ERROR', 'date invalide', QMessageBox.Ok)
         else:
             self.statistic_refresh(str(self.dateEdit_2.date().toPyDate()), str(self.dateEdit_3.date().toPyDate()))
 
